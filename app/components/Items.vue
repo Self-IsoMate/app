@@ -1,7 +1,7 @@
 <template>
   <Page>
     <ActionBar>
-      <Label text="Home"></Label>
+      <Label text="Welcome!"></Label>
     </ActionBar>
 
     <ListView for="item in items" @itemTap="onItemTap">
