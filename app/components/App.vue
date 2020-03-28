@@ -1,18 +1,27 @@
 <template lang="html">
-    <BottomNavigation>
+    <LoginMain />
+    <!-- <BottomNavigation>
         <TabStrip>
             <TabStripItem class="navigation__item">
                 <Label text="Home"></Label>
                 <Image src.decode="font://&#xf015;" class="fas t-36"></Image>
             </TabStripItem>
+
             <TabStripItem class="navigation__item">
-                <Label text="Browse"></Label>
+                <Label text="Challenges"></Label>
                 <Image src.decode="font://&#xf1ea;" class="far t-36"></Image>
             </TabStripItem>
+
             <TabStripItem class="navigation__item">
-                <Label text="Search"></Label>
+                <Label text="Community"></Label>
                 <Image src.decode="font://&#xf002;" class="fas t-36"></Image>
             </TabStripItem>
+
+            <TabStripItem class="navigation__item">
+                <Label text="Chat"></Label>
+                <Image src.decode="font://&#xf002;" class="fas t-36"></Image>
+            </TabStripItem>
+
         </TabStrip>
 
         <TabContentItem>
@@ -33,19 +42,27 @@
             </Frame>
         </TabContentItem>
 
-    </BottomNavigation>
+        <TabContentItem>
+            <Frame>
+                <LoginMAin />
+            </Frame>
+        </TabContentItem>
+
+    </BottomNavigation> -->
 </template>
 
 <script>
 import Items from "./Items.vue";
 import Browse from "./Browse.vue";
 import Search from "./Search.vue";
+import LoginMain from "./LoginMain.vue";
 
 export default {
   components: {
     Items,
     Browse,
-    Search
+    Search,
+    LoginMain
   }
 };
 </script>
