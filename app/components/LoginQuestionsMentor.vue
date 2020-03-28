@@ -3,15 +3,19 @@
 		<ActionBar title="Home"/>
 		<ScrollView>
 			<StackLayout margin="50 50 50 50">
-				<Label text="Some Questions..." class="" fontSize="20"/>
-				<Label text="Would you be open to becoming a mentor?" />
+				<Label text="Some Questions..." class="main-text" fontSize="20"/>
+				<Label text="Would you be open to becoming a mentor?" class="main-text"/>
 
-				<StackLayout orientation="horizontal">
-					<Button :class="{ selected : checkYes }" text="YES" @tap="selectYes" />
-					<Button :class="{ selected : !checkYes }" text="NO" @tap="selectNo" />
+
+				<StackLayout margin="15 0 0 0">
+					<FlexboxLayout alignItems="stretch" justifyContent="space-between">
+						<Button :class="{ selected : checkYes }" text="YES" @tap="selectYes" width="50%" />
+						<Button :class="{ selected : !checkYes }" text="NO" @tap="selectNo" width="50%" />
+					</FlexboxLayout>
+
+					<Button text="Next" @tap="navigateNext" />
+					<Button text="Skip" @tap="navigateNext" />
 				</StackLayout>
-
-				<Button text="Next" @tap="navigateNext" />
 			</StackLayout>
 
 		</ScrollView>
@@ -26,7 +30,7 @@ import LoginQuestionsActivities from "./LoginQuestionsActivities";
 export default {
     data: () => {
         return {
-			checkYes: false
+			checkYes: null
         };
 	},
 	methods: {
@@ -59,6 +63,10 @@ export default {
 .selected {
 	background-color: $complementary;
 	color: $complementary-color;
+}
+
+.main-text {
+	text-align: center;
 }
 
 </style>
