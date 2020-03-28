@@ -7,33 +7,39 @@
             </TabStripItem>
             <TabStripItem class="navigation__item">
                 <Label text="Challenges"></Label>
-                <Image src.decode="font://&#xf1ea;" class="far t-36"></Image>
+                <Image src.decode="font://&#xf091;" class="fas t-36"></Image>
             </TabStripItem>
             <TabStripItem class="navigation__item">
                 <Label text="Community"></Label>
-                <Image src.decode="font://&#xf002;" class="fas t-36"></Image>
+                <Image src.decode="font://&#xf0c0;" class="fas t-36"></Image>
             </TabStripItem>
             <TabStripItem class="navigation__item">
                 <Label text="Chat"></Label>
-                <Image src.decode="font://&#xf002;" class="fas t-36"></Image>
+                <Image src.decode="font://&#xf075;" class="fas t-36"></Image>
             </TabStripItem>
         </TabStrip>
 
         <TabContentItem>
             <Frame>
-                <Items />
+                <Home />
             </Frame>
         </TabContentItem>
 
         <TabContentItem>
             <Frame>
-                <Browse />
+                <Challenges />
             </Frame>
         </TabContentItem>
 
         <TabContentItem>
             <Frame>
-                <Search />
+                <Community />
+            </Frame>
+        </TabContentItem>
+
+        <TabContentItem>
+            <Frame>
+                <Chat />
             </Frame>
         </TabContentItem>
 
@@ -41,15 +47,17 @@
 </template>
 
 <script>
-import Items from "./Items.vue";
-import Browse from "./Browse.vue";
-import Search from "./Search.vue";
+import Home from "./Home.vue";
+import Challenges from "./Challenges.vue";
+import Community from "./Community.vue";
+import Chat from "./Chat.vue";
 
 export default {
   components: {
-    Items,
-    Browse,
-    Search
+    Home,
+    Challenges,
+    Community,
+    Chat
   }
 };
 </script>

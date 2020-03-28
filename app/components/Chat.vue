@@ -1,11 +1,11 @@
 <template lang="html">
     <Page>
         <ActionBar>
-            <Label text="Search"></Label>
+            <Label text="Chat"></Label>
         </ActionBar>
 
         <GridLayout class="page__content">
-            <Label class="page__content-icon fas" text.decode="&#xf002;"></Label>
+            <Label class="page__content-icon far" text.decode="&#xf075;"></Label>
             <Label class="page__content-placeholder" :text="message"></Label>
         </GridLayout>
     </Page>
@@ -15,7 +15,7 @@
 export default {
     data: () => {
         return {
-            message: "<!-- Search page content goes here -->"
+            message: "<!-- Browse Chat content -->"
         };
     }
 }

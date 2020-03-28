@@ -7,7 +7,7 @@
     <ListView for="item in items" @itemTap="onItemTap">
       <v-template>
         <StackLayout orientation="horizontal">
-          <Label :text="item.name" textWrap="true"></Label>
+          <Label :text="item.name" textWrap="false"></Label>
         </StackLayout>
       </v-template>
     </ListView>
@@ -22,69 +22,37 @@ export default {
         return {
             items: [
                 {
-                    name: "Item 1",
+                    name: "Music",
                     description: "Description for Item 1"
                 },
                 {
-                    name: "Item 2",
+                    name: "DIY",
                     description: "Description for Item 2"
                 },
                 {
-                    name: "Item 3",
+                    name: "Cooking",
                     description: "Description for Item 3"
                 },
                 {
-                    name: "Item 4",
+                    name: "Sports",
                     description: "Description for Item 4"
                 },
                 {
-                    name: "Item 5",
+                    name: "Languages",
                     description: "Description for Item 5"
                 },
                 {
-                    name: "Item 6",
+                    name: "Baking",
                     description: "Description for Item 6"
                 },
                 {
-                    name: "Item 7",
+                    name: "Art",
                     description: "Description for Item 7"
                 },
                 {
-                    name: "Item 8",
+                    name: "Hydroponics",
                     description: "Description for Item 8"
                 },
-                {
-                    name: "Item 9",
-                    description: "Description for Item 9"
-                },
-                {
-                    name: "Item 10",
-                    description: "Description for Item 10"
-                },
-                {
-                    name: "Item 11",
-                    description: "Description for Item 11"
-                },
-                {
-                    name: "Item 12",
-                    description: "Description for Item 12"
-                },
-                {
-                    name: "Item 13",
-                    description: "Description for Item 13"
-                },
-                {
-                    name: "Item 14",
-                    description: "Description for Item 14"
-                },
-                {
-                    name: "Item 15",
-                    description: "Description for Item 15"
-                },
-                {
-                    name: "Item 16",
-                    description: "Description for Item 16"
-                }
             ]};
     },
     methods: {
