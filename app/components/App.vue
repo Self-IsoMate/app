@@ -1,6 +1,5 @@
 <template lang="html">
-    <LoginMain />
-    <!-- <BottomNavigation>
+    <BottomNavigation>
         <TabStrip>
             <TabStripItem class="navigation__item">
                 <Label text="Home"></Label>
@@ -44,11 +43,11 @@
 
         <TabContentItem>
             <Frame>
-                <LoginMAin />
+                <LoginMain />
             </Frame>
         </TabContentItem>
 
-    </BottomNavigation> -->
+    </BottomNavigation>
 </template>
 
 <script>
