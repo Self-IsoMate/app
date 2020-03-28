@@ -13,8 +13,11 @@
   "repository": "<fill-your-repository-here>",
   "dependencies": {
     "@nativescript/theme": "~2.3.3",
+    "@nstudio/nativescript-checkbox": "^1.0.0",
+    "nativescript-checkbox": "3.0.3",
     "nativescript-vue": "~2.5.0",
-    "tns-core-modules": "~6.5.0"
+    "tns-core-modules": "~6.5.0",
+    "underscore": "1.9.2"
   },
   "devDependencies": {
     "@babel/core": "~7.1.0",
