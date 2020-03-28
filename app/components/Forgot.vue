@@ -9,7 +9,7 @@
                 <TextField v-model="email" hint="EMAIL" class="my-class" />
                 <Button text="SEND RECOVERY EMAIL" @tap="handleLogin($event)"
                     class="button-class" />
-                <Button text="<- BACK" @tap="onButtonTap" fontStyle="Aharoni"
+                <Button text="<- BACK" @tap="handleLogin" fontStyle="Aharoni"
                     backgroundColor="black" color="#00ff92" fontSize="25"
                     marginRight="150" marginBottom="15" marginTop="50" />
             </StackLayout>
