@@ -5,9 +5,10 @@
             <StackLayout class="home-panel">
                 <Image
                     src="https://play.nativescript.org/dist/assets/img/NativeScript_logo.png" />
-                <Label text="SELF-ISOMATE" class="label-class"/>
-                <TextField v-model="email" hint="EMAIL"class="my-class" />
-                <Button text="SEND RECOVERY EMAIL" @tap="onButtonTap"class="button-class"/>
+                <Label text="SELF-ISOMATE" class="label-class" />
+                <TextField v-model="email" hint="EMAIL" class="my-class" />
+                <Button text="SEND RECOVERY EMAIL" @tap="handleLogin($event)"
+                    class="button-class" />
                 <Button text="<- BACK" @tap="onButtonTap" fontStyle="Aharoni"
                     backgroundColor="black" color="#00ff92" fontSize="25"
                     marginRight="150" marginBottom="15" marginTop="50" />
@@ -18,6 +19,8 @@
 </template>
 
 <script>
+    import LoginMain from "./LoginMain.vue";
+
     export default {
         name: "Forgot",
         data: () => {
@@ -26,11 +29,11 @@
             };
         },
         methods: {
-            onButtonTap() {
-                console.log("Button was pressed");
+            handleLogin(event) {
+                this.$navigateTo(LoginMain);
             }
         }
-    }
+    };
 </script>
 
 
