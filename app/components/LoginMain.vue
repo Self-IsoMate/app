@@ -19,6 +19,7 @@
 
 <script>
 import Browse from './Browse.vue';
+import LoginQuestionsMentorVue from './LoginQuestionsMentor.vue';
 
 export default {
 	name: 'LoginMain',
@@ -31,7 +32,7 @@ export default {
 	},
 	methods: {
 		handleLogin(event) {
-			this.$navigateTo(Browse);
+			this.$navigateTo(LoginQuestionsMentorVue);
 		}
 	}
 }
