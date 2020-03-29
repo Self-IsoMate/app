@@ -1,6 +1,9 @@
-import Vue from "nativescript-vue";
+import Vue from 'nativescript-vue'
+import Home from './components/Home'
 
-import App from "./components/App";
+Vue.config.silent = true
+
+Vue.registerElement('RadSideDrawer', () => require('nativescript-ui-sidedrawer').RadSideDrawer)
 
 import routes from "./routes/routes";
 
