@@ -10,7 +10,7 @@
                 <TextField v-model="password" hint="PASSWORD" class="my-class" />
                 <TextField v-model="confirmpassword" hint="CONFIRM PASSWORD" class="my-class" />
                 <TextField v-model="email" hint="EMAIL" class="my-class" />
-                <Button text="CONTINUE" @tap="onButtonTap" class="button-class" />
+                <Button text="CONTINUE" @tap="navigateQuestions" class="button-class" />
             </StackLayout>
         </ScrollView>
     </Page>
@@ -18,23 +18,26 @@
 </template>
 
 <script>
-    export default {
-        name: "Register",
-        data: () => {
-            return {
-                message: "",
-                username: "",
-                password: "",
-                confirmpassword: "",
-                email: ""
-            };
-        },
-        methods: {
-            onButtonTap() {
-                console.log("Button was pressed");
-            }
+
+import LoginQuestionsMentor from "./LoginQuestionsMentor";
+
+export default {
+    name: "Register",
+    data: () => {
+        return {
+            message: "",
+            username: "",
+            password: "",
+            confirmpassword: "",
+            email: ""
+        };
+    },
+    methods: {
+        navigateQuestions (event) {
+            this.$navigateTo(LoginQuestionsMentor);
         }
     }
+}
 </script>
 
 

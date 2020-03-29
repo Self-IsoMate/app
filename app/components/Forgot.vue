@@ -6,9 +6,9 @@
                 <Image
                     src="https://play.nativescript.org/dist/assets/img/NativeScript_logo.png" />
                 <Label text="SELF-ISOMATE" class="label-class"/>
-                <TextField v-model="email" hint="EMAIL"class="my-class" />
-                <Button text="SEND RECOVERY EMAIL" @tap="onButtonTap"class="button-class"/>
-                <Button text="<- BACK" @tap="onButtonTap" fontStyle="Aharoni"
+                <TextField v-model="email" hint="EMAIL" class="my-class" />
+                <Button text="SEND RECOVERY EMAIL" @tap="handleSendRecovery" class="button-class"/>
+                <Button text="<- BACK" @tap="onBack"
                     backgroundColor="black" color="#00ff92" fontSize="25"
                     marginRight="150" marginBottom="15" marginTop="50" />
             </StackLayout>
@@ -18,19 +18,24 @@
 </template>
 
 <script>
-    export default {
-        name: "Forgot",
-        data: () => {
-            return {
-                email: ""
-            };
+import LoginMain from "./LoginMain";
+
+export default {
+    name: "Forgot",
+    data: () => {
+        return {
+            email: ""
+        };
+    },
+    methods: {
+        handleSendRecovery (event) {
+            console.log("recovery email");
         },
-        methods: {
-            onButtonTap() {
-                console.log("Button was pressed");
-            }
+        onBack (event) {
+            this.$navigateTo(LoginMain);
         }
     }
+}
 </script>
 
 
