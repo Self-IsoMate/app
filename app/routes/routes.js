@@ -1,8 +1,6 @@
 import LoginMain from "../components/LoginMain.vue";
-import App from "../components/App";
 
 const routes = {
-    loginMain: LoginMain,
-    app: App
+    loginMain: LoginMain
 }
 export default routes;

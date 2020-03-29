@@ -24,8 +24,8 @@
 
 <script>
 
-import Browse from "./Browse";
 import LoginQuestionsActivities from "./LoginQuestionsActivities";
+import Home from "./Home";
 
 export default {
     data: () => {
@@ -46,7 +46,7 @@ export default {
 				this.$navigateTo(LoginQuestionsActivities);
 			} else {
 				// go straight to home
-				this.$navigateTo(Browse);
+				this.$navigateTo(Home);
 			}
 		}
 	}

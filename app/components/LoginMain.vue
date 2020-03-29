@@ -20,6 +20,7 @@
 <script>
 import Register from "./Register";
 import Forgot from "./Forgot";
+import Home from "./Home";
 
 export default {
 	name: 'LoginMain',
@@ -38,7 +39,7 @@ export default {
 			this.$navigateTo(Forgot);
 		},
 		handleLogin(event) {
-
+			this.$navigateTo(Home);
 		}
 	}
 }

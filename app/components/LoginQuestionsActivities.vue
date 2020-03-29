@@ -16,7 +16,7 @@
 <script>
 
 import _ from "underscore";
-import Browse from "./Browse";
+import Home from "./Home";
 
 export default {
     data: () => {
@@ -74,7 +74,7 @@ export default {
 			return this.selectedActivities.find((a) => _.isEqual(a.name, param.name)) != null;
 		},
 		confirm(event) {
-			this.$navigateTo(Browse);
+			this.$navigateTo(Home);
 		}
 	}
 }
