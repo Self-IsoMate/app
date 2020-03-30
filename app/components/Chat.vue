@@ -149,27 +149,27 @@
                 drawer2: "",
                 mainColor: "#00ff92",
                 conversations: [{
-                        convFriendImg: "~/assets/images/images.jpg",
+                        convFriendImg: "~/assets/images/violinGroup.png",
                         read: "notRead",
-                        convFriendName: "John",
-                        convText: "ok but why?",
+                        convFriendName: "#ViolinIntermediate",
+                        convText: "Lindsay21: can anyone help me with my double stops?",
                         convDate: "19:01",
                         seenVisibility: "collapse"
                     },
                     {
-                        convFriendImg: "~/assets/images/large.jpg",
-                        read: "read",
-                        convFriendName: "Christine",
-                        convText: "Okay",
+                        convFriendImg: "~/assets/images/uk.png",
+                        read: "notRead",
+                        convFriendName: "#UnitedKingdom",
+                        convText: "DiscoDan: Honestly not surprised Boris has it",
                         convDate: "18:43",
                         seenVisibility: "collapse"
                     },
                     {
-                        convFriendImg: "~/assets/images/download_(1).jpg",
+                        convFriendImg: "~/assets/images/musicCollaboration.jpeg",
                         read: "read",
-                        convFriendName: "Katty",
-                        convText: "You: Sorry I Can't",
-                        convDate: "18:21",
+                        convFriendName: "#MusicCollaborate",
+                        convText: "You: Any guitarists out there? Need background instrumentals for my new track",
+                        convDate: "2 minutes ago",
                         seenVisibility: "visible"
                     }
                 ]

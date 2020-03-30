@@ -135,6 +135,10 @@
                 mainColor: "#00ff92",
                 homePosts: [ {
                         title: "Gardening",
+                        postImg: "~/assets/images/TrySomethingNew.png",
+                    },
+                    {
+                        title: "Gardening",
                         postImg: "~/assets/images/Gardening.png",
                     },
                     {
@@ -147,7 +151,7 @@
                     },
                     {
                         title: "Art",
-                        postImg: "~/assets/images/Sports.png",
+                        postImg: "~/assets/images/Cooking.png",
                     }
                 ]
             };
