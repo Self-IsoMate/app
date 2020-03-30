@@ -12,6 +12,7 @@
 					<Button col="1" row="0" text="GUEST" @tap="handleLogin($event)"></Button>
 					<Label row="1" colSpan="2" text="Forgot password?" @tap="navigateForgot" class="forgot-pass"></Label>
 				</GridLayout>
+				<Label :text="message" />
 			</StackLayout>
 		</ScrollView>
     </Page>
@@ -21,6 +22,7 @@
 import Register from "./Register";
 import Forgot from "./Forgot";
 import Home from "./Home";
+import BackendService from "../services/BackendService";
 
 export default {
 	name: 'LoginMain',
@@ -39,7 +41,15 @@ export default {
 			this.$navigateTo(Forgot);
 		},
 		handleLogin(event) {
-			this.$navigateTo(Home);
+			var service = new BackendService();
+			service.login(this.username, this.password).then((response) => {
+				console.log(response);
+				if (response && response.success) {
+					this.$navigateTo(Home);
+				} else {
+					this.message = "Login failed";
+				}
+			});
 		}
 	}
 }
