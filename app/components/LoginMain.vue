@@ -44,7 +44,10 @@ export default {
 			service.login(this.username, this.password).then((response) => {
 				console.log(response);
 				if (response && response.success) {
-					this.$navigateTo(Home, { clearHistory: true });
+					this.$navigateTo(Home,{
+							animated: false,
+							clearHistory: true
+						});
 				} else {
 					this.message = "Login failed";
 				}
