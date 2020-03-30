@@ -3,7 +3,6 @@
 		<ActionBar title="Self-IsoMate" class="action-bar header"/>
 		<ScrollView>
 			<StackLayout margin="50 50 50 50">
-				<Image src="~/assets/images/100x88.png" width="100" />
 				<TextField v-model="username" hint="Username"/>
 				<TextField v-model="password" hint="Password" secure="true"/>
 				<Button text="LOGIN" @tap="handleLogin($event)"></Button>
