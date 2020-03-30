@@ -121,7 +121,7 @@
     import Notifications from "./Notifications";
     import Settings from "./Settings";
     import Help from "./Help";
-    import LoginMain from "./LoginMain";
+    import LoginScreen from "./LoginMain";
 
     export default {
         computed: {},
@@ -206,7 +206,7 @@
                 });
             },
             logOut(){
-                this.$navigateTo(LoginMain, {
+                this.$navigateTo(LoginScreen, {
                     animated: false,
                     clearHistory: true
                 });

@@ -170,6 +170,7 @@
     import Notifications from "./Notifications";
     import Settings from "./Settings";
     import Help from "./Help";
+    import LoginScreen from "./LoginMain";
 
     export default {
         created() {},
@@ -229,7 +230,12 @@
                     clearHistory: true
                 });
             },
-            logOut(){}, //put in here navigate to log-in screen
+            logOut(){
+                this.$navigateTo(LoginScreen, {
+                    animated: false,
+                    clearHistory: true
+                });
+            }, //put in here navigate to log-in screen
             showDetails() {}
         }
     };
