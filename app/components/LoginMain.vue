@@ -1,6 +1,6 @@
 <template lang="html">
     <Page>
-		<ActionBar title="Home"/>
+		<ActionBar title="Login"/>
 		<ScrollView>
 			<StackLayout margin="50 50 50 50">
 				<Label text="Login" class="" fontSize="20"/>
