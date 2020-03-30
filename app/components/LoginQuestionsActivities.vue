@@ -1,6 +1,6 @@
 <template lang="html">
     <Page>
-		<ActionBar title="Home"/>
+		<ActionBar title="Self-IsoMate" class="action-bar header" />
 		<GridLayout rows="*, auto">
 			<ScrollView row="0">
 				<StackLayout margin="50 50 50 50">
@@ -17,8 +17,12 @@
 
 import _ from "underscore";
 import Home from "./Home";
+import BackendService from "../services/BackendService";
 
 export default {
+	props: {
+		newUser: Object
+	},
     data: () => {
         return {
 			selectedActivities: [],
@@ -74,7 +78,18 @@ export default {
 			return this.selectedActivities.find((a) => _.isEqual(a.name, param.name)) != null;
 		},
 		confirm(event) {
-			this.$navigateTo(Home);
+			var backend = new BackendService();
+
+			var newUser = this.$props.newUser;
+			newUser.mentorSubjects = this.selectedActivities;
+
+			backend.register(newUser)
+				.then((response) => {
+					if (response.success)
+						this.$navigateTo(Home, { clearHistory: true });
+					else
+						console.log("you failed, you loser");
+				});
 		}
 	}
 }
