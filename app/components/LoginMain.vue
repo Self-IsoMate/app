@@ -34,17 +34,17 @@ export default {
 	},
 	methods: {
 		navigateRegister(event) {
-			this.$navigateTo(Register);
+			this.$navigateTo(Register, { clearHistory: true });
 		},
 		navigateForgot(event) {
-			this.$navigateTo(Forgot);
+			this.$navigateTo(Forgot, { clearHistory: true });
 		},
 		handleLogin(event) {
 			var service = new BackendService();
 			service.login(this.username, this.password).then((response) => {
 				console.log(response);
 				if (response && response.success) {
-					this.$navigateTo(Home);
+					this.$navigateTo(Home, { clearHistory: true });
 				} else {
 					this.message = "Login failed";
 				}

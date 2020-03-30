@@ -55,7 +55,8 @@ export default {
 							email: this.$props.newUser.email,
 							isMentor: this.checkYes
 						}
-					}
+					},
+					clearHistory: true
 				});
 			} else {
 				// register
@@ -67,7 +68,7 @@ export default {
 						if (response.success) {
 							this.$store.commit("saveUser", response.user._id);
 							console.log(this.$store.state.userId);
-							this.$navigateTo(Home);
+							this.$navigateTo(Home, { clearHistory: true });
 						} else {
 							console.log("you failed, you loser");
 						}
