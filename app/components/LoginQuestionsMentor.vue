@@ -4,7 +4,7 @@
 		<ScrollView>
 			<StackLayout margin="50 50 50 50">
 				<Label text="Some Questions..." class="main-text" fontSize="20"/>
-				<Label text="Would you be open to becoming a mentor?" class="main-text"/>
+				<Label textWrap="true" text="Would you be open to becoming a mentor?" class="main-text"/>
 
 				<StackLayout margin="15 0 0 0">
 					<FlexboxLayout alignItems="stretch" justifyContent="space-between">
@@ -66,11 +66,12 @@ export default {
 				backend.register(this.newUser)
 					.then((response) => {
 						if (response.success) {
-							this.$store.commit("saveUser", response.user._id);
-							console.log(this.$store.state.userId);
-							this.$navigateTo(Home, { clearHistory: true });
+							this.$navigateTo(Home,  {
+								animated: false,
+								clearHistory: true
+							});
 						} else {
-							console.log("you failed, you loser");
+							console.log("login failed");
 						}
 					});
 			}

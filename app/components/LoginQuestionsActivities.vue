@@ -86,7 +86,10 @@ export default {
 			backend.register(newUser)
 				.then((response) => {
 					if (response.success)
-						this.$navigateTo(Home, { clearHistory: true });
+						this.$navigateTo(Home,  {
+							animated: false,
+							clearHistory: true
+						});
 					else
 						console.log("you failed, you loser");
 				});
