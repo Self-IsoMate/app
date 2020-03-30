@@ -124,9 +124,6 @@
     import LoginScreen from "./LoginMain";
 
     export default {
-        computed: {},
-        watch: {},
-        mounted() {},
         data() {
             return {
                 drawerToggle: false,

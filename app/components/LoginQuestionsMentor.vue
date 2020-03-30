@@ -26,6 +26,7 @@
 import BackendService from "../services/BackendService";
 import LoginQuestionsActivities from "./LoginQuestionsActivities";
 import Home from "./Home";
+import * as ApplicationSettings from "application-settings"
 
 export default {
 	props: {
@@ -63,10 +64,13 @@ export default {
 
 				backend.register(this.newUser)
 					.then((response) => {
-						if (response.success)
+						if (response.success) {
+							this.$store.commit("saveUser", response.user._id);
+							console.log(this.$store.state.userId);
 							this.$navigateTo(Home);
-						else
+						} else {
 							console.log("you failed, you loser");
+						}
 					});
 			}
 		}
