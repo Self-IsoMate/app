@@ -8,7 +8,7 @@
 				<Button text="LOGIN" @tap="handleLogin($event)"></Button>
 				<GridLayout columns="*, *" rows="*, *">
 					<Button col="0" row="0" text="REGISTER" @tap="navigateRegister"></Button>
-					<Button col="1" row="0" text="GUEST" @tap="handleLogin($event)"></Button>
+					<Button col="1" row="0" text="GUEST" @tap="handleGuest"></Button>
 					<Label row="1" colSpan="2" text="Forgot password?" @tap="navigateForgot" class="forgot-pass"></Label>
 				</GridLayout>
 				<Label :text="message" />
@@ -51,6 +51,13 @@ export default {
 				} else {
 					this.message = "Login failed";
 				}
+			});
+		},
+		handleGuest(event) {
+			this.$navigateTo(Home,
+			{
+				animated: false,
+				clearHistory: true
 			});
 		}
 	}
