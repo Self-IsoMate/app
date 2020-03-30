@@ -43,4 +43,15 @@ export default class BackendService {
     logout() {
         this.loggedIn = false;
     }
+
+    register (user) {
+        return axios.post(API+"users", user)
+            .then((res) => {
+                if (res.data.success) {
+                    return { success: true }
+                } else {
+                    return { success: false }
+                }
+            });
+    }
 }

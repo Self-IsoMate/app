@@ -6,7 +6,6 @@
 				<Label text="Some Questions..." class="main-text" fontSize="20"/>
 				<Label text="Would you be open to becoming a mentor?" class="main-text"/>
 
-
 				<StackLayout margin="15 0 0 0">
 					<FlexboxLayout alignItems="stretch" justifyContent="space-between">
 						<Button :class="{ selected : checkYes }" text="YES" @tap="selectYes" width="50%" />
@@ -24,10 +23,14 @@
 
 <script>
 
+import BackendService from "../services/BackendService";
 import LoginQuestionsActivities from "./LoginQuestionsActivities";
 import Home from "./Home";
 
 export default {
+	props: {
+		newUser: Object
+	},
     data: () => {
         return {
 			checkYes: null
@@ -43,10 +46,28 @@ export default {
 		navigateNext () {
 			if (this.checkYes) {
 				// go to choosing which ones you're good at
-				this.$navigateTo(LoginQuestionsActivities);
+				this.$navigateTo(LoginQuestionsActivities, {
+					props: {
+						newUser: {
+							username: this.$props.newUser.username,
+							password: this.$props.newUser.password,
+							email: this.$props.newUser.email,
+							isMentor: this.checkYes
+						}
+					}
+				});
 			} else {
-				// go straight to home
-				this.$navigateTo(Home);
+				// register
+
+				var backend = new BackendService();
+
+				backend.register(this.newUser)
+					.then((response) => {
+						if (response.success)
+							this.$navigateTo(Home);
+						else
+							console.log("you failed, you loser");
+					});
 			}
 		}
 	}
