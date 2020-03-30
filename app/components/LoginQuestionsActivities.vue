@@ -1,6 +1,6 @@
 <template lang="html">
     <Page>
-		<ActionBar title="Self-IsoMate"/>
+		<ActionBar title="Self-IsoMate" class="action-bar header" />
 		<GridLayout rows="*, auto">
 			<ScrollView row="0">
 				<StackLayout margin="50 50 50 50">

@@ -1,6 +1,6 @@
 <template>
     <Page>
-        <ActionBar title="Self-IsoMate" />
+        <ActionBar title="Self-IsoMate" class="action-bar header"/>
         <ScrollView>
             <StackLayout margin="50">
                 <TextField v-model="email" hint="Email" />

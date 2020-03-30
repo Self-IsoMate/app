@@ -1,6 +1,6 @@
 <template>
     <Page >
-        <ActionBar title="Self-IsoMate" />
+        <ActionBar title="Self-IsoMate" class="action-bar header" />
         <ScrollView>
             <StackLayout margin="50 50 50 50">
 				<Label text="Register" class="" fontSize="20"/>
