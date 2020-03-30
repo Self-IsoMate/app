@@ -1,6 +1,6 @@
 <template>
     <Page>
-        <ActionBar title="Forgot Password" />
+        <ActionBar title="Self-IsoMate" />
         <ScrollView>
             <StackLayout margin="50">
                 <TextField v-model="email" hint="Email" />

@@ -1,6 +1,6 @@
 <template lang="html">
     <Page>
-		<ActionBar title="Home"/>
+		<ActionBar title="Self-IsoMate"/>
 		<ScrollView>
 			<StackLayout margin="50 50 50 50">
 				<Label text="Some Questions..." class="main-text" fontSize="20"/>
