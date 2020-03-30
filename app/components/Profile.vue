@@ -56,14 +56,14 @@
                                     <Image src="~/assets/images/profilepic.png"
                                         stretch="aspectFill" class="profilePic">
                                     </Image>
-                                    <Label text="Aurora Mary" color="#000"
+                                    <Label text="Helen Normalassi-Lazogka" color="#000"
                                         fontSize="19" fontWeight="bold"
                                         textAlignment="center" />
                                     <StackLayout class="aboutContainer">
                                         <StackLayout orientation="horizontal">
                                             <Label text="" style="font-size:18;color:#557AAD;"
                                                 class="font-awesome" />
-                                            <Label text="New York" style="font-size:16;color:#000;margin-left:9;margin-top:1;"
+                                            <Label text="Sheffield, UK" style="font-size:16;color:#000;margin-left:9;margin-top:1;"
                                                 class="font-awesome" />
                                         </StackLayout>
                                         <StackLayout orientation="horizontal"
@@ -96,22 +96,16 @@
                                     marginTop="10">
                                     <Image src="~/assets/images/New-York.jpg"
                                         stretch="aspectFill" class="listImage"
-                                        width="33.3%" height="140" />
+                                        width="50%" height="140" />
                                     <Image src="~/assets/images/ny2.jpg"
                                         stretch="aspectFill" class="listImage"
-                                        width="33.3%" height="140" />
+                                        width="50%" height="140" />
                                     <Image src="~/assets/images/food.jpg"
                                         stretch="aspectFill" class="listImage"
-                                        width="33.3%" height="140" />
+                                        width="50%" height="140" />
                                     <Image src="~/assets/images/wedding.jpg"
                                         stretch="aspectFill" class="listImage"
-                                        width="33.3%" height="140" />
-                                    <Image src="~/assets/images/Selfie.jpg"
-                                        stretch="aspectFill" class="listImage"
-                                        width="33.3%" height="140" />
-                                    <Image src="~/assets/images/nature.jpg"
-                                        stretch="aspectFill" class="listImage"
-                                        width="33.3%" height="140" />
+                                        width="50%" height="140" />
                                 </WrapLayout>
 
                             </StackLayout>

@@ -139,20 +139,12 @@
                     },
                     {
                         title: "Gardening",
-                        postImg: "~/assets/images/Gardening.png",
-                    },
-                    {
-                        title: "Art",
                         postImg: "~/assets/images/Art.png",
                     },
                     {
                         title: "Art",
                         postImg: "~/assets/images/music.png",
                     },
-                    {
-                        title: "Art",
-                        postImg: "~/assets/images/Cooking.png",
-                    }
                 ]
             };
         },

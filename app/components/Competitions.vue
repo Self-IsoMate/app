@@ -135,19 +135,11 @@
                 mainColor: "#00ff92",
                 homePosts: [ {
                         title: "Gardening",
-                        postImg: "~/assets/images/Gardening.png",
+                        postImg: "~/assets/images/gardeningChallenge.png",
                     },
                     {
                         title: "Art",
-                        postImg: "~/assets/images/Art.png",
-                    },
-                    {
-                        title: "Art",
-                        postImg: "~/assets/images/music.png",
-                    },
-                    {
-                        title: "Art",
-                        postImg: "~/assets/images/Sports.png",
+                        postImg: "~/assets/images/musicChallenge.png",
                     }
                 ]
             };
