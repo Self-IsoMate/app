@@ -45,9 +45,6 @@
             <StackLayout ~mainContent>
 
                 <DockLayout>
-
-
-
                     <StackLayout dock="top" height="90%" width="100%" style="">
                         <ScrollView>
 
@@ -56,7 +53,7 @@
                                     <Image src="~/assets/images/profilepic.png"
                                         stretch="aspectFill" class="profilePic">
                                     </Image>
-                                    <Label text="Helen Normalassi-Lazogka" color="#000"
+                                    <Label :text="currentUser.username" color="#000"
                                         fontSize="19" fontWeight="bold"
                                         textAlignment="center" />
                                     <StackLayout class="aboutContainer">
@@ -165,18 +162,18 @@
     import Settings from "./Settings";
     import Help from "./Help";
     import LoginScreen from "./LoginMain";
+    import Vuex from "vuex";
 
     export default {
-        created() {},
         data() {
             return {
                 drawerToggle: false,
                 drawer1: "", //the three dots vertically
                 drawer2: "", //the three dots horizontally
-                mainColor: "#00ff92",
+                mainColor: "#00ff92"
             };
         },
-         methods: {
+        methods: {
             onDrawerClosed() {
                 this.drawerToggle = false;
             },
@@ -231,6 +228,12 @@
                 });
             }, //put in here navigate to log-in screen
             showDetails() {}
+        },
+        computed: {
+            currentUser: function () { 
+                console.log(this.$store.state);
+                return this.$store.state.user
+            }
         }
     };
 </script>

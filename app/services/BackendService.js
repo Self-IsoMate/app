@@ -28,7 +28,7 @@ export default class BackendService {
                 if (loginSuccessful) {
                     console.log("login successful");
                     this.loggedIn = true;
-                    return { success : true };
+                    return { success : true, user: res.data.user };
                 } 
                 else 
                 {

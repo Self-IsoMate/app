@@ -48,6 +48,11 @@ export default {
 							animated: false,
 							clearHistory: true
 						});
+
+					console.log(response);
+
+					this.$store.commit("setUser", { user: response.user });
+
 				} else {
 					this.message = "Login failed";
 				}
