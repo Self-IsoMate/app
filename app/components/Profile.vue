@@ -50,8 +50,9 @@
 
                             <StackLayout style="font-size:18;">
                                 <StackLayout alignItems="center">
-                                    <Image src="~/assets/images/profilepic.png"
-                                        stretch="aspectFill" class="profilePic">
+                                    <Image :src="currentUser.profilePicture"
+                                        stretch="aspectFill" class="profilePic"
+                                        @tap="pickProfile">
                                     </Image>
                                     <Label :text="currentUser.username" color="#000"
                                         fontSize="19" fontWeight="bold"
@@ -163,6 +164,9 @@
     import Help from "./Help";
     import LoginScreen from "./LoginMain";
     import Vuex from "vuex";
+    import * as imagepicker from "nativescript-imagepicker";
+    import { ItemEventData } from "tns-core-modules/ui/list-view";
+    import { Observable } from "tns-core-modules/data/observable";
 
     export default {
         data() {
@@ -227,11 +231,34 @@
                     clearHistory: true
                 });
             }, //put in here navigate to log-in screen
-            showDetails() {}
+            showDetails() {},
+            pickProfile() {
+                let context = imagepicker.create({ mode: "single", mediaType: 1 });
+
+                context
+                    .authorize()
+                    .then(() => {
+                        return context.present()
+                    })
+                    .then((selection) => {
+                        if (selection) {
+                            console.log("selected image");
+                            let image = selection[0];
+                            image.options.width = 300;
+                            image.options.height = 300;
+                            this.currentUser.profilePicture = image;
+                        } else {
+                            console.log("no image selected");
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    })
+
+            }
         },
         computed: {
             currentUser: function () { 
-                console.log(this.$store.state);
                 return this.$store.state.user
             }
         }

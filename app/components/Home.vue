@@ -55,7 +55,7 @@
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
 
-                        <ListView for="item in homePosts" :key="index" height="100%"
+                        <ListView for="item in homePosts" key="item.title" height="100%"
                             backgroundColor="#E8E8E8" separatorColor="transparent"
                             id="listView">
                             <v-template>
