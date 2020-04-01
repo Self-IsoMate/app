@@ -1,6 +1,10 @@
 import axios from "axios";
 const API = "https://self-isomate-api.appspot.com/api/";
-const {Storage} =  require("@google-cloud/storage");
+import { token } from "../../secrets/token";
+const BUCKET_NAME = "self-isomate-images";
+const BUCKET_PROFILE_PICTURES = "https://storage.googleapis.com/self-isomate-images/profile-pictures/";
+var bghttp = require("nativescript-background-http");
+
 
 export default class BackendService {
 
@@ -67,23 +71,46 @@ export default class BackendService {
             return;
         }
 
-        return this.uploadImage(imageUri, user)
-            .then((response) => {
-                if (response) console.log("successfully uploaded image");
-            })
-            .catch((err) => console.log(err));
+        var imgArr = imageUri.split('/');
+
+        var name = user.username + imgArr.pop();
+
+        var link = BUCKET_PROFILE_PICTURES + name;
+
+        var type = name.split('.').pop();
+
+        var session = bghttp.session("image-upload");
+
+        var request = {
+            url: `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=profile-pictures/${name}`,
+            method: "POST",
+            headers: {
+                "Content-Type": `image/${type}`,
+                "Authorization": `Bearer ${token}`
+            }
+        };
+
+        var task = session.uploadFile(imageUri, request);
+
+        task.on("error", (err) => console.log(err));
+        task.on("complete", (e) => {
+            this.updateUserProfilePicture(user, link);
+        });
+
     }
 
-    async uploadImage(imageUri, user) {
-        const bucketName = "";
-        const storage = new Storage({keyFilename: "../../secrets/key.json"});
+    async updateUserProfilePicture (user, imageLink) {
+        console.log("updateUserProfilePicture");
+        user.profilePicture = imageLink;
 
-        return storage.bucket(bucketName).upload(imageUri, {
-            gzip: true,
-            // destination: user.username + "profilePicture.png",
-            metadata: {
-              cacheControl: 'no-cache',
-            },
-          });
+        return await axios.put(API+`users/${user._id}`, user)
+            .then((res) => {
+                if (res) {
+                    return { newLocation: imageLink };
+                }
+            })
+            .catch((err) => {
+                if (err) console.log(err);
+            })
     }
 }

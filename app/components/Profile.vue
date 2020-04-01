@@ -231,11 +231,11 @@
                     animated: false,
                     clearHistory: true
                 });
-            }, //put in here navigate to log-in screen
+            },
             showDetails() {},
-            pickProfile() {
+
+            pickProfile () {
                 let context = imagepicker.create({ mode: "single", mediaType: 1 });
-                let backendService = new BackendService();
 
                 context
                     .authorize()
@@ -244,17 +244,16 @@
                     })
                     .then((selection) => {
                         if (selection) {
-                            console.log("selected image");
                             let image = selection[0];
                             image.options.width = 300;
                             image.options.height = 300;
                             this.currentUser.profilePicture = image;
-                            backendService.changeProfilePicture(this.currentUser)
+                            this.uploadImage()
                                 .then((res) => {
-                                    console.log(success);
-                                })
-                                .catch((err) => {
-                                    console.log(err);
+                                    if (res) {
+                                        console.log("got response");
+                                        this.currentUser.profilePicture = res;
+                                    }
                                 });
                         } else {
                             console.log("no image selected");
@@ -264,10 +263,17 @@
                         console.log(err);
                     })
 
+            },
+            
+            async uploadImage () {
+                let backendService = new BackendService();
+                console.log("uploading image");
+                return await backendService.changeProfilePicture(this.currentUser).newLocation;
             }
         },
         computed: {
-            currentUser: () => { 
+            currentUser: function () { 
+                console.log(this);
                 return this.$store.state.user
             }
         }
