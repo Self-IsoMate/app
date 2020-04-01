@@ -1,5 +1,6 @@
 import axios from "axios";
 const API = "https://self-isomate-api.appspot.com/api/";
+const {Storage} =  require("@google-cloud/storage");
 
 export default class BackendService {
 
@@ -53,5 +54,36 @@ export default class BackendService {
                     return { success: false }
                 }
             });
+    }
+
+    async changeProfilePicture (user) {
+        // checking if image uses android or apple file system uri
+        var imageUri = null;
+
+        imageUri = user.profilePicture._android ?? user.profilePicture._ios;
+
+        if (!imageUri) {
+            console.log("No image found");
+            return;
+        }
+
+        return this.uploadImage(imageUri, user)
+            .then((response) => {
+                if (response) console.log("successfully uploaded image");
+            })
+            .catch((err) => console.log(err));
+    }
+
+    async uploadImage(imageUri, user) {
+        const bucketName = "";
+        const storage = new Storage({keyFilename: "../../secrets/key.json"});
+
+        return storage.bucket(bucketName).upload(imageUri, {
+            gzip: true,
+            // destination: user.username + "profilePicture.png",
+            metadata: {
+              cacheControl: 'no-cache',
+            },
+          });
     }
 }

@@ -101,7 +101,9 @@ module.exports = env => {
     const config = {
         mode: mode,
         context: appFullPath,
-        externals,
+        externals: {
+            '@google-cloud/storage': 'commonjs @google-cloud/storage'
+        },
         watchOptions: {
             ignored: [
                 appResourcesFullPath,

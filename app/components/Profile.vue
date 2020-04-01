@@ -167,6 +167,7 @@
     import * as imagepicker from "nativescript-imagepicker";
     import { ItemEventData } from "tns-core-modules/ui/list-view";
     import { Observable } from "tns-core-modules/data/observable";
+    import BackendService from "../services/BackendService";
 
     export default {
         data() {
@@ -234,6 +235,7 @@
             showDetails() {},
             pickProfile() {
                 let context = imagepicker.create({ mode: "single", mediaType: 1 });
+                let backendService = new BackendService();
 
                 context
                     .authorize()
@@ -247,6 +249,13 @@
                             image.options.width = 300;
                             image.options.height = 300;
                             this.currentUser.profilePicture = image;
+                            backendService.changeProfilePicture(this.currentUser)
+                                .then((res) => {
+                                    console.log(success);
+                                })
+                                .catch((err) => {
+                                    console.log(err);
+                                });
                         } else {
                             console.log("no image selected");
                         }
@@ -258,7 +267,7 @@
             }
         },
         computed: {
-            currentUser: function () { 
+            currentUser: () => { 
                 return this.$store.state.user
             }
         }
