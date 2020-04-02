@@ -1,6 +1,5 @@
 import axios from "axios";
 const API = "https://self-isomate-api.appspot.com/api/";
-import { token } from "../../secrets/token";
 const BUCKET_NAME = "self-isomate-images";
 const BUCKET_PROFILE_PICTURES = "https://storage.googleapis.com/self-isomate-images/profile-pictures/";
 var bghttp = require("nativescript-background-http");
@@ -85,8 +84,7 @@ export default class BackendService {
             url: `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=profile-pictures/${name}`,
             method: "POST",
             headers: {
-                "Content-Type": `image/${type}`,
-                "Authorization": `Bearer ${token}`
+                "Content-Type": `image/${type}`
             }
         };
 
