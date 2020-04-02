@@ -9,11 +9,16 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <TextField placeholderColor="white" id="searchField"
+                    ///
+                    <SearchBar hint="Search hint" :text="searchPhrase" @textChange="onTextChanged" @submit="onSubmit" />
+                    <SearchBar v-model="homePosts.title" />
+                    <!-- <TextField placeholderColor="white" id="searchField"
                         editable="true" hint="      Search" returnKeyType="search"
                         ios:height="30" ios:marginTop="3"
                         android:paddingBottom="5" class="searchField font-awesome"
                         color="#fff" />
+                    -->
+                    ///
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -141,11 +146,11 @@
                         postImg: "~/assets/images/Art.png",
                     },
                     {
-                        title: "Art",
+                        title: "Music",
                         postImg: "~/assets/images/music.png",
                     },
                     {
-                        title: "Art",
+                        title: "Sports",
                         postImg: "~/assets/images/Sports.png",
                     }
                 ]
