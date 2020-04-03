@@ -138,6 +138,7 @@
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
+                searchPhrase: "",
                 allHomePosts: [ {
                         title: "Gardening",
                         postImg: "~/assets/images/Gardening.png",
