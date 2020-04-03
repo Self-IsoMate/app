@@ -9,15 +9,7 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    ///
-                    <SearchBar hint="Search hint" :text="searchPhrase" @textChange="filter()" @submit="onSubmit" />
-                    <!-- <TextField placeholderColor="white" id="searchField"
-                        editable="true" hint="      Search" returnKeyType="search"
-                        ios:height="30" ios:marginTop="3"
-                        android:paddingBottom="5" class="searchField font-awesome"
-                        color="#fff" />
-                    -->
-                    ///
+                    <SearchBar hint="Search hint" v-model="searchPhrase" @textChange="filter" />
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -59,7 +51,7 @@
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
 
-                        <ListView for="item in homePosts" :key="index" height="100%"
+                        <ListView for="item in homePosts" key="index" height="100%"
                             backgroundColor="#E8E8E8" separatorColor="transparent"
                             id="listView">
                             <v-template>
@@ -95,7 +87,7 @@
                             <StackLayout class="navItem" @tap="communityTap()">
                                 <Label text="" android:class="notificationAndroid"
                                     ios:class="notification" opacity="0" />
-                                <Label text="" :color="profileColor"
+                                <Label text="" color="red"
                                     android:style="font-size:25;margin-top:-15"
                                     ios:style="font-size:30;margin-top:-15"
                                     class="font-awesome" />
@@ -130,7 +122,7 @@
         computed: {},
         watch: {},
         created() {
-            this.homePosts = this.allHomePosts;
+            this.homePosts = Array.from(this.allHomePosts);
         },
         data() {
             return {
@@ -163,7 +155,7 @@
             ///
             filter() {
                 this.homePosts = this.allHomePosts.filter((h)=>{
-                   h.title.startsWith(searchPhrase); 
+                   return h.title.startsWith(this.searchPhrase);
                 });
             },
             ///
