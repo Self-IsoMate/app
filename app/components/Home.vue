@@ -10,8 +10,7 @@
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
                     ///
-                    <SearchBar hint="Search hint" :text="searchPhrase" @textChange="onTextChanged" @submit="onSubmit" />
-                    <SearchBar v-model="homePosts.title" />
+                    <SearchBar hint="Search hint" :text="searchPhrase" @textChange="filter()" @submit="onSubmit" />
                     <!-- <TextField placeholderColor="white" id="searchField"
                         editable="true" hint="      Search" returnKeyType="search"
                         ios:height="30" ios:marginTop="3"
@@ -130,14 +129,16 @@
     export default {
         computed: {},
         watch: {},
-        mounted() {},
+        created() {
+            this.homePosts = this.allHomePosts;
+        },
         data() {
             return {
                 drawerToggle: false,
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
-                homePosts: [ {
+                allHomePosts: [ {
                         title: "Gardening",
                         postImg: "~/assets/images/Gardening.png",
                     },
@@ -153,10 +154,18 @@
                         title: "Sports",
                         postImg: "~/assets/images/Sports.png",
                     }
-                ]
+                ],
+                homePosts:[]
             };
         },
         methods: {
+            ///
+            filter() {
+                this.homePosts = this.allHomePosts.filter((h)=>{
+                   h.title.startsWith(searchPhrase); 
+                });
+            },
+            ///
             onDrawerClosed() {
                 this.drawerToggle = false;
             },
