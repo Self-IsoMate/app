@@ -51,7 +51,7 @@
                         </ListView>
 
                     </StackLayout>
-                    <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
+                        <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
                         <StackLayout orientation="horizontal">
                             <StackLayout class="navItem" @tap="homeTap()">
                                 <Label text="" android:class="notificationAndroid"
@@ -87,38 +87,23 @@
                     </StackLayout>
                     <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
                         <StackLayout orientation="horizontal">
-                            <StackLayout class="navItem" @tap="homeTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text="" android:style="font-size:23;margin-top:-15"
-                                    ios:style="font-size:29;margin-top:-15"
-                                    class="font-awesome" />
+                            <StackLayout class="textItem" @tap="homeTap()">
+                            <TextField placeholderColor="white" id="searchField"
+                                editable="true" hint="    Say Something" returnKeyType="search"
+                                ios:height="30" ios:marginTop="3"
+                                android:paddingBottom="5" class="searchField font-awesome"
+                                color="#000000" />>
                             </StackLayout>
                             <StackLayout class="navItem" @tap="competitionTap()">
                                 <Label text="0" android:class="notificationAndroid"
                                     ios:class="notification" opacity="0" />
-                                <Label text=" " android:style="font-size:23;margin-top:-15"
+                                <Label text="" android:style="font-size:23;margin-top:-15"
                                     ios:style="font-size:29;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                            <StackLayout class="navItem" @tap="communityTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text="" :color="profileColor"
-                                    android:style="font-size:25;margin-top:-15"
-                                    ios:style="font-size:30;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                            <StackLayout class="navItem" @tap="chatTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text="" :color="mainColor"
-                                    android:style="font-size:25;margin-top:-15"
-                                    ios:style="font-size:30;margin-top:-15"
                                     class="font-awesome" />
                             </StackLayout>
                         </StackLayout>
                     </StackLayout>
+
 
                 </DockLayout>
 

@@ -138,7 +138,6 @@
     import Help from "./Help";
     import LoginScreen from "./LoginMain";
     import Chatroom from "./Chatroom";
-    import testChatroom from "./testChatroom";
 
     export default {
         created() {},
@@ -238,12 +237,6 @@
             chatroomTap(name){
                 this.$navigateTo(Chatroom, {
                     props: {chatName: name},
-                    animated: false,
-                    clearHistory: true
-                }); 
-            },
-            testTap(){
-                this.$navigateTo(testChatroom, {
                     animated: false,
                     clearHistory: true
                 }); 

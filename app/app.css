@@ -162,6 +162,11 @@ The imported CSS rules must precede all other types of rules.
 	text-align: center;
 }
 
+.textItem{
+	width:58%;
+	text-align: right;
+}
+
 .followersTxt{
 	text-align: center;
 	font-size: 14;
