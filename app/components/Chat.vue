@@ -15,6 +15,9 @@
           />
         </StackLayout>
         <StackLayout class="HMid" alignItems="left">
+          //
+          <SearchBar hint="Search hint" v-model="searchPhrase" @textChange="filter" />
+          //
           <TextField
             placeholderColor="white"
             id="searchField"
@@ -87,25 +90,6 @@
       <StackLayout ~mainContent>
         <DockLayout>
 ////////////////////////////////////////////////
-          <StackLayout dock="top" height="90%" width="100%" style>
-            ///////////
-            <div>
-              <Chat
-                :participants="participants"
-                :myself="myself"
-                :messages="messages"
-                :onType="onType"
-                :onMessageSubmit="onMessageSubmit"
-                :chatTitle="chatTitle"
-                :placeholder="placeholder"
-                :colors="colors"
-                :borderStyle="borderStyle"
-                :hideCloseButton="hideCloseButton"
-                :closeButtonIconSize="closeButtonIconSize"
-                :submitIconSize="submitIconSize"
-              />
-            </div>
-            /////////
             <ListView
               for="item in conversations"
               :key="index"
@@ -138,7 +122,7 @@
                 </StackLayout>
               </v-template>
             </ListView>
-          </StackLayout>
+          </StackLayout> -->
 ///////////////////////////////////////////////////////////
           <StackLayout
             dock="bottom"
@@ -220,111 +204,21 @@ import Profile from "./Profile";
 import Notifications from "./Notifications";
 import Settings from "./Settings";
 import Help from "./Help";
-/////
-import { Chat } from "vue-quick-chat"; ///////
 
 export default {
-  ///////
-  components: {
-    Chat
-  }, ////////////
-  created() {},
+  computed: {},
+  watch: {},
+  created() {
+    this.conversations = Array.from(this.allConversations);
+  },
   data() {
     return {
-      //////////
-      participants: [
-        {
-          name: "Arnaldo",
-          id: 1
-        },
-        {
-          name: "José",
-          id: 2
-        }
-      ],
-      myself: {
-        name: "Matheus S.",
-        id: 3
-      },
-      messages: [
-        {
-          content: "received messages",
-          myself: false,
-          participantId: 1,
-          timestamp: {
-            year: 2019,
-            month: 3,
-            day: 5,
-            hour: 20,
-            minute: 10,
-            second: 3,
-            millisecond: 123
-          }
-        },
-        {
-          content: "sent messages",
-          myself: true,
-          participantId: 3,
-          timestamp: {
-            year: 2019,
-            month: 4,
-            day: 5,
-            hour: 19,
-            minute: 10,
-            second: 3,
-            millisecond: 123
-          }
-        },
-        {
-          content: "other received messages",
-          myself: false,
-          participantId: 2,
-          timestamp: {
-            year: 2019,
-            month: 5,
-            day: 5,
-            hour: 10,
-            minute: 10,
-            second: 3,
-            millisecond: 123
-          }
-        }
-      ],
-      chatTitle: "My chat title",
-      placeholder: "send your message",
-      colors: {
-        header: {
-          bg: "#d30303",
-          text: "#fff"
-        },
-        message: {
-          myself: {
-            bg: "#fff",
-            text: "#bdb8b8"
-          },
-          others: {
-            bg: "#fb4141",
-            text: "#fff"
-          }
-        },
-        submitIcon: "#b91010"
-      },
-      borderStyle: {
-        topLeft: "10px",
-        topRight: "10px",
-        bottomLeft: "10px",
-        bottomRight: "10px"
-      },
-      hideCloseButton: false,
-      submitIconSize: "20px",
-      closeButtonIconSize: "20px",
-      ///////////
-
       drawerToggle: false,
       drawer1: "",
       drawer2: "",
       mainColor: "#00ff92",
-      conversations: [
+      searchPhrase: "",
+      allConversations: [
         {
           convFriendImg: "~/assets/images/images.jpg",
           read: "notRead",
@@ -354,14 +248,13 @@ export default {
   },
 
   methods: {
-      //////
-      onType: function (event){
-      //here you can set any behavior
+    ///
+    filter() {
+      this.conversations = this.allConversations.filter((h)=>{
+        return h.title.startsWith(this.searchPhrase);
+      });
     },
-    onMessageSubmit: function(message){
-      //here you can set any behavior
-    },
-    ////////
+    ///
     onDrawerClosed() {
       this.drawerToggle = false;
     },
@@ -417,7 +310,7 @@ export default {
     logOut() {}, //put in here navigate to log-in screen
     showDetails() {}
   }
-};
+}
 </script>
 <style scoped>
 </style>
