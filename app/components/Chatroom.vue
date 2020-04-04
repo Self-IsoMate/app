@@ -16,35 +16,6 @@
             </StackLayout>
         </ActionBar>
 
-
-        <RadSideDrawer ref="drawer" @drawerOpened="onDrawerOpened()"
-            @drawerClosed="onDrawerClosed()">
-            <StackLayout ~drawerContent backgroundColor="#eee">
-                <StackLayout height="2%"></StackLayout>
-                <StackLayout class="">
-                    <StackLayout class = "prof" @tap="profileTap()">
-                    <Label text="  Profile" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "notif" @tap="notificationTap()">
-                    <Label text="  Notifications" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "settings" @tap="settingsTap()">
-                    <Label text="  Settings" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "help" @tap="helpTap()">
-                    <Label text="  Help" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "logout" @tap="logOut()">
-                    <Label text="  Log out" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                </StackLayout>
-            </StackLayout>
-
             <StackLayout ~mainContent>
 
                 <DockLayout>
@@ -119,7 +90,6 @@
                 </DockLayout>
 
             </StackLayout>
-        </RadSideDrawer>
 
     </Page>
 </template>
