@@ -88,13 +88,13 @@
                     <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
                         <StackLayout orientation="horizontal">
                             <StackLayout class="textItem" @tap="homeTap()">
-                            <TextField placeholderColor="white" id="searchField"
+                            <TextField placeholderColor="black" id="searchField"
                                 editable="true" hint="    Say Something" returnKeyType="search"
-                                ios:height="30" ios:marginTop="3"
+                                ios:height="30" ios:marginTop="3" 
                                 android:paddingBottom="5" class="searchField font-awesome"
-                                color="#000000" />>
+                                color="#000000" />
                             </StackLayout>
-                            <StackLayout class="navItem" @tap="competitionTap()">
+                            <StackLayout class="send" @tap="competitionTap()">
                                 <Label text="0" android:class="notificationAndroid"
                                     ios:class="notification" opacity="0" />
                                 <Label text="" android:style="font-size:23;margin-top:-15"

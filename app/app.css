@@ -164,6 +164,12 @@ The imported CSS rules must precede all other types of rules.
 
 .textItem{
 	width:58%;
+	text-align: left;
+	overflow-wrap: break-word;
+}
+
+.send{
+	width: 20%;
 	text-align: right;
 }
 
