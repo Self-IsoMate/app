@@ -53,23 +53,11 @@
 
                 <DockLayout>
 
-                    <StackLayout dock="top" height="90%" width="100%" style="">
-
-                        <ListView for="item in homePosts" key="item.title" height="100%"
-                            backgroundColor="#E8E8E8" separatorColor="transparent"
-                            id="listView">
-                            <v-template>
-
-                                <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
-                                    <StackLayout class="postContainer">
-                                        <Image :src="item.postImg" marginTop="10" />
-                                    </StackLayout>
-                                </StackLayout>
-
-                            </v-template>
-                        </ListView>
-
-                    </StackLayout>
+                    <ScrollView dock="top" scrollBarIndicatorVisible="true" height="90%">
+                        <StackLayout>
+                            <CategoryThumb v-for="category in categories" :key="category._id" :category="category" />
+                        </StackLayout>
+                    </ScrollView>
 
                     <StackLayout dock="bottom" height="10%" style="border-color:#E8E8E8;border-width:1;background:#fff;">
                         <StackLayout orientation="horizontal">
@@ -122,6 +110,8 @@
     import Settings from "./Settings";
     import Help from "./Help";
     import LoginScreen from "./LoginMain";
+    import CategoryThumb from "./CategoryThumb";
+    import BackendService from "../services/BackendService";
 
     export default {
         data() {
@@ -130,20 +120,26 @@
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
-                homePosts: [ {
-                        title: "Gardening",
-                        postImg: "~/assets/images/TrySomethingNew.png",
-                    },
-                    {
-                        title: "Gardening",
-                        postImg: "~/assets/images/Art.png",
-                    },
-                    {
-                        title: "Art",
-                        postImg: "~/assets/images/music.png",
-                    },
-                ]
+                categories: []
             };
+        },
+        components: {
+            CategoryThumb
+        },
+        created () {
+            let service = new BackendService();
+            service.getCategories()
+                .then((res) => {
+                    if (res) {
+                        console.log(res);
+                        this.categories = res.categories;
+                    }
+                })
+                .catch((err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                })
         },
         methods: {
             onDrawerClosed() {
