@@ -42,3 +42,6 @@ typings/**/*
 
 #NativeScript cloud files
 .cloud/**/*
+
+#Files with secret information
+secrets

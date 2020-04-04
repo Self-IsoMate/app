@@ -46,6 +46,10 @@
 	<key>UIStatusBarStyle</key>
 	<string>UIStatusBarStyleLightContent</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<key>NSCameraUsageDescription</key>
+	<string>Take pictures for the gallery</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Add images from your device</string>
 	<false/>
 </dict>
 </plist>
