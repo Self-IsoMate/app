@@ -1,20 +1,14 @@
 <template>
     <Page class="page">
-
-
-        <ActionBar title="" class="action-bar header">
+        <ActionBar title="HHHH" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
-                <StackLayout class="HLeft" style="margin-top:10;" @tap="toggleDrawer()">
-                    <Label :text="drawerToggle ? drawer2: drawer1" style="font-size:27;color:#fff;"
+                <StackLayout class="HLeft" style="margin-top:10;" @tap="chatTap()">
+                    <Label :text="back" style="font-size:27;color:#fff;"
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <TextField placeholderColor="white" id="searchField"
-                        editable="true" hint="      Search" returnKeyType="search"
-                        ios:height="30" ios:marginTop="3"
-                        android:paddingBottom="5" class="searchField font-awesome"
-                        color="#fff" />
+                    <Label class = "action-bar-title" :text="conversations" paddingTop = "7.5%" color="white" id="searchField"></Label>
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -62,7 +56,7 @@
                             <v-template>
 
                                 <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
-                                    padding="10" @tap="chatroomTap()">
+                                    padding="10" @tap="communityTap()">
                                     <StackLayout width="20%">
                                         <Image :src="item.convFriendImg"
                                             stretch="aspectFill" class="conImg" />
@@ -125,7 +119,6 @@
                 </DockLayout>
 
             </StackLayout>
-            <Chatroom v-bind:conversations="conversations"/>   
         </RadSideDrawer>
 
     </Page>
@@ -140,44 +133,18 @@
     import Settings from "./Settings";
     import Help from "./Help";
     import LoginScreen from "./LoginMain";
-    import Chatroom from "./Chatroom";
+    import Chat from "./Chat";
 
     export default {
+        name: "Chat",
+        props: ['conversations'],
         created() {},
         data() {
             return {
-                drawerToggle: false,
-                drawer1: "",
-                drawer2: "",
+                back:"",
                 mainColor: "#00ff92",
-                conversations: [{
-                        convFriendImg: "~/assets/images/violinGroup.png",
-                        read: "notRead",
-                        convFriendName: "#ViolinIntermediate",
-                        convText: "Lindsay21: can anyone help me with my double stops?",
-                        convDate: "19:01",
-                        seenVisibility: "collapse"
-                    },
-                    {
-                        convFriendImg: "~/assets/images/uk.png",
-                        read: "notRead",
-                        convFriendName: "#UnitedKingdom",
-                        convText: "DiscoDan: Honestly not surprised Boris has it",
-                        convDate: "18:43",
-                        seenVisibility: "collapse"
-                    },
-                    {
-                        convFriendImg: "~/assets/images/musicCollaboration.jpeg",
-                        read: "read",
-                        convFriendName: "#MusicCollaborate",
-                        convText: "You: Any guitarists out there? Need background instrumentals for my new track",
-                        convDate: "2 minutes ago",
-                        seenVisibility: "visible"
-                    }
-                ]
             };
         },
-
         methods: {
             onDrawerClosed() {
                 this.drawerToggle = false;
@@ -200,7 +167,12 @@
                     clearHistory: true
                 });
             },
-            chatTap(){},
+            chatTap() {
+                this.$navigateTo(Chat, {
+                    animated: false,
+                    clearHistory: true
+                });
+            },
             competitionTap() {
                 this.$navigateTo(Competitions, {
                     animated: false,
@@ -237,13 +209,7 @@
                     clearHistory: true
                 }); 
             }, //put in here navigate to log-in screen
-            showDetails() {},
-            chatroomTap(){
-                this.$navigateTo(Chatroom, {
-                    animated: false,
-                    clearHistory: true
-                }); 
-            }
+            showDetails() {}
         }
     };
 </script>
