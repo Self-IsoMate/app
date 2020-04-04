@@ -62,7 +62,7 @@
                             <v-template>
 
                                 <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
-                                    padding="10" @tap="chatroomTap(item.convFriendName)">
+                                    padding="10" @tap="testTap()">
                                     <StackLayout width="20%">
                                         <Image :src="item.convFriendImg"
                                             stretch="aspectFill" class="conImg" />
@@ -139,6 +139,7 @@
     import Help from "./Help";
     import LoginScreen from "./LoginMain";
     import Chatroom from "./Chatroom";
+    import testChatroom from "./testChatroom";
 
     export default {
         created() {},
@@ -238,6 +239,12 @@
             chatroomTap(name){
                 this.$navigateTo(Chatroom, {
                     props: {chatName: name},
+                    animated: false,
+                    clearHistory: true
+                }); 
+            },
+            testTap(){
+                this.$navigateTo(testChatroom, {
                     animated: false,
                     clearHistory: true
                 }); 
