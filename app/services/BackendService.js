@@ -111,4 +111,14 @@ export default class BackendService {
                 if (err) console.log(err);
             })
     }
+
+    async getProfilePosts(user) {
+        return axios.get(API+`posts?user.username=${user.username}`)
+            .then((res) => {
+                return { posts: res.data };
+            })
+            .catch((err) => {
+                if (err) console.log(err);
+            })
+    }
 }

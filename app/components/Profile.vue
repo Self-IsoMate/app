@@ -49,7 +49,7 @@
                         <ScrollView>
 
                             <StackLayout style="font-size:18;">
-                                <StackLayout alignItems="center">
+                                <StackLayout alignItems="center" margin="0 30px">
                                     <Image :src="currentUser.profilePicture"
                                         stretch="aspectFill" class="profilePic"
                                         @tap="pickProfile">
@@ -57,54 +57,17 @@
                                     <Label :text="currentUser.username" color="#000"
                                         fontSize="19" fontWeight="bold"
                                         textAlignment="center" />
-                                    <StackLayout class="aboutContainer">
-                                        <StackLayout orientation="horizontal">
-                                            <Label text="" style="font-size:18;color:#557AAD;"
-                                                class="font-awesome" />
-                                            <Label text="Sheffield, UK" style="font-size:16;color:#000;margin-left:9;margin-top:1;"
-                                                class="font-awesome" />
-                                        </StackLayout>
-                                        <StackLayout orientation="horizontal"
-                                            class="aboutRow">
-                                            <Label text="" style="font-size:16;color:#557AAD;"
-                                                class="font-awesome" />
-                                            <Label text="Website.com" style="font-size:16;color:#000;margin-left:6;"
-                                                class="font-awesome" />
-                                        </StackLayout>
-
-                                    </StackLayout>
-                                    <StackLayout orientation="horizontal"
-                                        class="followersContainer">
-                                        <StackLayout width="33%">
-                                            <Label text="6" class="followersTxtValue" />
-                                            <Label text="Posts " class="followersTxt" />
-                                        </StackLayout>
-                                        <StackLayout width="33%">
-                                            <Label text="2300" class="followersTxtValue" />
-                                            <Label text="Followers " class="followersTxt" />
-                                        </StackLayout>
-                                        <StackLayout width="33%">
-                                            <Label text="400" class="followersTxtValue" />
-                                            <Label text="Following " class="followersTxt" />
-                                        </StackLayout>
-                                    </StackLayout>
+                                    <Label :text="currentUser.bio" class="bio" />
+                                    <WrapLayout orientation="horizontal">
+                                        <Label v-for="commie in currentUser.communities" :key="commie._id" :text="commie.name" class="pill" />
+                                    </WrapLayout>
                                 </StackLayout>
 
-                                <WrapLayout alignItems="left" backgroundColor="#eeeeee"
-                                    marginTop="10">
-                                    <Image src="~/assets/images/New-York.jpg"
-                                        stretch="aspectFill" class="listImage"
-                                        width="50%" height="140" />
-                                    <Image src="~/assets/images/ny2.jpg"
-                                        stretch="aspectFill" class="listImage"
-                                        width="50%" height="140" />
-                                    <Image src="~/assets/images/food.jpg"
-                                        stretch="aspectFill" class="listImage"
-                                        width="50%" height="140" />
-                                    <Image src="~/assets/images/wedding.jpg"
-                                        stretch="aspectFill" class="listImage"
-                                        width="50%" height="140" />
-                                </WrapLayout>
+                                <StackLayout  alignItems="left" backgroundColor="#eeeeee"
+                                    margin="10" padding="10" v-show="posts">
+                                    <Label padding="10" text="Posts" fontSize="20px" textAlign="center" />
+                                    <PostThumb v-for="post in posts" :key="post._id" :post="post" />
+                                </StackLayout>
 
                             </StackLayout>
 
@@ -168,14 +131,31 @@
     import { ItemEventData } from "tns-core-modules/ui/list-view";
     import { Observable } from "tns-core-modules/data/observable";
     import BackendService from "../services/BackendService";
+    import PostThumb from "./PostThumb";
 
     export default {
+        created() {
+            var service = new BackendService();
+
+            if (this.$store.state.user) {
+                service.getProfilePosts(this.$store.state.user)
+                    .then((res) => {
+                        if (res.posts.length > 0)
+                            this.posts = res.posts;
+                        else
+                            this.posts = null;
+                        console.log(res);
+                    });
+            }
+
+        },
         data() {
             return {
                 drawerToggle: false,
                 drawer1: "", //the three dots vertically
                 drawer2: "", //the three dots horizontally
-                mainColor: "#00ff92"
+                mainColor: "#00ff92",
+                posts: []
             };
         },
         methods: {
@@ -273,11 +253,27 @@
         },
         computed: {
             currentUser: function () { 
-                console.log(this);
                 return this.$store.state.user
             }
+        },
+        components: {
+            PostThumb
         }
     };
 </script>
 <style scoped>
+
+.pill {
+    background-color: rgb(209, 224, 215);
+    padding: 25px;
+    margin: 10px;
+    border-radius: 10%;
+    font-size: 12px;
+}
+
+.bio {
+    text-align: center;
+    font-size: 14px;
+}
+
 </style>
