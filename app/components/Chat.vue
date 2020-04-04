@@ -54,7 +54,7 @@
             <StackLayout ~mainContent>
 
                 <DockLayout>
-                    <StackLayout dock="top" height="80%" width="100%" style="">
+                    <StackLayout dock="top" height="90%" width="100%" style="">
 
 
                         <ListView for="item in conversations" :key="index"
@@ -87,40 +87,6 @@
 
                     </StackLayout>
 
-                    <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
-                        <StackLayout orientation="horizontal">
-                            <StackLayout class="navItem" @tap="homeTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text="" android:style="font-size:23;margin-top:-15"
-                                    ios:style="font-size:29;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                            <StackLayout class="navItem" @tap="competitionTap()">
-                                <Label text="0" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text=" " android:style="font-size:23;margin-top:-15"
-                                    ios:style="font-size:29;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                            <StackLayout class="navItem" @tap="communityTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text="" :color="profileColor"
-                                    android:style="font-size:25;margin-top:-15"
-                                    ios:style="font-size:30;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                            <StackLayout class="navItem" @tap="chatTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text="" :color="mainColor"
-                                    android:style="font-size:25;margin-top:-15"
-                                    ios:style="font-size:30;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                        </StackLayout>
-                    </StackLayout>
                     <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
                         <StackLayout orientation="horizontal">
                             <StackLayout class="navItem" @tap="homeTap()">
