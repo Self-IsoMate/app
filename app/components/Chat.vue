@@ -62,7 +62,7 @@
                             <v-template>
 
                                 <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
-                                    padding="10" @tap="chatroomTap()">
+                                    padding="10" @tap="chatroomTap(item.convFriendName)">
                                     <StackLayout width="20%">
                                         <Image :src="item.convFriendImg"
                                             stretch="aspectFill" class="conImg" />
@@ -125,9 +125,7 @@
                 </DockLayout>
 
             </StackLayout>
-            <Chatroom v-bind:conversations="conversations"/>   
         </RadSideDrawer>
-
     </Page>
 </template>
 
@@ -177,7 +175,6 @@
                 ]
             };
         },
-
         methods: {
             onDrawerClosed() {
                 this.drawerToggle = false;
@@ -238,8 +235,9 @@
                 }); 
             }, //put in here navigate to log-in screen
             showDetails() {},
-            chatroomTap(){
+            chatroomTap(name){
                 this.$navigateTo(Chatroom, {
+                    props: {chatName: name},
                     animated: false,
                     clearHistory: true
                 }); 

@@ -8,7 +8,7 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <Label class = "action-bar-title" :text="conversations" paddingTop = "7.5%" color="white" id="searchField"></Label>
+                    <Label class = "action-bar-title" :text= "$props.chatName" paddingTop = "7.5%" color="white" id="searchField"></Label>
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -136,8 +136,7 @@
     import Chat from "./Chat";
 
     export default {
-        name: "Chat",
-        props: ['conversations'],
+        props: ['chatName'],
         created() {},
         data() {
             return {
