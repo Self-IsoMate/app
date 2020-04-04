@@ -40,6 +40,9 @@ export default class BackendService {
                     return { success : false };
                 }
             }
+        })
+        .catch((err) => {
+            if (err) console.log(err);
         });
 
     }
@@ -119,6 +122,20 @@ export default class BackendService {
             })
             .catch((err) => {
                 if (err) console.log(err);
+            })
+    }
+
+    async getCategories() {
+        return axios.get(API+'categories?isSubcategory=false')
+            .then((res) => {
+                if (res) {
+                    console.log(res);
+                    return { categories: res.data }
+                }
+            })
+            .catch((err) => {
+                if (err)
+                    return { success: false, message: err }
             })
     }
 }
