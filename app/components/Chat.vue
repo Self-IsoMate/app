@@ -10,15 +10,21 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <TextField placeholderColor="white" id="searchField"
-                        editable="true" hint="      Search" returnKeyType="search"
-                        ios:height="30" ios:marginTop="3"
-                        android:paddingBottom="5" class="searchField font-awesome"
-                        color="#fff" />
+                    <SearchBar hint="Search hint" v-model="searchPhrase" @textChange="filter" />
+                    <TextField
+                        placeholderColor="white"
+                        id="searchField"
+                        editable="true"
+                        hint="      Search"
+                        returnKeyType="search"
+                        ios:height="30"
+                        ios:marginTop="3"
+                        android:paddingBottom="5"
+                        class="searchField font-awesome"
+                        color="#fff"
+                    />
                 </StackLayout>
-                <StackLayout class="HRight">
-
-                </StackLayout>
+                <StackLayout class="HRight"></StackLayout>
             </StackLayout>
         </ActionBar>
 
@@ -141,14 +147,19 @@
     import LoginScreen from "./LoginMain";
 
     export default {
-        created() {},
+        computed: {},
+        watch: {},
+        created() {
+            this.conversations = Array.from(this.allConversations);
+        },
         data() {
             return {
                 drawerToggle: false,
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
-                conversations: [{
+                searchPhrase: "",
+                allConversations: [{
                         convFriendImg: "~/assets/images/violinGroup.png",
                         read: "notRead",
                         convFriendName: "#ViolinIntermediate",
@@ -177,6 +188,11 @@
         },
 
         methods: {
+            filter() {
+                this.conversations = this.allConversations.filter((h)=>{
+                return h.title.startsWith(this.searchPhrase);
+                });
+            },
             onDrawerClosed() {
                 this.drawerToggle = false;
             },
