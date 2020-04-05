@@ -13,10 +13,6 @@ The imported CSS rules must precede all other types of rules.
 @import '~nativescript-theme-core/css/core.light.css';
 
 
-#searchField {
-	placeholder-color: white;
-}
-
 .btn {
 	font-size: 18;
 }
@@ -160,6 +156,22 @@ The imported CSS rules must precede all other types of rules.
 .navItem{
 	width:24%;
 	text-align: center;
+}
+
+.textItem{
+	width:58%;
+	text-align: left;
+	margin-left: 25;
+	overflow-wrap: break-word;
+	border-right-width: 1;
+	border-right-color:#E4E4E4;
+	height:40;
+ 	text-decoration: none;
+}
+
+.send{
+	width: 20%;
+	text-align: right;
 }
 
 .followersTxt{
