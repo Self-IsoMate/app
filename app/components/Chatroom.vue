@@ -89,12 +89,12 @@
                         <StackLayout orientation="horizontal">
                             <StackLayout class="textItem">
                             <TextView v-model="message" placeholderColor="black" 
-                                editable="true" hint="    Say Something" returnKeyType="search"
+                                editable="true" hint="    Say Something" returnKeyType="send"
                                 ios:height="30" ios:marginTop="3" 
                                 android:paddingBottom="5" class="searchField font-awesome" textWrap="true"
                                 color="#000000"/>
                             </StackLayout>
-                            <StackLayout class="send" @tap="sendTap(message)">
+                            <StackLayout class="send" @tap="sendTap()">
                                 <Label text="0" android:class="notificationAndroid"
                                     ios:class="notification" opacity="0" />
                                 <Label text="" android:style="font-size:23;margin-top:-15"
@@ -122,6 +122,7 @@
     import Help from "./Help";
     import LoginScreen from "./LoginMain";
     import Chat from "./Chat";
+    import moment from "moment";
 
     export default {
         props: ['chatName'],
@@ -198,18 +199,20 @@
                 }); 
             }, 
             showDetails() {},
-            sendTap(message){
-                this.conversations.push({
-                     convFriendImg: "~/assets/images/violinGroup.png",
-                        read: "notRead",
-                        convFriendName: "Me",
-                        convText: message,
-                        convDate: "19:01",
-                        seenVisibility: "collapse"
+            sendTap(){
+                const current = new Date();
+                this.conversations.unshift({ //use .push to add to bottom
+                    convFriendImg: "~/assets/images/violinGroup.png",
+                    read: "notRead",
+                    convFriendName: "Me",
+                    convText: this.message,
+                    convDate: moment().format('HH:mm'),
+                    seenVisibility: "collapse"
                 });
-                //this.message = "" -- THIS CLEARED IT BUT NOT VISUALLY
-                //also need to implement it so all messages send from bottom and push up
-            },
+                this.message = "";
+                //this.message = "" -- THIS CLEARS IT BUT NOT VISUALLY
+                //better implementation so all messages send from bottom and push up
+            }, 
         }
     };
 </script>
