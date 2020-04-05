@@ -257,95 +257,6 @@
                 ]
             };
         },
-        {
-          content: "sent messages",
-          myself: true,
-          participantId: 3,
-          timestamp: {
-            year: 2019,
-            month: 4,
-            day: 5,
-            hour: 19,
-            minute: 10,
-            second: 3,
-            millisecond: 123
-          }
-        },
-        {
-          content: "other received messages",
-          myself: false,
-          participantId: 2,
-          timestamp: {
-            year: 2019,
-            month: 5,
-            day: 5,
-            hour: 10,
-            minute: 10,
-            second: 3,
-            millisecond: 123
-          }
-        }
-      ],
-      chatTitle: "My chat title",
-      placeholder: "send your message",
-      colors: {
-        header: {
-          bg: "#d30303",
-          text: "#fff"
-        },
-        message: {
-          myself: {
-            bg: "#fff",
-            text: "#bdb8b8"
-          },
-          others: {
-            bg: "#fb4141",
-            text: "#fff"
-          }
-        },
-        submitIcon: "#b91010"
-      },
-      borderStyle: {
-        topLeft: "10px",
-        topRight: "10px",
-        bottomLeft: "10px",
-        bottomRight: "10px"
-      },
-      hideCloseButton: false,
-      submitIconSize: "20px",
-      closeButtonIconSize: "20px",
-      ///////////
-      drawerToggle: false,
-      drawer1: "",
-      drawer2: "",
-      mainColor: "#00ff92",
-      conversations: [
-        {
-          convFriendImg: "~/assets/images/images.jpg",
-          read: "notRead",
-          convFriendName: "John",
-          convText: "ok but why?",
-          convDate: "19:01",
-          seenVisibility: "collapse"
-        },
-        {
-          convFriendImg: "~/assets/images/large.jpg",
-          read: "read",
-          convFriendName: "Christine",
-          convText: "Okay",
-          convDate: "18:43",
-          seenVisibility: "collapse"
-        },
-        {
-          convFriendImg: "~/assets/images/download_(1).jpg",
-          read: "read",
-          convFriendName: "Katty",
-          convText: "You: Sorry I Can't",
-          convDate: "18:21",
-          seenVisibility: "visible"
-         }
-        ]
-       },
         methods: {
             onDrawerClosed() {
                 this.drawerToggle = false;
@@ -357,10 +268,10 @@
                 this.$refs.drawer.nativeView.toggleDrawerState();
             },
             homeTap() {
-                 this.$navigateTo(Home, {
+              this.$navigateTo(Home, {
                     animated: false,
                     clearHistory: true
-                });
+              });
             },
             communityTap() {
                 this.$navigateTo(Community, {
@@ -368,7 +279,7 @@
                     clearHistory: true
                 });
             },
-            chatTap(){},
+            chatTap() {},
             competitionTap() {
                 this.$navigateTo(Competitions, {
                     animated: false,
@@ -403,79 +314,11 @@
                 this.$navigateTo(LoginScreen, {
                     animated: false,
                     clearHistory: true
-                }); 
-            }, //put in here navigate to log-in screen
+                });
+            }, 
             showDetails() {}
-        }
-      ]
-    };
-  },
-
-  methods: {
-      //////
-      onType: function (event){
-      //here you can set any behavior
-    },
-    onMessageSubmit: function(message){
-      //here you can set any behavior
-    },
-    ////////
-    onDrawerClosed() {
-      this.drawerToggle = false;
-    },
-    onDrawerOpened() {
-      this.drawerToggle = true;
-    },
-    toggleDrawer() {
-      this.$refs.drawer.nativeView.toggleDrawerState();
-    },
-    homeTap() {
-      this.$navigateTo(Home, {
-        animated: false,
-        clearHistory: true
-      });
-    },
-    communityTap() {
-      this.$navigateTo(Community, {
-        animated: false,
-        clearHistory: true
-      });
-    },
-    chatTap() {},
-    competitionTap() {
-      this.$navigateTo(Competitions, {
-        animated: false,
-        clearHistory: true
-      });
-    },
-    profileTap() {
-      this.$navigateTo(Profile, {
-        animated: false,
-        clearHistory: true
-      });
-    },
-    notificationTap() {
-      this.$navigateTo(Notifications, {
-        animated: false,
-        clearHistory: true
-      });
-    },
-    settingsTap() {
-      this.$navigateTo(Settings, {
-        animated: false,
-        clearHistory: true
-      });
-    },
-    helpTap() {
-      this.$navigateTo(Help, {
-        animated: false,
-        clearHistory: true
-      });
-    },
-    logOut() {}, //put in here navigate to log-in screen
-    showDetails() {}
-  }
-};
+      }
+  };
 </script>
 <style scoped>
 </style>
