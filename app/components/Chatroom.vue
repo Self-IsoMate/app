@@ -27,7 +27,7 @@
                             <v-template>
 
                                 <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
-                                    padding="10" @tap="communityTap()">
+                                    padding="10">
                                     <StackLayout width="20%">
                                         <Image :src="item.convFriendImg"
                                             stretch="aspectFill" class="conImg" />
@@ -36,11 +36,11 @@
                                         width="50%">
                                         <Label :text="item.convFriendName"
                                             :class="'convFriendName ' + item.read" />
-                                        <Label :text="item.convText" :class="'convTextOut ' + item.read" />
+                                        <Label :text="item.convText" textWrap="true" :class="'convTextOut ' + item.read" />
                                     </StackLayout>
                                     <StackLayout marginLeft="10" paddingTop="3"
                                         width="60%">
-                                        <Label :text="item.convDate" :class="'convDateOut ' + item.read" />
+                                        <Label :text="item.convDate"  :class="'convDateOut ' + item.read" />
                                         <Label text="" :visibility="item.seenVisibility"
                                             style="font-size:17;text-align:center;margin-top:12;color:#1aa3ff;"
                                             class="font-awesome" />
@@ -87,14 +87,14 @@
                     </StackLayout>
                     <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
                         <StackLayout orientation="horizontal">
-                            <StackLayout class="textItem" @tap="homeTap()">
-                            <TextField placeholderColor="black" id="searchField"
+                            <StackLayout class="textItem">
+                            <TextView v-model="message" placeholderColor="black" 
                                 editable="true" hint="    Say Something" returnKeyType="search"
                                 ios:height="30" ios:marginTop="3" 
-                                android:paddingBottom="5" class="searchField font-awesome"
-                                color="#000000" />
+                                android:paddingBottom="5" class="searchField font-awesome" textWrap="true"
+                                color="#000000"/>
                             </StackLayout>
-                            <StackLayout class="send" @tap="competitionTap()">
+                            <StackLayout class="send" @tap="sendTap(message)">
                                 <Label text="0" android:class="notificationAndroid"
                                     ios:class="notification" opacity="0" />
                                 <Label text="" android:style="font-size:23;margin-top:-15"
@@ -130,6 +130,7 @@
             return {
                 back:"",
                 mainColor: "#00ff92",
+                conversations: []
             };
         },
         methods: {
@@ -195,8 +196,20 @@
                     animated: false,
                     clearHistory: true
                 }); 
-            }, //put in here navigate to log-in screen
-            showDetails() {}
+            }, 
+            showDetails() {},
+            sendTap(message){
+                this.conversations.push({
+                     convFriendImg: "~/assets/images/violinGroup.png",
+                        read: "notRead",
+                        convFriendName: "Me",
+                        convText: message,
+                        convDate: "19:01",
+                        seenVisibility: "collapse"
+                });
+                //this.message = "" -- THIS CLEARED IT BUT NOT VISUALLY
+                //also need to implement it so all messages send from bottom and push up
+            },
         }
     };
 </script>
