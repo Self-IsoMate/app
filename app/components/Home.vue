@@ -9,11 +9,7 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <TextField placeholderColor="white" id="searchField"
-                        editable="true" hint="      Search" returnKeyType="search"
-                        ios:height="30" ios:marginTop="3"
-                        android:paddingBottom="5" class="searchField font-awesome"
-                        color="#fff" />
+                    <SearchBar hint="Search hint" v-model="searchPhrase" @textChange="filter" />
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -91,7 +87,7 @@
                             <StackLayout class="navItem" @tap="communityTap()">
                                 <Label text="" android:class="notificationAndroid"
                                     ios:class="notification" opacity="0" />
-                                <Label text="" :color="profileColor"
+                                <Label text="" color="red"
                                     android:style="font-size:25;margin-top:-15"
                                     ios:style="font-size:30;margin-top:-15"
                                     class="font-awesome" />
@@ -124,13 +120,19 @@
     import LoginScreen from "./LoginMain";
 
     export default {
+        computed: {},
+        watch: {},
+        created() {
+            this.homePosts = Array.from(this.allHomePosts);
+        },
         data() {
             return {
                 drawerToggle: false,
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
-                homePosts: [ {
+                searchPhrase: "",
+                allHomePosts: [ {
                         title: "Gardening",
                         postImg: "~/assets/images/TrySomethingNew.png",
                     },
@@ -139,13 +141,25 @@
                         postImg: "~/assets/images/Art.png",
                     },
                     {
-                        title: "Art",
+                        title: "Music",
                         postImg: "~/assets/images/music.png",
                     },
-                ]
+                    {
+                        title: "Sports",
+                        postImg: "~/assets/images/Sports.png",
+                    }
+                ],
+                homePosts:[]
             };
         },
         methods: {
+            ///
+            filter() {
+                this.homePosts = this.allHomePosts.filter((h)=>{
+                   return h.title.startsWith(this.searchPhrase);
+                });
+            },
+            ///
             onDrawerClosed() {
                 this.drawerToggle = false;
             },
