@@ -5,7 +5,7 @@
 			<StackLayout margin="50 50 50 50">
 				<TextField v-model="username" hint="Username"/>
 				<TextField v-model="password" hint="Password" secure="true"/>
-				<Button text="LOGIN" @tap="handleLogin($event)"></Button>
+				<Button text="LOGIN" @tap="handleLogin($event)" autoCapitalizationType="none"></Button>
 				<GridLayout columns="*, *" rows="*, *">
 					<Button col="0" row="0" text="REGISTER" @tap="navigateRegister"></Button>
 					<Button col="1" row="0" text="GUEST" @tap="handleGuest"></Button>
@@ -48,6 +48,11 @@ export default {
 							animated: false,
 							clearHistory: true
 						});
+
+					console.log(response);
+
+					this.$store.commit("setUser", { user: response.user });
+
 				} else {
 					this.message = "Login failed";
 				}
