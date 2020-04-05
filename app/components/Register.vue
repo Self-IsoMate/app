@@ -1,16 +1,15 @@
 <template>
-    <Page backgroundColor="black">
-        <ActionBar title="Home2" />
+    <Page >
+        <ActionBar title="Self-IsoMate" class="action-bar header" />
         <ScrollView>
-            <StackLayout class="home-panel">
-                <Image
-                    src="https://play.nativescript.org/dist/assets/img/NativeScript_logo.png" />
-                <Label text="REGISTER" class="label-class" />
-                <TextField v-model="username" hint="USERNAME" class="my-class" marginTop= "40"/>
-                <TextField v-model="password" hint="PASSWORD" class="my-class" />
-                <TextField v-model="confirmpassword" hint="CONFIRM PASSWORD" class="my-class" />
-                <TextField v-model="email" hint="EMAIL" class="my-class" />
-                <Button text="CONTINUE" @tap="navigateQuestions" class="button-class" />
+            <StackLayout margin="50 50 50 50">
+				<Label text="Register" class="" fontSize="20"/>
+                <TextField v-model="username" hint="Username" />
+                <TextField secure="true" v-model="password" hint="Password"  />
+                <TextField secure="true" v-model="confirmpassword" hint="Confirm password" />
+                <Label v-if="invalidPasswords" text="Passwords need to match" class="error" />
+                <TextField v-model="email" hint="Email" />
+                <Button text="CONTINUE" @tap="navigateQuestions" />
             </StackLayout>
         </ScrollView>
     </Page>
@@ -29,12 +28,35 @@ export default {
             username: "",
             password: "",
             confirmpassword: "",
-            email: ""
+            email: "",
+            invalidPasswords: false
         };
     },
     methods: {
         navigateQuestions (event) {
-            this.$navigateTo(LoginQuestionsMentor);
+            if (!this.isInvalid()) {
+                this.$navigateTo(LoginQuestionsMentor, {
+                    props: {
+                        newUser: {
+                            username: this.username,
+                            password: this.password,
+                            email: this.email
+                        }
+                    }
+                });
+            } else {
+                this.invalidPasswords = true;
+                setTimeout(() => { this.invalidPasswords = false }, 3000);
+            }
+        },
+
+        isInvalid() {
+            // add any extra cases where passwords could be invalid
+
+            if (this.password != this.confirmpassword)
+                return true;
+
+            return false;
         }
     }
 }
@@ -42,34 +64,11 @@ export default {
 
 
 <style scoped>
-    .home-panel {
-        font-family: aharoni;
-        width: 80%;
-    }
 
-    .label-class{
-            color: #00ff92;
-            font-size: 28;
-            text-align: center;
-            vertical-align: middle;
-            margin-top: 10;
-    }
-
-    .my-class {
-        background-color: pink;
-        color: #00ff92;
-        font-size: 20;
-        border-color: #00ff92;
-        border-width: 4;
-    }
-
-    .button-class {
-        background-color: #00ff92;
-        color: black;
-        font-size: 22;
-        margin-bottom: 15;
-        margin-top: 50;
-    }
-
+.error {
+    color: red;
+    font-style: italic;
+    font-size: 8px;
+}
     
 </style>

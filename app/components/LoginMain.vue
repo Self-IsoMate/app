@@ -1,17 +1,17 @@
 <template lang="html">
     <Page>
-		<ActionBar title="Home"/>
+		<ActionBar title="Self-IsoMate" class="action-bar header"/>
 		<ScrollView>
 			<StackLayout margin="50 50 50 50">
-				<Label text="Login" class="" fontSize="20"/>
 				<TextField v-model="username" hint="Username"/>
 				<TextField v-model="password" hint="Password" secure="true"/>
-				<Button text="LOGIN" @tap="handleLogin($event)"></Button>
+				<Button text="LOGIN" @tap="handleLogin($event)" autoCapitalizationType="none"></Button>
 				<GridLayout columns="*, *" rows="*, *">
 					<Button col="0" row="0" text="REGISTER" @tap="navigateRegister"></Button>
-					<Button col="1" row="0" text="GUEST" @tap="handleLogin($event)"></Button>
+					<Button col="1" row="0" text="GUEST" @tap="handleGuest"></Button>
 					<Label row="1" colSpan="2" text="Forgot password?" @tap="navigateForgot" class="forgot-pass"></Label>
 				</GridLayout>
+				<Label :text="message" />
 			</StackLayout>
 		</ScrollView>
     </Page>
@@ -21,6 +21,7 @@
 import Register from "./Register";
 import Forgot from "./Forgot";
 import Home from "./Home";
+import BackendService from "../services/BackendService";
 
 export default {
 	name: 'LoginMain',
@@ -33,13 +34,36 @@ export default {
 	},
 	methods: {
 		navigateRegister(event) {
-			this.$navigateTo(Register);
+			this.$navigateTo(Register, { clearHistory: true });
 		},
 		navigateForgot(event) {
-			this.$navigateTo(Forgot);
+			this.$navigateTo(Forgot, { clearHistory: true });
 		},
 		handleLogin(event) {
-			this.$navigateTo(Home);
+			var service = new BackendService();
+			service.login(this.username, this.password).then((response) => {
+				console.log(response);
+				if (response && response.success) {
+					this.$navigateTo(Home,{
+							animated: false,
+							clearHistory: true
+						});
+
+					console.log(response);
+
+					this.$store.commit("setUser", { user: response.user });
+
+				} else {
+					this.message = "Login failed";
+				}
+			});
+		},
+		handleGuest(event) {
+			this.$navigateTo(Home,
+			{
+				animated: false,
+				clearHistory: true
+			});
 		}
 	}
 }

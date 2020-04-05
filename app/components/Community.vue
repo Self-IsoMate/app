@@ -16,14 +16,15 @@
                         color="#fff" />
                 </StackLayout>
                 <StackLayout class="HRight">
-
+                    <Label text="+" style="font-size:40;color:#fff;" paddingLeft="15%"
+                        class="font-awesome" />
                 </StackLayout>
             </StackLayout>
         </ActionBar>
 
         <RadSideDrawer ref="drawer" @drawerOpened="onDrawerOpened()"
             @drawerClosed="onDrawerClosed()">
-            <StackLayout ~drawerContent backgroundColor="#eee">
+                      <StackLayout ~drawerContent backgroundColor="#eee">
                 <StackLayout height="2%"></StackLayout>
                 <StackLayout class="">
                     <StackLayout class = "prof" @tap="profileTap()">
@@ -48,40 +49,54 @@
                     </StackLayout>
                 </StackLayout>
             </StackLayout>
+
             <StackLayout ~mainContent>
 
                 <DockLayout>
 
-
-
                     <StackLayout dock="top" height="90%" width="100%" style="">
-                        <ListView for="item in conversations" :key="index"
-                            height="100%" separatorColor="transparent" id="listView">
+                        <ListView for="item in posts" :key="index" height="100%"
+                            backgroundColor="#E8E8E8" separatorColor="transparent"
+                            id="listView">
                             <v-template>
 
-                                <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
-                                    padding="10">
-                                    <StackLayout width="20%">
-                                        <Image :src="item.convFriendImg"
-                                            stretch="aspectFill" class="conImg" />
-                                    </StackLayout>
-                                    <StackLayout marginLeft="10" paddingTop="3"
-                                        width="50%">
-                                        <Label :text="item.convFriendName"
-                                            :class="'convFriendName ' + item.read" />
-                                        <Label :text="item.convText" :class="'convTextOut ' + item.read" />
-                                    </StackLayout>
-                                    <StackLayout marginLeft="10" paddingTop="3"
-                                        width="60%">
-                                        <Label :text="item.convDate" :class="'convDateOut ' + item.read" />
-                                        <Label text="" :visibility="item.seenVisibility"
-                                            style="font-size:17;text-align:center;margin-top:12;color:#1aa3ff;"
-                                            class="font-awesome" />
+                            <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
+                                    <StackLayout class="postContainer">
+                                        <StackLayout orientation="horizontal"
+                                            padding="10">
+                                            <Image :src="item.authorImg"
+                                                stretch="aspectFill" class="postImageSmall" />
+                                            <StackLayout>
+                                                <Label :text="item.autorName"
+                                                    class="postAuthotName" />
+                                                <Label :text="item.date"
+                                                    class="postDateSmall" />
+                                                <Label :text="item.categories"
+                                                    class="postDateSmall" />
+                                            </StackLayout>
+                                        </StackLayout>
+                                        <Label marginLeft="10" marginRight="10"
+                                            class="postTitle" :text="item.title" />
+                                        <Image :src="item.postImg" marginTop="10" />
+                                        <StackLayout orientation="horizontal"
+                                            padding="10" marginLeft="10%">
+                                            <Label text=" " style="font-size:18;margin-top:-1;"
+                                                :color="item.color" class="font-awesome" />
+                                            <Label :text="item.likes" style="font-size:12;color:#1aa3ff;" />
+                                            <Label text=" " style="font-size:19;margin-left:23%;margin-top:-3;color:#747474;"
+                                                class="font-awesome" />
+                                            <Label :text="item.comments"
+                                                style="font-size:12;color:#1aa3ff;" />
+                                            <Label text=" " style="font-size:22;margin-left:23%;margin-top:-1;color:#747474;"
+                                                class="font-awesome" />
+                                            <Label :text="item.reposts" style="font-size:12;color:#1aa3ff;" />
+                                        </StackLayout>
                                     </StackLayout>
                                 </StackLayout>
 
                             </v-template>
                         </ListView>
+
                     </StackLayout>
 
 
@@ -119,13 +134,12 @@
                         </StackLayout>
                     </StackLayout>
 
-
                 </DockLayout>
 
             </StackLayout>
         </RadSideDrawer>
 
-    </Page>
+    </page>
 </template>
 
 <script>
@@ -136,6 +150,7 @@
     import Notifications from "./Notifications";
     import Settings from "./Settings";
     import Help from "./Help";
+    import LoginScreen from "./LoginMain";
 
      export default {
         created() {},
@@ -145,29 +160,29 @@
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
-                conversations: [{
-                        convFriendImg: "~/assets/images/images.jpg",
-                        read: "notRead",
-                        convFriendName: "John",
-                        convText: "ok but why?",
-                        convDate: "19:01",
-                        seenVisibility: "collapse"
+                posts: [{
+                        authorImg: "~/assets/images/Sebastian.jpg",
+                        autorName: "Sebastian",
+                        color: "#747474",
+                        date: "Today at 13:45",
+                        title: "Thanks guys! Finally broken it out",
+                        postImg: "~/assets/images/Violin.jpg",
+                        likes: "30",
+                        comments: "14",
+                        reposts: "8",
+                        categories: "#music #learningviolin"
                     },
                     {
-                        convFriendImg: "~/assets/images/large.jpg",
-                        read: "read",
-                        convFriendName: "Christine",
-                        convText: "Okay",
-                        convDate: "18:43",
-                        seenVisibility: "collapse"
-                    },
-                    {
-                        convFriendImg: "~/assets/images/download_(1).jpg",
-                        read: "read",
-                        convFriendName: "Katty",
-                        convText: "You: Sorry I Can't",
-                        convDate: "18:21",
-                        seenVisibility: "visible"
+                        authorImg: "~/assets/images/large.jpg",
+                        autorName: "Cristine",
+                        color: "#E15050",
+                        date: "Today at 16:21",
+                        title: "What a treat! Super rich 👌",
+                        postImg: "~/assets/images/ChocolateTart.jpg",
+                        likes: "150",
+                        comments: "21",
+                        reposts: "11",
+                        categories: "#recipes #trysomethingnew"
                     }
                 ]
             };
@@ -225,7 +240,12 @@
                     clearHistory: true
                 });
             },
-            logOut(){}, //put in here navigate to log-in screen
+            logOut(){
+                this.$navigateTo(LoginScreen, {
+                    animated: false,
+                    clearHistory: true
+                });
+            }, //put in here navigate to log-in screen
             showDetails() {}
         }
     };

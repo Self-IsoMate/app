@@ -46,9 +46,14 @@
                 <DockLayout>
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
-                        <GridLayout class="page__content">
-                         <Label class="page__content-placeholder" :text="message"></Label>
-                        </GridLayout>
+                    <ListView for="item in items" @itemTap="onItemTap">
+                    <v-template>
+                        <StackLayout orientation="horizontal">
+                        <Label :text="item.description" textWrap="false" paddingLeft = "5%" paddingTop = "25%" paddingBottom = "15%"
+                        android:style="font-size:18;margin-top:-15" ios:style="font-size:18;margin-top:-15"></Label>
+                        </StackLayout>
+                    </v-template>
+                    </ListView>
                     </StackLayout>
 
                     <StackLayout dock="bottom" height="10%" style="border-color:#E8E8E8;border-width:1;background:#fff;">
@@ -103,6 +108,7 @@
     import Home from "./Home";
     import Settings from "./Settings";
     import Help from "./Help";
+    import LoginScreen from "./LoginMain";
 
     export default {
         mounted() {
@@ -113,15 +119,28 @@
                 return "No Notifications";
             }
         },
-        data() {
-            return {
-                drawerToggle: false,
-                drawer1: "", //the three dots vertically
-                drawer2: "", //the three dots horizontally
-                mainColor: "#00ff92",
-            };
-        },
-        methods: {
+        data: () => {
+        return {
+            items: [
+                {
+                    name: "Music",
+                    description: "Welcome to Self-Isomate. There's a lot to do but you should first..."
+                },
+                {
+                    name: "DIY",
+                    description: "Day 3 in Isolation, why not try something new? We have a range of..."
+                },
+                {
+                    name: "Cooking",
+                    description: "Hey Helen, you got 3rd prize in this week's cooking competition... "
+                }
+            ],
+            drawerToggle: false,
+            drawer1: "", //the three dots vertically
+            drawer2: "", //the three dots horizontally
+            mainColor: "#00ff92",
+            }
+        }, methods: {
             onDrawerClosed() {
                 this.drawerToggle = false;
             },
@@ -174,7 +193,12 @@
                     clearHistory: true
                 });
             },
-            logOut(){}, //put in here navigate to log-in screen
+            logOut(){
+                this.$navigateTo(LoginScreen, {
+                    animated: false,
+                    clearHistory: true
+                });
+            }, //put in here navigate to log-in screen
             showDetails() {}
         }
     };

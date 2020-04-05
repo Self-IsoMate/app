@@ -1,11 +1,10 @@
 <template lang="html">
     <Page>
-		<ActionBar title="Home"/>
+		<ActionBar title="Self-IsoMate" class="action-bar header" />
 		<ScrollView>
 			<StackLayout margin="50 50 50 50">
 				<Label text="Some Questions..." class="main-text" fontSize="20"/>
-				<Label text="Would you be open to becoming a mentor?" class="main-text"/>
-
+				<Label textWrap="true" text="Would you be open to becoming a mentor?" class="main-text"/>
 
 				<StackLayout margin="15 0 0 0">
 					<FlexboxLayout alignItems="stretch" justifyContent="space-between">
@@ -24,10 +23,15 @@
 
 <script>
 
+import BackendService from "../services/BackendService";
 import LoginQuestionsActivities from "./LoginQuestionsActivities";
 import Home from "./Home";
+import * as ApplicationSettings from "application-settings"
 
 export default {
+	props: {
+		newUser: Object
+	},
     data: () => {
         return {
 			checkYes: null
@@ -43,10 +47,33 @@ export default {
 		navigateNext () {
 			if (this.checkYes) {
 				// go to choosing which ones you're good at
-				this.$navigateTo(LoginQuestionsActivities);
+				this.$navigateTo(LoginQuestionsActivities, {
+					props: {
+						newUser: {
+							username: this.$props.newUser.username,
+							password: this.$props.newUser.password,
+							email: this.$props.newUser.email,
+							isMentor: this.checkYes
+						}
+					},
+					clearHistory: true
+				});
 			} else {
-				// go straight to home
-				this.$navigateTo(Home);
+				// register
+
+				var backend = new BackendService();
+
+				backend.register(this.newUser)
+					.then((response) => {
+						if (response.success) {
+							this.$navigateTo(Home,  {
+								animated: false,
+								clearHistory: true
+							});
+						} else {
+							console.log("login failed");
+						}
+					});
 			}
 		}
 	}

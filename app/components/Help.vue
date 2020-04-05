@@ -103,6 +103,7 @@
     import Home from "./Home";
     import Notifications from "./Notifications";
     import Settings from "./Settings";
+    import LoginScreen from "./LoginMain";
 
     export default {
         mounted() {
@@ -174,7 +175,12 @@
                 });
             },
             helpTap(){},
-            logOut(){}, //put in here navigate to log-in screen
+            logOut(){
+                this.$navigateTo(LoginScreen, {
+                    animated: false,
+                    clearHistory: true
+                });
+            }, //put in here navigate to log-in screen
             showDetails() {}
         }
     };

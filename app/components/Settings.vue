@@ -46,9 +46,16 @@
                 <DockLayout>
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
-                        <GridLayout class="page__content">
-                         <Label class="page__content-placeholder" :text="message"></Label>
-                        </GridLayout>
+                    <ListView for="item in items" @itemTap="onItemTap">
+                    <v-template>
+                        <StackLayout orientation="horizontal">
+                        <Label :text="item.title" textWrap="false" paddingLeft = "5%" paddingTop = "25%" paddingBottom = "15%"
+                        android:style="font-size:25;margin-top:-15" ios:style="font-size:30;margin-top:-15"></Label>
+                        <Label :text="item.description" textWrap="false" paddingLeft = "5%" paddingTop = "30%" paddingBottom = "15%"
+                        android:style="font-size:18;margin-top:-15" ios:style="font-size:18;margin-top:-15"></Label>
+                        </StackLayout>
+                    </v-template>
+                    </ListView>
                     </StackLayout>
 
                     <StackLayout dock="bottom" height="10%" style="border-color:#E8E8E8;border-width:1;background:#fff;">
@@ -103,6 +110,7 @@
     import Home from "./Home";
     import Notifications from "./Notifications";
     import Help from "./Help";
+    import LoginScreen from "./LoginMain";
 
     export default {
         mounted() {
@@ -113,13 +121,31 @@
                 return "No Settings";
             }
         },
-        data() {
-            return {
-                drawerToggle: false,
-                drawer1: "", //the three dots vertically
-                drawer2: "", //the three dots horizontally
-                mainColor: "#00ff92",
-            };
+        data: () => {
+        return {
+            items: [
+                {
+                    title: "Security >> ",
+                    description: "Change your password, Change Email, Delete Account"
+                },
+                {
+                    title: "Display >> ",
+                    description: "Dark Mode, Text Font and Size"
+                },
+                {
+                    title: "Notifications >> ",
+                    description: "Control how you are getting contacted"
+                },
+                {
+                    title: "Community >> ",
+                    description: "View Community List, Exit a community"
+                }
+            ],
+            drawerToggle: false,
+            drawer1: "", //the three dots vertically
+            drawer2: "", //the three dots horizontally
+            mainColor: "#00ff92",
+        }
         },
         methods: {
             onDrawerClosed() {
@@ -174,7 +200,12 @@
                     clearHistory: true
                 });
             },
-            logOut(){}, //put in here navigate to log-in screen
+            logOut(){
+                this.$navigateTo(Help, {
+                    animated: false,
+                    clearHistory: true
+                });
+            }, //put in here navigate to log-in screen
             showDetails() {}
         }
     };

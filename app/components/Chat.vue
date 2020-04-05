@@ -213,53 +213,49 @@
 </template>
 
 <script>
-import Home from "./Home";
-import Community from "./Community";
-import Competitions from "./Competitions";
-import Profile from "./Profile";
-import Notifications from "./Notifications";
-import Settings from "./Settings";
-import Help from "./Help";
-/////
-import { Chat } from "vue-quick-chat"; ///////
+    import Home from "./Home";
+    import Community from "./Community";
+    import Competitions from "./Competitions"
+    import Profile from "./Profile";
+    import Notifications from "./Notifications";
+    import Settings from "./Settings";
+    import Help from "./Help";
+    import LoginScreen from "./LoginMain";
 
-export default {
-  ///////
-  components: {
-    Chat
-  }, ////////////
-  created() {},
-  data() {
-    return {
-      //////////
-      participants: [
-        {
-          name: "Arnaldo",
-          id: 1
-        },
-        {
-          name: "José",
-          id: 2
-        }
-      ],
-      myself: {
-        name: "Matheus S.",
-        id: 3
-      },
-      messages: [
-        {
-          content: "received messages",
-          myself: false,
-          participantId: 1,
-          timestamp: {
-            year: 2019,
-            month: 3,
-            day: 5,
-            hour: 20,
-            minute: 10,
-            second: 3,
-            millisecond: 123
-          }
+    export default {
+        created() {},
+        data() {
+            return {
+                drawerToggle: false,
+                drawer1: "",
+                drawer2: "",
+                mainColor: "#00ff92",
+                conversations: [{
+                        convFriendImg: "~/assets/images/violinGroup.png",
+                        read: "notRead",
+                        convFriendName: "#ViolinIntermediate",
+                        convText: "Lindsay21: can anyone help me with my double stops?",
+                        convDate: "19:01",
+                        seenVisibility: "collapse"
+                    },
+                    {
+                        convFriendImg: "~/assets/images/uk.png",
+                        read: "notRead",
+                        convFriendName: "#UnitedKingdom",
+                        convText: "DiscoDan: Honestly not surprised Boris has it",
+                        convDate: "18:43",
+                        seenVisibility: "collapse"
+                    },
+                    {
+                        convFriendImg: "~/assets/images/musicCollaboration.jpeg",
+                        read: "read",
+                        convFriendName: "#MusicCollaborate",
+                        convText: "You: Any guitarists out there? Need background instrumentals for my new track",
+                        convDate: "2 minutes ago",
+                        seenVisibility: "visible"
+                    }
+                ]
+            };
         },
         {
           content: "sent messages",
@@ -319,7 +315,6 @@ export default {
       submitIconSize: "20px",
       closeButtonIconSize: "20px",
       ///////////
-
       drawerToggle: false,
       drawer1: "",
       drawer2: "",
@@ -348,6 +343,69 @@ export default {
           convText: "You: Sorry I Can't",
           convDate: "18:21",
           seenVisibility: "visible"
+         }
+        ]
+       },
+        methods: {
+            onDrawerClosed() {
+                this.drawerToggle = false;
+            },
+            onDrawerOpened() {
+                this.drawerToggle = true;
+            },
+            toggleDrawer() {
+                this.$refs.drawer.nativeView.toggleDrawerState();
+            },
+            homeTap() {
+                 this.$navigateTo(Home, {
+                    animated: false,
+                    clearHistory: true
+                });
+            },
+            communityTap() {
+                this.$navigateTo(Community, {
+                    animated: false,
+                    clearHistory: true
+                });
+            },
+            chatTap(){},
+            competitionTap() {
+                this.$navigateTo(Competitions, {
+                    animated: false,
+                    clearHistory: true
+                });
+            },
+            profileTap() {
+                this.$navigateTo(Profile, {
+                    animated: false,
+                    clearHistory: true
+                });
+            },
+            notificationTap() {
+                this.$navigateTo(Notifications, {
+                    animated: false,
+                    clearHistory: true
+                });
+            },
+            settingsTap() {
+                this.$navigateTo(Settings, {
+                    animated: false,
+                    clearHistory: true
+                });
+            },
+            helpTap(){
+                this.$navigateTo(Help, {
+                    animated: false,
+                    clearHistory: true
+                });
+            },
+            logOut(){
+                this.$navigateTo(LoginScreen, {
+                    animated: false,
+                    clearHistory: true
+                }); 
+            }, //put in here navigate to log-in screen
+            showDetails() {}
         }
       ]
     };

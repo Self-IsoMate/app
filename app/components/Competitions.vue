@@ -55,7 +55,7 @@
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
 
-                        <ListView for="item in homePosts" :key="index" height="100%"
+                        <ListView for="item in homePosts" key="index" height="100%"
                             backgroundColor="#E8E8E8" separatorColor="transparent"
                             id="listView">
                             <v-template>
@@ -121,6 +121,7 @@
     import Notifications from "./Notifications";
     import Settings from "./Settings";
     import Help from "./Help";
+    import LoginScreen from "./LoginMain";
 
     export default {
         computed: {},
@@ -134,19 +135,11 @@
                 mainColor: "#00ff92",
                 homePosts: [ {
                         title: "Gardening",
-                        postImg: "~/assets/images/Gardening.png",
+                        postImg: "~/assets/images/gardeningChallenge.png",
                     },
                     {
                         title: "Art",
-                        postImg: "~/assets/images/Art.png",
-                    },
-                    {
-                        title: "Art",
-                        postImg: "~/assets/images/music.png",
-                    },
-                    {
-                        title: "Art",
-                        postImg: "~/assets/images/Sports.png",
+                        postImg: "~/assets/images/musicChallenge.png",
                     }
                 ]
             };
@@ -204,7 +197,12 @@
                     clearHistory: true
                 });
             },
-            logOut(){}, //put in here navigate to log-in screen
+            logOut(){
+                this.$navigateTo(LoginScreen, {
+                    animated: false,
+                    clearHistory: true
+                });
+            }, //put in here navigate to log-in screen
             showDetails() {}
         }
     };
