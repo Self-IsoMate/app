@@ -84,14 +84,9 @@
 </template>
 
 <script>
-import SideBar from "./SideBar";
-import NavBar from "./NavBar";
 
 export default {
-    components: {
-        SideBar,
-        NavBar
-    },
+    name: "Community",
     data() {
         return {
             drawerToggle: false,

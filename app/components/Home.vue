@@ -43,29 +43,26 @@
     </page>
 </template>
 <script>
-    import SideBar from "./SideBar";
-    import NavBar from "./NavBar";
     import CategoryThumb from "./CategoryThumb";
     import BackendService from "../services/BackendService";
     import Category from "./Category";
 
     export default {
+        name: "Home",
         data() {
             return {
                 drawerToggle: false,
                 categories: [],
                 drawer1: "",
-                drawer2: ""
+                drawer2: "",
+                service: new BackendService()
             };
         },
         components: {
-            CategoryThumb,
-            SideBar,
-            NavBar
+            CategoryThumb
         },
-        created () {
-            let service = new BackendService();
-            service.getCategories()
+        mounted () {
+            this.service.getCategories()
                 .then((res) => {
                     if (res) {
                         console.log(res);

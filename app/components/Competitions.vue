@@ -53,14 +53,9 @@
     </Page>
 </template>
 <script>
-import SideBar from "./SideBar";
-import NavBar from "./NavBar";
 
 export default {
-    components: {
-        SideBar,
-        NavBar
-    },
+    name: "Competitions",
     data() {
         return {
             drawerToggle: false,
