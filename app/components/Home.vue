@@ -87,7 +87,7 @@
                             <StackLayout class="navItem" @tap="communityTap()">
                                 <Label text="" android:class="notificationAndroid"
                                     ios:class="notification" opacity="0" />
-                                <Label text="" color="red"
+                                <Label text=""
                                     android:style="font-size:25;margin-top:-15"
                                     ios:style="font-size:30;margin-top:-15"
                                     class="font-awesome" />
@@ -133,21 +133,17 @@
                 mainColor: "#00ff92",
                 searchPhrase: "",
                 allHomePosts: [ {
-                        title: "Gardening",
+                        title: "Try Something New",
                         postImg: "~/assets/images/TrySomethingNew.png",
                     },
                     {
-                        title: "Gardening",
+                        title: "Art",
                         postImg: "~/assets/images/Art.png",
                     },
                     {
                         title: "Music",
                         postImg: "~/assets/images/music.png",
                     },
-                    {
-                        title: "Sports",
-                        postImg: "~/assets/images/Sports.png",
-                    }
                 ],
                 homePosts:[]
             };
@@ -156,7 +152,7 @@
             ///
             filter() {
                 this.homePosts = this.allHomePosts.filter((h)=>{
-                   return h.title.startsWith(this.searchPhrase);
+                   return h.title.toUpperCase().startsWith(this.searchPhrase.toUpperCase());
                 });
             },
             ///
