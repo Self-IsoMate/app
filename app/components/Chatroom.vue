@@ -85,14 +85,14 @@
                             </StackLayout>
                         </StackLayout>
                     </StackLayout>
-                    <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
+                    <StackLayout dock="bottom" height="200px" style="border-color:#E4E4E4;border-width:1;background:#fff;">
                         <StackLayout orientation="horizontal">
                             <StackLayout class="textItem">
                             <TextView v-model="message" placeholderColor="black" 
                                 editable="true" hint="    Say Something" returnKeyType="send"
                                 ios:height="30" ios:marginTop="3" 
                                 android:paddingBottom="5" class="searchField font-awesome" textWrap="true"
-                                color="#000000"/>
+                                color="#000000" :text="message" @textChanged="log" />
                             </StackLayout>
                             <StackLayout class="send" @tap="sendTap()">
                                 <Label text="0" android:class="notificationAndroid"
@@ -131,7 +131,8 @@
             return {
                 back:"",
                 mainColor: "#00ff92",
-                conversations: []
+                conversations: [],
+                message: ""
             };
         },
         methods: {
@@ -200,11 +201,11 @@
             }, 
             showDetails() {},
             sendTap(){
-                const current = new Date();
+                console.log(`sending: ${this.message}`);
                 this.conversations.unshift({ //use .push to add to bottom
-                    convFriendImg: "~/assets/images/violinGroup.png",
+                    convFriendImg: this.$store.state.user.profilePicture,
                     read: "notRead",
-                    convFriendName: "Me",
+                    convFriendName: this.$store.state.user.username,
                     convText: this.message,
                     convDate: moment().format('HH:mm'),
                     seenVisibility: "collapse"
@@ -212,7 +213,10 @@
                 this.message = "";
                 //this.message = "" -- THIS CLEARS IT BUT NOT VISUALLY
                 //better implementation so all messages send from bottom and push up
-            }, 
+            },
+            log (event) {
+                console.log(this.message);
+            }
         }
     };
 </script>
