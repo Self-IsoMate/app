@@ -65,7 +65,7 @@
             this.service.getCategories()
                 .then((res) => {
                     if (res) {
-                        console.log(res);
+                        console.log(res.categories);
                         this.categories = res.categories;
                     }
                 })
@@ -93,10 +93,7 @@
                 this.$refs.drawer.nativeView.toggleDrawerState();
             }, //put in here navigate to log-in screen
             selectCategory(event) {
-                console.log(event);
                 this.$navigateTo(Category, {
-                    animated: false,
-                    clearHistory: true,
                     props: {
                         subcategories: event.category.subcategories
                     }
