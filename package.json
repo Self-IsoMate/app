@@ -39,7 +39,7 @@
         "nativescript-vue": "2.5.0",
         "numeral": "^2.0.6",
         "tns-core-modules": "6.5.0",
-        "underscore": "^1.9.2",
+        "underscore": "^1.9.2"
 
     },
     "devDependencies": {
