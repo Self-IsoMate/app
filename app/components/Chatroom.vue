@@ -92,7 +92,7 @@
                                 editable="true" hint="    Say Something" returnKeyType="send"
                                 ios:height="30" ios:marginTop="3" 
                                 android:paddingBottom="5" class="searchField font-awesome" textWrap="true"
-                                color="#000000" :text="message" @textChanged="log" />
+                                color="#000000" :text="message" />
                             </StackLayout>
                             <StackLayout class="send" @tap="sendTap()">
                                 <Label text="0" android:class="notificationAndroid"
@@ -201,7 +201,6 @@
             }, 
             showDetails() {},
             sendTap(){
-                console.log(`sending: ${this.message}`);
                 this.conversations.unshift({ //use .push to add to bottom
                     convFriendImg: this.$store.state.user.profilePicture,
                     read: "notRead",
@@ -213,9 +212,6 @@
                 this.message = "";
                 //this.message = "" -- THIS CLEARS IT BUT NOT VISUALLY
                 //better implementation so all messages send from bottom and push up
-            },
-            log (event) {
-                console.log(this.message);
             }
         }
     };
