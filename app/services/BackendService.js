@@ -129,7 +129,6 @@ export default class BackendService {
         return axios.get(API+'categories?isSubcategory=false')
             .then((res) => {
                 if (res) {
-                    console.log(res);
                     return { categories: res.data }
                 }
             })
