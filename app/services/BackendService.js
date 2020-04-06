@@ -121,4 +121,28 @@ export default class BackendService {
                 if (err) console.log(err);
             })
     }
+
+    async saveMessage(userID,chatroomID,message) {
+      
+        return axios.post(API+"messages", {
+                userID: userID,
+				chatroomID: chatroomID,
+                message: message
+        })
+        .then((res, err) => {
+
+            if (err) {
+                return {success : false, message: err};
+            }
+
+            if (res) {
+
+                return {success : true, message: res};
+
+                
+                } 
+               
+            });
+    }
+    
 }

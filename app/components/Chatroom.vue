@@ -123,6 +123,8 @@
     import LoginScreen from "./LoginMain";
     import Chat from "./Chat";
     import moment from "moment";
+    import BackendService from "../services/BackendService";
+
 
     export default {
         props: ['chatName'],
@@ -200,14 +202,12 @@
                 }); 
             }, 
             showDetails() {},
-            sendTap(){
-                this.conversations.unshift({ //use .push to add to bottom
-                    convFriendImg: this.$store.state.user.profilePicture,
-                    read: "notRead",
-                    convFriendName: this.$store.state.user.username,
-                    convText: this.message,
-                    convDate: moment().format('HH:mm'),
-                    seenVisibility: "collapse"
+            sendTap(events){
+      			var service = new BackendService();
+                service.saveMessage(this.userID,this.chatroomID,this.message).then((response) => {
+                    
+                    console.log(response);
+
                 });
                 this.message = "";
                 //this.message = "" -- THIS CLEARS IT BUT NOT VISUALLY
