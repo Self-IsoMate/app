@@ -171,4 +171,18 @@ export default class BackendService {
             })
     }
 
+    async getResources(categoryId) {
+        return axios.get( API + `resources?categoryId=${categoryId}` )
+            .then((res) => {
+                if (res && res.data.success) {
+                    return { success: res.data.success, resources: res.data.resources };
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err };
+                }
+            })
+    }
+
 }
