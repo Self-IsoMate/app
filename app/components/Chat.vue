@@ -138,7 +138,8 @@
     import Help from "./Help";
     import LoginScreen from "./LoginMain";
     import Chatroom from "./Chatroom";
-
+    var service = new BackendService();
+    
     export default {
         created() {},
         data() {
@@ -235,8 +236,8 @@
             }, //put in here navigate to log-in screen
             showDetails() {},
             chatroomTap(name){
-                this.$navigateTo(Chatroom, {
-                    props: {chatName: name},
+                this.$navigateTo(Chatroom, { 		
+                    props: service.getMessages(this.chatName),
                     animated: false,
                     clearHistory: true
                 }); 

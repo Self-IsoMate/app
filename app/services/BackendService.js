@@ -131,18 +131,24 @@ export default class BackendService {
         })
         .then((res, err) => {
 
-            if (err) {
-                return {success : false, message: err};
-            }
-
-            if (res) {
-
-                return {success : true, message: res};
-
-                
-                } 
-               
-            });
+     
+                return {success : true, message: res};  
+        
+            }).catch((err) => {
+                if (err) console.log(err);
+            })
+    }
+ 
+    async getMessages(chatName) {
+      
+        return axios.get(API+`chatrooms?chatroomName=`+chatName)
+        .then((res) => {
+            return { chatroom: res.data };
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
     }
     
+
 }

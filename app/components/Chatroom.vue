@@ -203,11 +203,15 @@
             }, 
             showDetails() {},
             sendTap(events){
+  
       			var service = new BackendService();
                 service.saveMessage(this.userID,this.chatroomID,this.message).then((response) => {
                     
+   				if (response) {
                     console.log(response);
-
+                   }else{
+                       console.log("Error: No Response")
+                   }
                 });
                 this.message = "";
                 //this.message = "" -- THIS CLEARS IT BUT NOT VISUALLY
