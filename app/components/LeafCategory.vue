@@ -34,10 +34,11 @@
 
 						<Label text="Resources" class="sub-header" />
 
-					</StackLayout>
+						<StackLayout>
+							<ResourceCard v-for="resource in resources" :key="resource._id" :resource="resource" />
+						</StackLayout>
 
-					<!-- Resources section -->
-                    
+					</StackLayout>
 
                     <NavBar dock="bottom" height="10%" selectedtab="home" />
 
@@ -49,6 +50,7 @@
 <script>
 import BackendService from "../services/BackendService";
 import CommunityButton from "./CommunityButton";
+import ResourceCard from "./ResourceCard";
 
 export default {
 	props: {
@@ -60,7 +62,8 @@ export default {
             drawer1: "",
             drawer2: "",
 			service: new BackendService(),
-			communities: []
+			communities: [],
+			resources: []
 		}
 	},
 	methods: {
@@ -75,7 +78,8 @@ export default {
         }
 	},
 	components : {
-		CommunityButton
+		CommunityButton,
+		ResourceCard
 	},
 	created() {
 		console.log(this.category.communities);
@@ -95,6 +99,18 @@ export default {
 					console.log(err);
 				}
 			});
+
+		this.service.getResources(this.category._id)
+			.then((res) => {
+				if (res && res.success) {
+					console.log(":)");
+					this.resources = res.resources;
+				}
+
+				if (res && !res.success) {
+					console.log(":(");
+				}
+			})
 	},
 	computed: {
 		currentUser () {
@@ -113,6 +129,6 @@ export default {
 
 .sub-header {
 	font-size: 16;
-	margin: 5;
+	margin: 5 0;
 }
 </style>
