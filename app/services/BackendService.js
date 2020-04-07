@@ -126,7 +126,7 @@ export default class BackendService {
     }
 
     async getCategories() {
-        return axios.get(API+'categories?isSubcategory=false')
+        return axios.get(API+'categories?isChild=false')
             .then((res) => {
                 if (res) {
                     return { categories: res.data }
@@ -137,4 +137,38 @@ export default class BackendService {
                     return { success: false, message: err }
             })
     }
+
+    async getSubcategories(parent) {
+        return axios.get( API + `categories?parentId=${parent._id}` )
+            .then((res) => {
+                if (res) {
+                    return { subcategories: res.data }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err }
+                }
+            })
+    }
+
+    async getCommunities(communityIds) {
+        var promises = communityIds.map((id) => {
+            return axios.get( API + `communities?_id=${id}` )
+        });
+
+        return Promise.all(promises)
+            .then((res) => {
+                if (res) {
+                    var commies = res.map((r) => r.data[0]);
+                    return { success: true, communities: commies }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success : false, message: err }
+                }
+            })
+    }
+
 }

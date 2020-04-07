@@ -93,11 +93,14 @@
                 this.$refs.drawer.nativeView.toggleDrawerState();
             }, //put in here navigate to log-in screen
             selectCategory(event) {
-                this.$navigateTo(Category, {
-                    props: {
-                        subcategories: event.category.subcategories
-                    }
-                })
+                this.service.getSubcategories(event.category)
+                    .then((res) => {
+                        this.$navigateTo(Category, {
+                            props: {
+                                subcategories: res.subcategories
+                            }
+                        })
+                    });
             }
         }
     };

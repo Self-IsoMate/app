@@ -44,6 +44,8 @@
 <script>
 import CategoryThumb from "./CategoryThumb";
 import BackendService from "../services/BackendService"
+import Category from "./Category";
+import LeafCategory from "./LeafCategory";
 
 export default {
 	name: "Category",
@@ -67,7 +69,24 @@ export default {
 			console.log(`tapped subcategory ${event.category.name}`);
         },
         selectCategory(event) {
-            console.log(`look what i tapped! ${event.category.name}`);
+            console.log(`selected category ${event.category.name}`);
+            if (event.category.isLeaf) {
+                console.log("OPEN UP IT'S THE POLICE");
+                this.$navigateTo(LeafCategory, {
+                    props: {
+                        category: event.category
+                    }
+                });
+            } else {
+                this.service.getSubcategories(event.category)
+                    .then((res) => {
+                        this.$navigateTo(Category, {
+                            props: {
+                                subcategories: res.subcategories
+                            }
+                        })
+                    });
+            }
         }
     },
     data () {
