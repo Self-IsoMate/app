@@ -152,7 +152,7 @@
                 conversations: [{
                         convFriendImg: "~/assets/images/violinGroup.png",
                         read: "notRead",
-                        convFriendName: "#ViolinIntermediate",
+                        convFriendName: "aaaaaaa",
                         convText: "Lindsay21: can anyone help me with my double stops?",
                         convDate: "19:01",
                         seenVisibility: "collapse"
@@ -160,7 +160,7 @@
                     {
                         convFriendImg: "~/assets/images/uk.png",
                         read: "notRead",
-                        convFriendName: "#UnitedKingdom",
+                        convFriendName: "UnitedKingdom",
                         convText: "DiscoDan: Honestly not surprised Boris has it",
                         convDate: "18:43",
                         seenVisibility: "collapse"
@@ -168,7 +168,7 @@
                     {
                         convFriendImg: "~/assets/images/musicCollaboration.jpeg",
                         read: "read",
-                        convFriendName: "#MusicCollaborate",
+                        convFriendName: "Italy",
                         convText: "You: Any guitarists out there? Need background instrumentals for my new track",
                         convDate: "2 minutes ago",
                         seenVisibility: "visible"
@@ -236,12 +236,20 @@
                 }); 
             }, //put in here navigate to log-in screen
             showDetails() {},
-            chatroomTap(name){
-                this.$navigateTo(Chatroom, { 		
-                    props: service.getMessages(this.chatName),
+            chatroomTap(chatName){     		
+             var service = new BackendService();
+
+                service.getChatroom(chatName).then(res=>{
+                    console.log(res);
+
+                this.$navigateTo(Chatroom, { 
+                    props:{chatroom:res},
                     animated: false,
                     clearHistory: true
                 }); 
+
+                });
+
             }
         }
     };

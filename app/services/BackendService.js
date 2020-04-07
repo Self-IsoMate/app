@@ -139,11 +139,11 @@ export default class BackendService {
             })
     }
  
-    async getMessages(chatName) {
+    async getChatroom(chatName) {
       
         return axios.get(API+`chatrooms?chatroomName=`+chatName)
         .then((res) => {
-            return { chatroom: res.data };
+            return { chatroom: res.data[0] };
         })
         .catch((err) => {
             if (err) console.log(err);

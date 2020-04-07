@@ -8,7 +8,7 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <Label class = "action-bar-title" :text= "$props.chatName" paddingTop = "7.5%" color="white" id="searchField"></Label>
+                    <Label class = "action-bar-title" :text="chatroom.chatroomName" paddingTop = "7.5%" color="white" id="searchField"></Label>
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -127,7 +127,7 @@
 
 
     export default {
-        props: ['chatName'],
+        props: ['chatroom'],
         created() {},
         data() {
             return {
@@ -205,15 +205,17 @@
             sendTap(events){
   
       			var service = new BackendService();
-                service.saveMessage(this.userID,this.chatroomID,this.message).then((response) => {
-                    
+                service.saveMessage(this.$store.state.user._id,this.$props.chatroom.chatroom._id,this.message).then((response) => {
+                    console.log(this.message);
+
    				if (response) {
                     console.log(response);
+                    this.message = "";
+
                    }else{
                        console.log("Error: No Response")
                    }
                 });
-                this.message = "";
                 //this.message = "" -- THIS CLEARS IT BUT NOT VISUALLY
                 //better implementation so all messages send from bottom and push up
             }
