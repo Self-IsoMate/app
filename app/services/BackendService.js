@@ -121,4 +121,16 @@ export default class BackendService {
                 if (err) console.log(err);
             })
     }
+
+    async getAllChatrooms(){
+        return axios.get(API + 'chatrooms')
+        .then((res) => {
+            if (res){
+                return {chatrooms: res.data};
+            } 
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        }) 
+    }
 }

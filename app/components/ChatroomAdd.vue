@@ -56,6 +56,26 @@
                         <Button text="Popular"/>
                         <Button text="Recommended for you"/>
                         <Button text="All Chatrooms"/>
+                         <ListView for="chatroom in chatrooms" :key="chatroom._id"
+                            height="100%" separatorColor="transparent" id="listView">
+                            <v-template>
+
+                                <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
+                                    padding="10">
+                                    <StackLayout width="20%">
+                                        <Image :src="chatroom.chatroomPicture"
+                                            stretch="aspectFill" class="conImg" />
+                                    </StackLayout>
+                                    <StackLayout marginLeft="10" paddingTop="3"
+                                        width="50%">
+                                        <Label :text="chatroom.chatroomName"
+                                            :class="'convFriendName '" />
+                            
+                                    </StackLayout>
+                                </StackLayout>
+
+                            </v-template>
+                        </ListView>
                     </StackLayout>
 
                     <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
@@ -111,9 +131,21 @@
     import Settings from "./Settings";
     import Help from "./Help";
     import LoginScreen from "./LoginMain";
+    import BackendService from "../services/BackendService";
 
      export default {
-        created() {},
+        created() {
+            var backend = new BackendService();
+            backend.getAllChatrooms()
+            .then((res) => {
+            if (res){
+               this.chatrooms = res.chatrooms;
+            } 
+            })
+            .catch((err) => {
+                if (err) console.log(err);
+            }) 
+        },
         data() {
             return {
                 back:"",
@@ -121,6 +153,7 @@
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
+                chatrooms: []
             };
         },
          methods: {
