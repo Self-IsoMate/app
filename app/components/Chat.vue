@@ -138,6 +138,7 @@
     import Help from "./Help";
     import LoginScreen from "./LoginMain";
     import Chatroom from "./Chatroom";
+    import BackendService from "../services/BackendService";
     var service = new BackendService();
     
     export default {
