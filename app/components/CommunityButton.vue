@@ -6,18 +6,31 @@
 	</StackLayout>
 </template>
 <script>
+import BackendService from "../services/BackendService";
+
 export default {
 	name: "CommunityButton",
 	created () {
 		// check if user subscribed to community
-		this.isFollowing = false;
+		// check if user.communities contains this community's id
+		if (this.$props.user.communities.includes(this.$props.community._id)) {
+			this.isFollowing = true;
+		} else {
+			this.isFollowing = false;
+		}
 	},
 	methods: {
 		handleClick(event) {
 			if (this.isFollowing) {
 				this.isFollowing = false;
 			} else {
-				this.isFollowing = true;
+				this.service.subscribeUserToCommunity(this.$props.user, this.$props.community._id)
+					.then((res) => {
+						if (res && res.success) {
+							this.isFollowing = true;
+							console.log(res);
+						}
+					});
 			}
 		}
 	},
@@ -27,7 +40,8 @@ export default {
 	},
 	data () {
 		return {
-			isFollowing: false
+			isFollowing: false,
+			service: new BackendService()
 		};
 	}
 }
