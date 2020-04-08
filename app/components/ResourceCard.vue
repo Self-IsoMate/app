@@ -1,9 +1,9 @@
 <template>
 	<CardView class="card" elevation="10" radius="10" ios:shadowRadius="3">
 		<StackLayout margin="10">
-			<GridLayout columns="*" rows="150">
+			<GridLayout columns="*" rows="auto">
 				<Image v-show="containsImage" :src="resource.image" col="0" row="0" tintColor="rgba(0,0,0,0.5)"
-					stretch="aspectFill" />
+					stretch="aspectFill" height="150" />
 				<Label :class="{ 'image-title' : containsImage, 'normal-title': !containsImage }"
 					:text="resource.title" col="0" row="0" />
 			</GridLayout>
@@ -43,6 +43,8 @@ export default {
 
 .normal-title {
 	color: black;
+	font-size: 18;
+	font-weight: bold;
 }
 
 .card {
@@ -53,6 +55,7 @@ export default {
 
 .body-text {
 	margin: 10 0;
+	font-size: 16;
 }
 
 .hyperlink {

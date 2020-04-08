@@ -59,7 +59,7 @@ export default {
 			});
 		},
 		handleGuest(event) {
-			this.$store.commit("setUser", { user: {} });
+			this.$store.commit("setUser", { user: null });
 			this.$navigateTo(Home,
 			{
 				animated: false,
