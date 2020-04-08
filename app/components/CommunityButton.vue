@@ -13,7 +13,9 @@ export default {
 	created () {
 		// check if user subscribed to community
 		// check if user.communities contains this community's id
-		if (this.$props.user && this.$props.user.communities.includes(this.$props.community._id)) {
+		console.log(this.$props.user);
+
+		if (this.$props.user && this.$props.user.communities && this.$props.user.communities.includes(this.$props.community._id)) {
 			this.isFollowing = true;
 		} else {
 			this.isFollowing = false;

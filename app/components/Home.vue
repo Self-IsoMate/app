@@ -9,11 +9,7 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <TextField placeholderColor="white" id="searchField"
-                        editable="true" hint="      Search" returnKeyType="search"
-                        ios:height="30" ios:marginTop="3"
-                        android:paddingBottom="5" class="searchField font-awesome"
-                        color="#fff" />
+                    <SearchBar hint="Search" v-model="searchPhrase" @textChange="filter()" />
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -52,21 +48,27 @@
         data() {
             return {
                 drawerToggle: false,
+                allCategories: [],
                 categories: [],
                 drawer1: "",
                 drawer2: "",
-                service: new BackendService()
+                service: new BackendService(),
+                searchPhrase: ""
             };
         },
         components: {
             CategoryThumb
         },
         mounted () {
-            this.service.getCategories()
+            var service = new BackendService();
+
+            service.getCategories()
                 .then((res) => {
                     if (res) {
+                        console.log("this is the response");
                         console.log(res.categories);
-                        this.categories = res.categories;
+                        this.allCategories = res.categories;
+                        this.categories = Array.from(this.allCategories);
                     }
                 })
                 .catch((err) => {
@@ -76,13 +78,11 @@
                 })
         },
         methods: {
-            ///
             filter() {
-                this.homePosts = this.allHomePosts.filter((h)=>{
-                   return h.title.toUpperCase().startsWith(this.searchPhrase.toUpperCase());
+                this.categories = this.allCategories.filter((h)=>{
+                   return h.name.toUpperCase().startsWith(this.searchPhrase.toUpperCase());
                 });
             },
-            ///
             onDrawerClosed() {
                 this.drawerToggle = false;
             },

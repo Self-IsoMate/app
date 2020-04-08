@@ -8,11 +8,7 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <TextField placeholderColor="white" id="searchField"
-                        editable="true" hint="      Search" returnKeyType="search"
-                        ios:height="30" ios:marginTop="3"
-                        android:paddingBottom="5" class="searchField font-awesome"
-                        color="#fff" />
+                    <SearchBar hint="Search" v-model="searchPhrase" @textChange="filter()" />
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -29,7 +25,7 @@
 
                     <ScrollView dock="top" scrollBarIndicatorVisible="true" height="90%" padding="0 10">
                         <WrapLayout>
-                            <CategoryThumb v-for="category in subcategories" :key="category._id" :category="category" @tap="selectCategory" />
+                            <CategoryThumb v-for="category in filteredSubcategories" :key="category._id" :category="category" @tap="selectCategory" />
                         </WrapLayout>
                     </ScrollView>
 
@@ -56,6 +52,11 @@ export default {
 		subcategories: Array
 	},
 	methods: {
+        filter() {
+            this.filteredSubcategories = this.$props.subcategories.filter((h)=>{
+                return h.name.toUpperCase().startsWith(this.searchPhrase.toUpperCase());
+            });
+        },
         onDrawerClosed() {
             this.drawerToggle = false;
         },
@@ -94,8 +95,13 @@ export default {
             drawerToggle: false,
             drawer1: "",
             drawer2: "",
-            service: new BackendService()
+            service: new BackendService(),
+            searchPhrase: "",
+            filteredSubcategories: []
         }
+    },
+    created () {
+        this.filteredSubcategories = Array.from(this.$props.subcategories);
     }
 }
 </script>
