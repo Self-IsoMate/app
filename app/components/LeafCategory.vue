@@ -34,9 +34,11 @@
 
 						<Label text="Resources" class="sub-header" />
 
-						<StackLayout>
-							<ResourceCard v-for="resource in resources" :key="resource._id" :resource="resource" />
-						</StackLayout>
+						<ScrollView>
+							<StackLayout>
+								<ResourceCard v-for="resource in resources" :key="resource._id" :resource="resource" />
+							</StackLayout>
+						</ScrollView>
 
 					</StackLayout>
 
