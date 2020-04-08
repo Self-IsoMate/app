@@ -13,7 +13,7 @@ export default {
 	created () {
 		// check if user subscribed to community
 		// check if user.communities contains this community's id
-		if (this.$props.user.communities.includes(this.$props.community._id)) {
+		if (this.$props.user && this.$props.user.communities.includes(this.$props.community._id)) {
 			this.isFollowing = true;
 		} else {
 			this.isFollowing = false;
@@ -21,27 +21,30 @@ export default {
 	},
 	methods: {
 		handleClick(event) {
-			if (this.isFollowing) {
-				console.log("i'm going in");
-				this.service.unSubscribeUserFromCommunity(this.$props.user, this.$props.community._id)
-					.then((res) => {
-						if (res && res.success) {
-							this.isFollowing = false;
-							this.$store.commit("setUser", { user: res.user });
-						}
+			if (this.$props.user) {
+				if (this.isFollowing) {
+					this.service.unSubscribeUserFromCommunity(this.$props.user, this.$props.community._id)
+						.then((res) => {
+							if (res && res.success) {
+								this.isFollowing = false;
+								this.$store.commit("setUser", { user: res.user });
+							}
 
-						if (res && !res.success) {
-							console.log(res.message);
-						}
-					});
+							if (res && !res.success) {
+								console.log(res.message);
+							}
+						});
+				} else {
+					this.service.subscribeUserToCommunity(this.$props.user, this.$props.community._id)
+						.then((res) => {
+							if (res && res.success) {
+								this.isFollowing = true;
+								this.$store.commit("setUser", { user: res.user });
+							}
+						});
+				}
 			} else {
-				this.service.subscribeUserToCommunity(this.$props.user, this.$props.community._id)
-					.then((res) => {
-						if (res && res.success) {
-							this.isFollowing = true;
-							this.$store.commit("setUser", { user: res.user });
-						}
-					});
+				console.log("Not logged in, so can't subscribe & unsubscribe");
 			}
 		}
 	},
