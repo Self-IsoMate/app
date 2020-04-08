@@ -133,4 +133,28 @@ export default class BackendService {
             if (err) console.log(err);
         }) 
     }
+
+    async addChatroom(userID, chatroomID){
+        return axios.put(API + 'users/' + userID, {"chatrooms": [chatroomID]})
+        .then((res) => {
+            if (res){
+                return {user: res.data};
+            } 
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        }) 
+    }
+
+    async removeChatroom(userID, chatroomID){
+        return axios.delete(`${API}users/${userID}/chatrooms/${chatroomID}`)
+        .then((res) => {
+            if (res){
+                return {user: res.data};
+            } 
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        }) 
+    }
 }

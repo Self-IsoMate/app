@@ -53,15 +53,14 @@
                 <DockLayout>
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
-                        <Button text="Popular"/>
-                        <Button text="Recommended for you"/>
-                        <Button text="All Chatrooms"/>
+
                          <ListView for="chatroom in chatrooms"
                             height="100%" separatorColor="transparent" id="listView">
                             <v-template>
 
                                 <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
                                     padding="10">
+                                    <!--USER ID this.$store.state.user._id -->
                                     <StackLayout width="20%">
                                         <Image :src="chatroom.chatroomPicture"
                                             stretch="aspectFill" class="conImg" />
@@ -70,7 +69,11 @@
                                         width="50%">
                                         <Label :text="chatroom.chatroomName"
                                             :class="'convFriendName '" />
-                            
+                                    </StackLayout>
+                                    <StackLayout marginLeft="10" paddingTop="3"
+                                    width="60%">
+                                        <Button text="+" />
+                                        <Button text="-" />
                                     </StackLayout>
                                 </StackLayout>
 
