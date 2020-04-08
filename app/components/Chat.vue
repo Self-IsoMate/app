@@ -57,28 +57,25 @@
                     <StackLayout dock="top" height="90%" width="100%" style="">
 
 
-                        <ListView for="item in conversations" :key="index"
+                        <ListView for="item in conversations"
                             height="100%" separatorColor="transparent" id="listView">
                             <v-template>
 
                                 <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
-                                    padding="10" @tap="chatroomTap(item.convFriendName)">
+                                    padding="10" @tap="chatroomTap(item)">
                                     <StackLayout width="20%">
-                                        <Image :src="item.convFriendImg"
+                                        <Image :src="item.chatroomPicture"
                                             stretch="aspectFill" class="conImg" />
                                     </StackLayout>
                                     <StackLayout marginLeft="10" paddingTop="3"
                                         width="50%">
-                                        <Label :text="item.convFriendName"
-                                            :class="'convFriendName ' + item.read" />
-                                        <Label :text="item.convText" :class="'convTextOut ' + item.read" />
+                                        <Label :text="item.chatroomName"
+                                            :class="'chatroomName '" />
+                                        <Label :text="'item.convText'" :class="'convTextOut '" />
                                     </StackLayout>
                                     <StackLayout marginLeft="10" paddingTop="3"
                                         width="60%">
-                                        <Label :text="item.convDate" :class="'convDateOut ' + item.read" />
-                                        <Label text="" :visibility="item.seenVisibility"
-                                            style="font-size:17;text-align:center;margin-top:12;color:#1aa3ff;"
-                                            class="font-awesome" />
+                                        <Label :text="'item.convDate'" :class="'convDateOut '" />
                                     </StackLayout>
                                 </StackLayout>
 
@@ -142,37 +139,50 @@
     var service = new BackendService();
     
     export default {
-        created() {},
+        mounted() {
+            var service = new BackendService();
+
+                service.getChatroomIds(this.$store.state.user._id).then(res=>{
+                if (res) {
+            var index = 0; 
+            res.chatrooms.forEach(val => {
+             
+                                    service.getChatroomObj(val).then(response=>{
+                                    if (res) {
+                                        console.log(response.chatroom);               
+                                        this.conversations.push(response.chatroom);     
+                                        console.log(this.conversations);               
+                    
+                                }else{
+                                    console.log("error Chat created");
+                                }
+
+
+                                    });
+
+
+
+
+                });
+                //this.conversations= res;
+ 
+            }else{
+                console.log("error Chat created");
+            }
+
+
+                });
+           
+
+        
+        },
         data() {
             return {
                 drawerToggle: false,
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
-                conversations: [{
-                        convFriendImg: "~/assets/images/violinGroup.png",
-                        read: "notRead",
-                        convFriendName: "aaaaaaa",
-                        convText: "Lindsay21: can anyone help me with my double stops?",
-                        convDate: "19:01",
-                        seenVisibility: "collapse"
-                    },
-                    {
-                        convFriendImg: "~/assets/images/uk.png",
-                        read: "notRead",
-                        convFriendName: "UnitedKingdom",
-                        convText: "DiscoDan: Honestly not surprised Boris has it",
-                        convDate: "18:43",
-                        seenVisibility: "collapse"
-                    },
-                    {
-                        convFriendImg: "~/assets/images/musicCollaboration.jpeg",
-                        read: "read",
-                        convFriendName: "Italy",
-                        convText: "You: Any guitarists out there? Need background instrumentals for my new track",
-                        convDate: "2 minutes ago",
-                        seenVisibility: "visible"
-                    }
+                conversations: [
                 ]
             };
         },
@@ -236,19 +246,10 @@
                 }); 
             }, //put in here navigate to log-in screen
             showDetails() {},
-            chatroomTap(chatName){     		
+            chatroomTap(item){    	
              var service = new BackendService();
+console.log(item.chatroomName);
 
-                service.getChatroom(chatName).then(res=>{
-                    console.log(res);
-
-                this.$navigateTo(Chatroom, { 
-                    props:{chatroom:res},
-                    animated: false,
-                    clearHistory: true
-                }); 
-
-                });
 
             }
         }

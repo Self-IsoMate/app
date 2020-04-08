@@ -139,11 +139,23 @@ export default class BackendService {
             })
     }
  
-    async getChatroom(chatName) {
+    async getChatroomObj(chatroomId) {
       
-        return axios.get(API+`chatrooms?chatroomName=`+chatName)
+        return axios.get(API+`chatrooms/`+chatroomId)
         .then((res) => {
-            return { chatroom: res.data[0] };
+            return { chatroom: res.data };
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+
+    async getChatroomIds(userId) {
+      
+        return axios.get(API+`usersChat/`+userId)
+        .then((res) => {
+            return { chatrooms: res.data.chatrooms }; // return { chatroom: res.data };
+
         })
         .catch((err) => {
             if (err) console.log(err);
