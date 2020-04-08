@@ -189,10 +189,29 @@ export default class BackendService {
         return axios.post( API + `users/${user._id}/communities`, { communityId: communityId })
             .then((res) => {
                 if (res && res.data.success) {
-                    return { success: true, response: res.data.user };
+                    return { success: true, user: res.data.user };
                 }
 
                 if (res && !res.data.success) {
+                    return { success: false, message: res.data.message };
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err }
+                }
+            })
+    }
+
+    async unSubscribeUserFromCommunity(user, communityId) {
+        return axios.delete( API + `users/${user._id}/communities/${communityId}`)
+            .then((res) => {
+                if (res && res.data.success) {
+                    return { success: true, user: res.data.user };
+                }
+
+                if (res && !res.data.success) {
+                    console.log(res);
                     return { success: false, message: res.data.message };
                 }
             })

@@ -22,13 +22,24 @@ export default {
 	methods: {
 		handleClick(event) {
 			if (this.isFollowing) {
-				this.isFollowing = false;
+				console.log("i'm going in");
+				this.service.unSubscribeUserFromCommunity(this.$props.user, this.$props.community._id)
+					.then((res) => {
+						if (res && res.success) {
+							this.isFollowing = false;
+							this.$store.commit("setUser", { user: res.user });
+						}
+
+						if (res && !res.success) {
+							console.log(res.message);
+						}
+					});
 			} else {
 				this.service.subscribeUserToCommunity(this.$props.user, this.$props.community._id)
 					.then((res) => {
 						if (res && res.success) {
 							this.isFollowing = true;
-							console.log(res);
+							this.$store.commit("setUser", { user: res.user });
 						}
 					});
 			}
