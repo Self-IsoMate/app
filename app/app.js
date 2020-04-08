@@ -11,6 +11,7 @@ Vue.use(Vuex);
 // Vue.config.silent = true;
 
 Vue.registerElement('RadSideDrawer', () => require('nativescript-ui-sidedrawer').RadSideDrawer);
+Vue.registerElement("CardView", () => require('nativescript-cardview').CardView);
 Vue.component('SideBar', SideBar);
 Vue.component('NavBar', NavBar);
 

@@ -1,16 +1,19 @@
 <template>
-	<StackLayout>
-		<GridLayout columns="*" rows="150">
-			<Image v-show="containsImage" :src="resource.image" col="0" row="0" tintColor="rgba(0,0,0,0.5)"
-				stretch="aspectFill" />
-			<Label :class="{ 'image-title' : containsImage, 'normal-title': !containsImage }"
-				:text="resource.title" col="0" row="0" />
-		</GridLayout>
-		<Label :text="resource.body" textWrap="true" />
-		<StackLayout>
-			<Label v-for="(link, index) in resource.links" :key="index" :text="link" @tap="openLink(link)" />
+	<CardView class="card" elevation="10" radius="10" ios:shadowRadius="3">
+		<StackLayout margin="10">
+			<GridLayout columns="*" rows="150">
+				<Image v-show="containsImage" :src="resource.image" col="0" row="0" tintColor="rgba(0,0,0,0.5)"
+					stretch="aspectFill" />
+				<Label :class="{ 'image-title' : containsImage, 'normal-title': !containsImage }"
+					:text="resource.title" col="0" row="0" />
+			</GridLayout>
+			<Label :text="resource.body" textWrap="true" class="body-text" />
+			<StackLayout>
+				<Label v-for="(link, index) in resource.links" :key="index" :text="link" @tap="openLink(link)"
+					class="hyperlink" textWrap="true" />
+			</StackLayout>
 		</StackLayout>
-	</StackLayout>
+	</CardView>
 </template>
 <script>
 export default {
@@ -40,6 +43,21 @@ export default {
 
 .normal-title {
 	color: black;
+}
+
+.card {
+    background-color: #fff;
+	color: #4d4d4d;
+	margin: 10;
+}
+
+.body-text {
+	margin: 10 0;
+}
+
+.hyperlink {
+	text-decoration: underline;
+	margin: 2 0;
 }
 
 </style>
