@@ -58,12 +58,12 @@
                     <StackLayout dock="top" height="90%" width="100%" style="">
 
 
-                        <ListView for="item in conversations" :key="index"
+                        <ListView for="item in conversations"
                             height="100%" separatorColor="transparent" id="listView">
                             <v-template>
 
                                 <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
-                                    padding="10" @tap="chatroomTap(item.convFriendName)">
+                                    padding="10" @tap="chatroomTap">
                                     <StackLayout width="20%">
                                         <Image :src="item.convFriendImg"
                                             stretch="aspectFill" class="conImg" />
