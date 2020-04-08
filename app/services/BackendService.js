@@ -40,6 +40,9 @@ export default class BackendService {
                     return { success : false };
                 }
             }
+        })
+        .catch((err) => {
+            if (err) console.log(err);
         });
 
     }
@@ -121,4 +124,102 @@ export default class BackendService {
                 if (err) console.log(err);
             })
     }
+
+    async getCategories() {
+        return axios.get(API+'categories?isChild=false')
+            .then((res) => {
+                if (res) {
+                    return { categories: res.data }
+                }
+            })
+            .catch((err) => {
+                if (err)
+                    return { success: false, message: err }
+            })
+    }
+
+    async getSubcategories(parent) {
+        return axios.get( API + `categories?parentId=${parent._id}` )
+            .then((res) => {
+                if (res) {
+                    return { subcategories: res.data }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err }
+                }
+            })
+    }
+
+    async getCommunities(communityIds) {
+        var promises = communityIds.map((id) => {
+            return axios.get( API + `communities?_id=${id}` )
+        });
+
+        return Promise.all(promises)
+            .then((res) => {
+                if (res) {
+                    var commies = res.map((r) => r.data[0]);
+                    return { success: true, communities: commies }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success : false, message: err }
+                }
+            })
+    }
+
+    async getResources(categoryId) {
+        return axios.get( API + `resources?categoryId=${categoryId}` )
+            .then((res) => {
+                if (res && res.data.success) {
+                    return { success: res.data.success, resources: res.data.resources };
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err };
+                }
+            })
+    }
+
+    async subscribeUserToCommunity(user, communityId) {
+        return axios.post( API + `users/${user._id}/communities`, { communityId: communityId })
+            .then((res) => {
+                if (res && res.data.success) {
+                    return { success: true, user: res.data.user };
+                }
+
+                if (res && !res.data.success) {
+                    return { success: false, message: res.data.message };
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err }
+                }
+            })
+    }
+
+    async unSubscribeUserFromCommunity(user, communityId) {
+        return axios.delete( API + `users/${user._id}/communities/${communityId}`)
+            .then((res) => {
+                if (res && res.data.success) {
+                    return { success: true, user: res.data.user };
+                }
+
+                if (res && !res.data.success) {
+                    console.log(res);
+                    return { success: false, message: res.data.message };
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err }
+                }
+            })
+    }
+
 }
