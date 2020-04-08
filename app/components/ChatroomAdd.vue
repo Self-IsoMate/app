@@ -63,7 +63,7 @@
                                 <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
                                     padding="10">
                                     <StackLayout width="20%">
-                                        <Image :src="chatroom.chatroomPicture"
+                                        <Image src="https://storage.googleapis.com/self-isomate-images/chatroom-images/Learning%20Piano.png"
                                             stretch="aspectFill" class="conImg" />
                                     </StackLayout>
                                     <StackLayout marginLeft="10" paddingTop="3"
