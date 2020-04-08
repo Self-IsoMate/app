@@ -55,14 +55,14 @@
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
 
-                        <ListView for="item in homePosts" key="index" height="100%"
+                        <ListView for="challenge in challenges" key="index" height="100%"
                             backgroundColor="#E8E8E8" separatorColor="transparent"
                             id="listView">
                             <v-template>
 
                                 <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
                                     <StackLayout class="postContainer">
-                                        <Image :src="item.postImg" marginTop="10" />
+                                        <Image :src="challenge.image" marginTop="10" />
                                     </StackLayout>
                                 </StackLayout>
 
@@ -122,26 +122,28 @@
     import Settings from "./Settings";
     import Help from "./Help";
     import LoginScreen from "./LoginMain";
+    import BackendService from "../services/BackendService";
 
     export default {
-        computed: {},
-        watch: {},
-        mounted() {},
+        created() {
+            var backend = new BackendService();
+            backend.getChallenges()
+            .then((res) => {
+                if (res) {
+                    this.challenges = res.challenges;
+                }
+            })
+            .catch((err) => {
+                if (err) console.log(err);
+            })
+        },
         data() {
             return {
                 drawerToggle: false,
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
-                homePosts: [ {
-                        title: "Gardening",
-                        postImg: "~/assets/images/gardeningChallenge.png",
-                    },
-                    {
-                        title: "Art",
-                        postImg: "~/assets/images/musicChallenge.png",
-                    }
-                ]
+                challenges: []
             };
         },
         methods: {

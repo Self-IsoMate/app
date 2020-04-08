@@ -121,4 +121,16 @@ export default class BackendService {
                 if (err) console.log(err);
             })
     }
+
+    async getChallenges() {
+        return axios.get(API + 'challenges')
+        .then((res) => {
+            if (res) {
+                return {challenges: res.data};
+            }
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
 }
