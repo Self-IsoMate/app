@@ -56,7 +56,7 @@
                         <Button text="Popular"/>
                         <Button text="Recommended for you"/>
                         <Button text="All Chatrooms"/>
-                         <ListView for="chatroom in chatrooms" :key="chatroom._id"
+                         <ListView for="chatroom in chatrooms"
                             height="100%" separatorColor="transparent" id="listView">
                             <v-template>
 
