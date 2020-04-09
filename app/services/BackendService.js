@@ -135,10 +135,10 @@ export default class BackendService {
     }
 
     async addChatroom(userID, chatroomID){
-        return axios.put(API + 'users/' + userID, {"chatrooms": [chatroomID]})
+        return axios.post(API + 'users/' + userID + "/chatrooms", {"chatroomId": [chatroomID]})
         .then((res) => {
             if (res){
-                return {user: res.data};
+                return {user: res.data.user};
             } 
         })
         .catch((err) => {
@@ -150,7 +150,7 @@ export default class BackendService {
         return axios.delete(`${API}users/${userID}/chatrooms/${chatroomID}`)
         .then((res) => {
             if (res){
-                return {user: res.data};
+                return {user: res.data.user};
             } 
         })
         .catch((err) => {

@@ -10,12 +10,13 @@
             <Label :text="chatroom.chatroomName" :class="'convFriendName '" />
         </StackLayout>
         <StackLayout marginLeft="10" paddingTop="3" width="60%">
-        <Button :text="userHasChatroom ? '-' : '+' " style="font-size:27;color:#fff;"/>
+        <Button :text="userHasChatroom ? '-' : '+' " style="font-size:27;color:#fff;" @tap="onTap()" />
         </StackLayout>
     </StackLayout>
 </template>
 
 <script>
+import BackendService from "../services/BackendService";
 
 export default {
     created(){
@@ -30,6 +31,42 @@ export default {
         return{
             userHasChatroom: false,
         }
+    },
+    methods: {
+        onTap(){
+            if (this.userHasChatroomhasChatroom){
+                this.removeChatroom(this.$props.chatroom._id);
+            } else {
+                this.addChatroom(this.$props.chatroom._id);
+            }
+        },
+        removeChatroom(){
+            var backend = new BackendService();
+            backend.removeChatroom(this.$props.user._id, this.$props.chatroom._id)
+            .then((res) => {
+                    if (res){
+                        this.userHasChatroom = false;
+                        this.$store.commit("setUser", { user: res.user });
+                    } 
+            })
+            .catch((err) => {
+                if (err) console.log(err);
+            }) 
+        },
+        addChatroom(){
+            var backend = new BackendService();
+            backend.addChatroom(this.$props.user._id, this.$props.chatroom._id)
+                .then((res) => {
+                    if (res){
+                        this.userHasChatroom = true;
+                        this.$store.commit("setUser", { user: res.user });
+                    } 
+                })
+            .catch((err) => {
+                if (err) console.log(err);
+        })
+        }
+
     }
 }
 
