@@ -29,18 +29,17 @@
                                 <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
                                     padding="10">
                                     <StackLayout width="20%">
-                                        <Image :src="'https://storage.googleapis.com/self-isomate-images/chatroom-images/italy.png'"
+                                        <Image :src="item.profilePicture"
                                             stretch="aspectFill" class="conImg" />
                                     </StackLayout>
                                     <StackLayout marginLeft="10" paddingTop="3"
                                         width="50%">
-                                        <Label :text="item.userID"
+                                        <Label :text="item.username"
                                             :class="'convFriendName ' + item.read" />
                                         <Label :text="item.message" textWrap="true" :class="'convTextOut ' + item.read" />
                                     </StackLayout>
                                     <StackLayout marginLeft="10" paddingTop="3"
                                         width="60%">
-                                        <!--Label :text="item.dateSent.toTimeString().split(' ')[0]"  :class="'convDateOut ' + item.read" /-->
                                     </StackLayout>
                                 </StackLayout>
 
@@ -125,19 +124,30 @@
     export default {
         props: ['chatRoom'],
         created() {
-                        console.log("this.$props.chatRoom._id");
-                       console.log(this.$props.chatRoom._id);
+                        
                   service.getMessagesfromID(this.$props.chatRoom._id).then(res=>{
                                                if (res) {
-                       console.log("res");
-                       console.log(res);
-
+                     
                                             res.messages.forEach(val => {
-                        console.log("val");
-                        val = { ...val, userBello: 'Franci'};//userID
-                        console.log(val);
 
-                         this.conversations.push(val);     
+                        
+
+                             service.getUserfromId(val.userID).then(resUser=>{
+                               if (resUser) {
+
+                                    //console.log(resUser);
+
+                                    val = { ...val, username: resUser.user.username, profilePicture: resUser.user.profilePicture};
+                                   
+                                    this.conversations.push(val);                               
+                   
+                                }else{
+                                    console.log("error on getting chatrooms objects");
+                                }
+
+
+                                    });
+
 
                                            });
                                                 }else{
@@ -222,8 +232,10 @@
             showDetails() {},
             sendTap(events){
   
-      			var service = new BackendService();
-                service.saveMessage(this.$store.state.user._id,this.$props.chatroom._id,this.message).then((response) => {
+                  var service = new BackendService();
+                  console.log("this.$store.state.user._id");
+                  console.log(this.$store);
+               /*service.saveMessage(this.$store.state.user._id,this.$props.chatroom._id,this.message).then((response) => {
                     console.log(this.message);
 
    				if (response) {
@@ -236,7 +248,7 @@
                 });
                 //this.message = "" -- THIS CLEARS IT BUT NOT VISUALLY
                 //better implementation so all messages send from bottom and push up
-            }
+            }*/
         }
     };
 </script>

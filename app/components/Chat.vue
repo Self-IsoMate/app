@@ -143,7 +143,7 @@
              
                                service.getChatroomObj(val).then(response=>{
                                if (response) {
-                         console.log(response.chatroom);
+                         //console.log(response.chatroom);
                                         this.chatRoomsList.push(response.chatroom);     
                    
                                 }else{

@@ -174,4 +174,17 @@ export default class BackendService {
         })
     }
 
+    async getUserfromId(userID) {
+      
+        return axios.get(API+`users?_id=`+userID)
+        .then((res) => {
+            //console.log("userfromBackend");
+            //console.log(res.data.users[0]);
+            return { user: res.data.users[0] };
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+
 }
