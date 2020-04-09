@@ -1,116 +1,102 @@
 <template>
     <Page class= "page">
-        <ActionBar title="" class="action-bar header" backgroundColor="#079ef5">
-            <StackLayout orientation="horizontal" height="38" class="actionBarContainer">
-                <StackLayout class="HLeft" style="margin-top:10;" @tap="toggleDrawer()" alignItems="left">
+        
+        <ActionBar title="" class="action-bar header">
+            <StackLayout orientation="horizontal" height="38" alignItems="left"
+                class="actionBarContainer">
+                <StackLayout class="HLeft" style="vertical-align:center;" @tap="toggleDrawer">
                     <Label :text="drawerToggle ? drawer2: drawer1" style="font-size:27;color:#fff;"
                         class="font-awesome" />
                 </StackLayout>
-                <StackLayout class="HMid" alignItems="center">
-                     <Label class = "action-bar-title" text= "Settings" paddingTop = "7.5%" color="white" id="searchField"></Label>
+                <StackLayout class="HMid" alignItems="left">
+                    <Label text="Settings" class="header-text" />
                 </StackLayout>
-                <StackLayout class="HRight"></StackLayout>
+                <StackLayout class="HRight">
+                </StackLayout>
             </StackLayout>
         </ActionBar>
 
-         <RadSideDrawer ref="drawer" @drawerOpened="onDrawerOpened()"
-            @drawerClosed="onDrawerClosed()">
-            <StackLayout ~drawerContent backgroundColor="#eee">
-                <StackLayout height="2%"></StackLayout>
-                <StackLayout class="">
-                    <StackLayout class = "prof" @tap="profileTap()">
-                    <Label text="  Profile" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "notif" @tap="notificationTap()">
-                    <Label text="  Notifications" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "settings" @tap="settingsTap()">
-                    <Label text="  Settings" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "help" @tap="helpTap()">
-                    <Label text="  Help" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "logout" @tap="logOut()">
-                    <Label text="  Log out" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                </StackLayout>
-            </StackLayout>
+        <RadSideDrawer ref="drawer" @drawerOpened="onDrawerOpened" @drawerClosed="onDrawerClosed">
+            
+            <SideBar ~drawerContent />
 
             <StackLayout ~mainContent>
+                <!-- Actual page content goes here (in dock top) -->
+                <StackLayout dock="top" width="100%" style="">
+                    <StackLayout margin="15">
+                        <!-- Profile Settings -->
+                        <Label text="Profile" class="setting-header" />
 
-                <DockLayout>
+                        <Label text="Edit your profile" class="setting-text emphasis" @tap="navigateEditProfile" />
 
-                    <StackLayout dock="top" height="90%" width="100%" style="">
-                    <ListView for="item in items" @itemTap="onItemTap">
-                    <v-template>
-                        <StackLayout orientation="horizontal">
-                        <Label :text="item.title" textWrap="false" paddingLeft = "5%" paddingTop = "25%" paddingBottom = "15%"
-                        android:style="font-size:25;margin-top:-15" ios:style="font-size:30;margin-top:-15"></Label>
-                        <Label :text="item.description" textWrap="false" paddingLeft = "5%" paddingTop = "30%" paddingBottom = "15%"
-                        android:style="font-size:18;margin-top:-15" ios:style="font-size:18;margin-top:-15"></Label>
-                        </StackLayout>
-                    </v-template>
-                    </ListView>
+                        <StackLayout class="hr m-10 divider"/>
+
+                        <!-- Security & Privacy Settings -->
+                        <Label text="Security &amp; Privacy" class="setting-header" />
+
+                        <Label text="Change password" class="setting-text" />
+                        <Label text="Change email" class="setting-text" />
+                        <Button text="Delete your account" backgroundColor="red"/>
+
+                        <StackLayout class="hr m-10 divider"/>
+
+                        <!-- Notification Settings -->
+                        <Label text="Notifications" class="setting-header" />
+                        <GridLayout columns="*, auto" rows="auto">
+
+                            <Label col="0" text="Toggle all Notifications" class="setting-text" />
+                            <check-box col="1" />
+
+                        </GridLayout>
+
+                            <StackLayout class="hr m-10 divider"/>
+
+                        <GridLayout columns="*, auto" rows="auto">
+
+                            <Label col="0" text="Toggle comments" class="setting-text" />
+                            <check-box col="1" />
+
+                        </GridLayout>
+
+                            <StackLayout class="hr m-10 divider"/>
+
+                        <GridLayout columns="*, auto" rows="auto">
+
+                            <Label col="0" text="Toggle new posts" class="setting-text" />
+                            <check-box col="1"/>
+
+                        </GridLayout>
+
+                            <StackLayout class="hr m-10 divider"/>
+
+                        <GridLayout columns="*, auto" rows="auto">
+
+                            <Label col="0" text="Toggle new challenges" class="setting-text" />
+                            <check-box col="1" />
+
+                        </GridLayout>
+
+                        <StackLayout class="hr m-10 divider"/>
+
+                        <!-- Display Settings -->
+                        <Label text="Display" class="setting-header" />
+
+                        <Label text="Font Size" class="setting-text"/>
+                        <Label text="Dark Mode" class="setting-text"/>
                     </StackLayout>
 
-                    <StackLayout dock="bottom" height="10%" style="border-color:#E8E8E8;border-width:1;background:#fff;">
-                        <StackLayout orientation="horizontal">
-                            <StackLayout class="navItem" @tap="homeTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text="" :color="mainColor"
-                                    android:style="font-size:25;margin-top:-15"
-                                    ios:style="font-size:30;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                            <StackLayout class="navItem" @tap="competitionTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text=" " android:style="font-size:23;margin-top:-15"
-                                    ios:style="font-size:29;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                            <StackLayout class="navItem" @tap="communityTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text="" :color="profileColor"
-                                    android:style="font-size:25;margin-top:-15"
-                                    ios:style="font-size:30;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                            <StackLayout class="navItem" @tap="chatTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text="" android:style="font-size:25;margin-top:-15"
-                                    ios:style="font-size:30;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                        </StackLayout>
-                    </StackLayout>
-
-                </DockLayout>
-
+                </StackLayout>
             </StackLayout>
+            
         </RadSideDrawer>
+        
     </Page>
 </template>
 
 <script>
     import * as utils from "~/shared/utils";
     import SelectedPageService from "../shared/selected-page-service";
-    import Community from "./Community";
-    import Chat from "./Chat";
-    import Competitions from "./Competitions"
-    import Profile from "./Profile";
-    import Home from "./Home";
-    import Notifications from "./Notifications";
-    import Help from "./Help";
-    import LoginScreen from "./LoginMain";
+    import EditProfile from "./EditProfile";
 
     export default {
         mounted() {
@@ -122,30 +108,11 @@
             }
         },
         data: () => {
-        return {
-            items: [
-                {
-                    title: "Security >> ",
-                    description: "Change your password, Change Email, Delete Account"
-                },
-                {
-                    title: "Display >> ",
-                    description: "Dark Mode, Text Font and Size"
-                },
-                {
-                    title: "Notifications >> ",
-                    description: "Control how you are getting contacted"
-                },
-                {
-                    title: "Community >> ",
-                    description: "View Community List, Exit a community"
-                }
-            ],
-            drawerToggle: false,
-            drawer1: "", //the three dots vertically
-            drawer2: "", //the three dots horizontally
-            mainColor: "#00ff92",
-        }
+            return {
+                drawerToggle: false,
+                drawer1: "", //the three dots vertically
+                drawer2: "", //the three dots horizontally
+            }
         },
         methods: {
             onDrawerClosed() {
@@ -157,60 +124,32 @@
             toggleDrawer() {
                 this.$refs.drawer.nativeView.toggleDrawerState();
             },
-            homeTap() {
-                this.$navigateTo(Home, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            communityTap() {
-                this.$navigateTo(Community, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            chatTap() {
-                this.$navigateTo(Chat, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            competitionTap() {
-                this.$navigateTo(Competitions, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            profileTap() {
-                this.$navigateTo(Profile, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            notificationTap() {
-                this.$navigateTo(Profile, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            settingsTap() {},
-            helpTap(){
-                this.$navigateTo(Help, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            logOut(){
-                this.$navigateTo(Help, {
-                    animated: false,
-                    clearHistory: true
-                });
-            }, //put in here navigate to log-in screen
-            showDetails() {}
+            navigateEditProfile(event) {
+                this.$navigateTo(EditProfile);
+            }
         }
     };
 </script>
 
 <style scoped>
+
+.setting-header {
+    font-size: 20;
+    font-weight: bold;
+    color: #1aa3ff;
+    margin: 0 0 5 0;
+}
+
+.setting-text {
+    font-size: 16;
+    vertical-align: center;
+}
+
+.header-text {
+	font-size: 20;
+	vertical-align: center;
+	color: white;
+	margin: 5 0 0 0
+}
 
 </style>
