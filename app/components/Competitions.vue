@@ -9,11 +9,7 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <TextField placeholderColor="white" id="searchField"
-                        editable="true" hint="      Search" returnKeyType="search"
-                        ios:height="30" ios:marginTop="3"
-                        android:paddingBottom="5" class="searchField font-awesome"
-                        color="#fff" />
+                    <SearchBar hint="Search hint" v-model="searchValue" @textChange="filter" />
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -123,6 +119,7 @@
     import Help from "./Help";
     import LoginScreen from "./LoginMain";
     import BackendService from "../services/BackendService";
+import { backgroundInternalProperty } from 'tns-core-modules/ui/page/page';
 
     export default {
         created() {
@@ -136,6 +133,15 @@
             .catch((err) => {
                 if (err) console.log(err);
             })
+            backend.getAllCommunities()
+            .then((res) => {
+                if (res) {
+                    this.communities = res.communities;
+                }
+            })
+            .catch((err) => {
+                if (err) console.log(err);
+            })
         },
         data() {
             return {
@@ -143,10 +149,22 @@
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
-                challenges: []
+                challenges: [],
+                allChallenges: [],
+                communities: [],
+                searchValue: ""
             };
         },
         methods: {
+            filter(){
+                var filteredCommunities = this.communities.filter((community) => {
+                    community.name.startsWith(this.searchValue);
+                })
+
+                this.challenges = Array.from(this.allChallenges.filter((challenge) => {
+                    challenge.communities.some((c) => filteredCommunities.includes((c1) => c1._id == c))
+                }))
+            },
             onDrawerClosed() {
                 this.drawerToggle = false;
             },

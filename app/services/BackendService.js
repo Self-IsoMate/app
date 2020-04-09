@@ -133,4 +133,36 @@ export default class BackendService {
             if (err) console.log(err);
         })
     }
+
+    async getCommunities(communityIds) {
+        var promises = communityIds.map((id) => {
+            return axios.get( API + communities?_id=${id} )
+        });
+
+        return Promise.all(promises)
+            .then((res) => {
+                if (res) {
+                    var commies = res.map((r) => r.data[0]);
+                    return { success: true, communities: commies }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success : false, message: err }
+                }
+            })
+    }
+
+    async getAllCommunities() {
+        return axios.get(API + 'communities')
+        .then((res) => {
+            if (res) {
+                return {communities: res.data};
+            }
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+
 }
