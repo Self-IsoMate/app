@@ -233,14 +233,42 @@
             sendTap(events){
   
                   var service = new BackendService();
-                  console.log("this.$store.state.user._id");
-                  console.log(this.$store);
-               /*service.saveMessage(this.$store.state.user._id,this.$props.chatroom._id,this.message).then((response) => {
-                    console.log(this.message);
+               
+               service.saveMessage(this.$store.state.user._id,this.$props.chatRoom._id,this.message ).then((response) => {
 
    				if (response) {
                     console.log(response);
                     this.message = "";
+this.conversations=[];
+                                     service.getMessagesfromID(this.$props.chatRoom._id).then(res=>{
+                                               if (res) {
+                     
+                                            res.messages.forEach(val => {
+
+                        
+
+                             service.getUserfromId(val.userID).then(resUser=>{
+                               if (resUser) {
+
+                                    //console.log(resUser);
+
+                                    val = { ...val, username: resUser.user.username, profilePicture: resUser.user.profilePicture};
+                                   
+                                    this.conversations.push(val);                               
+                   
+                                }else{
+                                    console.log("error on getting chatrooms objects");
+                                }
+
+
+                                    });
+
+
+                                           });
+                                                }else{
+                                                    console.log("error on getting messages");
+                                               }
+                                                   });
 
                    }else{
                        console.log("Error: No Response")
@@ -248,7 +276,8 @@
                 });
                 //this.message = "" -- THIS CLEARS IT BUT NOT VISUALLY
                 //better implementation so all messages send from bottom and push up
-            }*/
+            
+           }
         }
     };
 </script>
