@@ -2,10 +2,6 @@
 	<StackLayout backgroundColor="#eee">
 		<StackLayout height="2%"></StackLayout>
 		<StackLayout>
-			<StackLayout class = "prof" @tap="profileTap()">
-			<Label text="  Profile" paddingLeft="15%" color="black"
-				class="drawerItemText font-awesome" margin="15" />
-			</StackLayout>
 			<StackLayout class = "notif" @tap="notificationTap()">
 			<Label text="  Notifications" paddingLeft="15%" color="black"
 				class="drawerItemText font-awesome" margin="15" />
@@ -30,7 +26,6 @@
 import Community from "./Community";
 import Chat from "./Chat";
 import Competitions from "./Competitions"
-import Profile from "./Profile";
 import Notifications from "./Notifications";
 import Settings from "./Settings";
 import Help from "./Help";
@@ -42,34 +37,19 @@ export default {
 	},
 	methods: {
             profileTap() {
-                this.$navigateTo(Profile, {
-                    animated: false,
-                    clearHistory: true
-                });
+                this.$navigateTo(Profile);
             },
             notificationTap() {
-                this.$navigateTo(Notifications, {
-                    animated: false,
-                    clearHistory: true
-                });
+                this.$navigateTo(Notifications);
             },
             settingsTap() {
-                this.$navigateTo(Settings, {
-                    animated: false,
-                    clearHistory: true
-                });
+                this.$navigateTo(Settings);
             },
             helpTap(){
-                this.$navigateTo(Help, {
-                    animated: false,
-                    clearHistory: true
-                });
+                this.$navigateTo(Help);
             },
             logOut(){
-                this.$navigateTo(LoginScreen, {
-                    animated: false,
-                    clearHistory: true
-                });
+                this.$navigateTo(LoginScreen);
             }
 	}
 }

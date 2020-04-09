@@ -12,6 +12,16 @@ Vue.use(Vuex);
 
 Vue.registerElement('RadSideDrawer', () => require('nativescript-ui-sidedrawer').RadSideDrawer);
 Vue.registerElement("CardView", () => require('nativescript-cardview').CardView);
+Vue.registerElement(
+  'CheckBox',
+  () => require('@nstudio/nativescript-checkbox').CheckBox,
+  {
+    model: {
+      prop: 'checked',
+      event: 'checkedChange'
+    }
+  }
+);
 Vue.component('SideBar', SideBar);
 Vue.component('NavBar', NavBar);
 
