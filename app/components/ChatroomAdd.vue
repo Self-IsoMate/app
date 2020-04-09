@@ -58,7 +58,7 @@
                             height="100%" separatorColor="transparent" id="listView">
                             <v-template>
 
-                            <ChatroomItem :chatroom="chatroom"/>
+                            <ChatroomItem :chatroom="chatroom" :user="currentUser"/>
 
                             </v-template>
                         </ListView>
@@ -124,11 +124,11 @@
         created() {
             var backend = new BackendService();
             backend.getAllChatrooms()
-            .then((res) => {
-            if (res){
-               this.chatrooms = res.chatrooms;
-            } 
-            })
+                .then((res) => {
+                    if (res){
+                        this.chatrooms = res.chatrooms;
+                    } 
+                })
             .catch((err) => {
                 if (err) console.log(err);
             }) 
@@ -211,6 +211,11 @@
                 });
             }, //put in here navigate to log-in screen
             showDetails() {}
+        },
+        computed: {
+            currentUser: function () {
+                return this.$store.state.user;
+            }
         }
     };
 </script>

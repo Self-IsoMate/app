@@ -19,13 +19,13 @@
 
 export default {
     created(){
-        if (!this.$store.state.user._id){
+        if (!this.$props.user._id){
             console.log("go away")
         } else {
-            this.userHasChatroom = this.$store.state.user.chatrooms.includes(this.$props.chatroom._id);
+            this.userHasChatroom = this.$props.user.chatrooms.includes(this.$props.chatroom._id);
         }
     },
-    props: ['chatroom'],
+    props: ['chatroom', 'user'],
     data(){
         return{
             userHasChatroom: false,
