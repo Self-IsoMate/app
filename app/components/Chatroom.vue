@@ -8,7 +8,7 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <Label class = "action-bar-title" :text="chatroom.chatroomName" paddingTop = "7.5%" color="white" id="searchField"></Label>
+                    <Label class = "action-bar-title" :text="chatRoom.chatroomName" paddingTop = "7.5%" color="white" id="searchField"></Label>
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -22,28 +22,25 @@
                     <StackLayout dock="top" height="80%" width="100%" style="">
 
 
-                        <ListView for="item in conversations" :key="index"
+                        <ListView for="item in conversations" 
                             height="100%" separatorColor="transparent" id="listView">
                             <v-template>
 
                                 <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
                                     padding="10">
                                     <StackLayout width="20%">
-                                        <Image :src="item.convFriendImg"
+                                        <Image :src="'https://storage.googleapis.com/self-isomate-images/chatroom-images/italy.png'"
                                             stretch="aspectFill" class="conImg" />
                                     </StackLayout>
                                     <StackLayout marginLeft="10" paddingTop="3"
                                         width="50%">
-                                        <Label :text="item.convFriendName"
+                                        <Label :text="item.userID"
                                             :class="'convFriendName ' + item.read" />
-                                        <Label :text="item.convText" textWrap="true" :class="'convTextOut ' + item.read" />
+                                        <Label :text="item.message" textWrap="true" :class="'convTextOut ' + item.read" />
                                     </StackLayout>
                                     <StackLayout marginLeft="10" paddingTop="3"
                                         width="60%">
-                                        <Label :text="item.convDate"  :class="'convDateOut ' + item.read" />
-                                        <Label text="" :visibility="item.seenVisibility"
-                                            style="font-size:17;text-align:center;margin-top:12;color:#1aa3ff;"
-                                            class="font-awesome" />
+                                        <!--Label :text="item.dateSent.toTimeString().split(' ')[0]"  :class="'convDateOut ' + item.read" /-->
                                     </StackLayout>
                                 </StackLayout>
 
@@ -70,9 +67,8 @@
                             <StackLayout class="navItem" @tap="communityTap()">
                                 <Label text="" android:class="notificationAndroid"
                                     ios:class="notification" opacity="0" />
-                                <Label text="" :color="profileColor"
-                                    android:style="font-size:25;margin-top:-15"
-                                    ios:style="font-size:30;margin-top:-15"
+                                <Label text="" android:style="font-size:23;margin-top:-15"
+                                    ios:style="font-size:29;margin-top:-15"
                                     class="font-awesome" />
                             </StackLayout>
                             <StackLayout class="navItem" @tap="chatTap()">
@@ -124,11 +120,33 @@
     import Chat from "./Chat";
     import moment from "moment";
     import BackendService from "../services/BackendService";
-
+    var service = new BackendService();
 
     export default {
-        props: ['chatroom'],
-        created() {},
+        props: ['chatRoom'],
+        created() {
+                        console.log("this.$props.chatRoom._id");
+                       console.log(this.$props.chatRoom._id);
+                  service.getMessagesfromID(this.$props.chatRoom._id).then(res=>{
+                                               if (res) {
+                       console.log("res");
+                       console.log(res);
+
+                                            res.messages.forEach(val => {
+                        console.log("val");
+                        val = { ...val, userBello: 'Franci'};//userID
+                        console.log(val);
+
+                         this.conversations.push(val);     
+
+                                           });
+                                                }else{
+                                                    console.log("error on getting messages");
+                                               }
+                                                   });
+
+
+        },
         data() {
             return {
                 back:"",
@@ -205,7 +223,7 @@
             sendTap(events){
   
       			var service = new BackendService();
-                service.saveMessage(this.$store.state.user._id,this.$props.chatroom.chatroom._id,this.message).then((response) => {
+                service.saveMessage(this.$store.state.user._id,this.$props.chatroom._id,this.message).then((response) => {
                     console.log(this.message);
 
    				if (response) {

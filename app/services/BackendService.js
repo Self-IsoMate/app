@@ -162,5 +162,16 @@ export default class BackendService {
         })
     }
     
+    
+    async getMessagesfromID(chatroomId) {
+      
+        return axios.get(API+`messages?chatroomID=`+chatroomId)
+        .then((res) => {
+            return { messages: res.data };
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
 
 }

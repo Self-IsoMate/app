@@ -23,6 +23,13 @@ The imported CSS rules must precede all other types of rules.
 
 }
 
+.chatroomNameTitle{
+	color:#fff;
+	font-size: 20;
+	text-align: center;
+}
+
+
 .convFriendName{
 	font-weight: bold;
 	font-size: 19;

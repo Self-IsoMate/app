@@ -57,7 +57,7 @@
                     <StackLayout dock="top" height="90%" width="100%" style="">
 
 
-                        <ListView for="item in conversations"
+                        <ListView for="item in chatRoomsList"
                             height="100%" separatorColor="transparent" id="listView">
                             <v-template>
 
@@ -70,12 +70,7 @@
                                     <StackLayout marginLeft="10" paddingTop="3"
                                         width="50%">
                                         <Label :text="item.chatroomName"
-                                            :class="'chatroomName '" />
-                                        <Label :text="'item.convText'" :class="'convTextOut '" />
-                                    </StackLayout>
-                                    <StackLayout marginLeft="10" paddingTop="3"
-                                        width="60%">
-                                        <Label :text="'item.convDate'" :class="'convDateOut '" />
+                                            class="chatroomNameTitle" />
                                     </StackLayout>
                                 </StackLayout>
 
@@ -103,9 +98,8 @@
                             <StackLayout class="navItem" @tap="communityTap()">
                                 <Label text="" android:class="notificationAndroid"
                                     ios:class="notification" opacity="0" />
-                                <Label text="" :color="profileColor"
-                                    android:style="font-size:25;margin-top:-15"
-                                    ios:style="font-size:30;margin-top:-15"
+                                <Label text="" android:style="font-size:23;margin-top:-15"
+                                    ios:style="font-size:29;margin-top:-15"
                                     class="font-awesome" />
                             </StackLayout>
                             <StackLayout class="navItem" @tap="chatTap()">
@@ -147,14 +141,13 @@
             var index = 0; 
             res.chatrooms.forEach(val => {
              
-                                    service.getChatroomObj(val).then(response=>{
-                                    if (res) {
-                                        console.log(response.chatroom);               
-                                        this.conversations.push(response.chatroom);     
-                                        console.log(this.conversations);               
-                    
+                               service.getChatroomObj(val).then(response=>{
+                               if (response) {
+                         console.log(response.chatroom);
+                                        this.chatRoomsList.push(response.chatroom);     
+                   
                                 }else{
-                                    console.log("error Chat created");
+                                    console.log("error on getting chatrooms objects");
                                 }
 
 
@@ -164,10 +157,9 @@
 
 
                 });
-                //this.conversations= res;
  
             }else{
-                console.log("error Chat created");
+                console.log("error on getting Chatroom Ids");
             }
 
 
@@ -182,7 +174,7 @@
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
-                conversations: [
+                chatRoomsList: [
                 ]
             };
         },
@@ -247,10 +239,11 @@
             }, //put in here navigate to log-in screen
             showDetails() {},
             chatroomTap(item){    	
-             var service = new BackendService();
-console.log(item.chatroomName);
-
-
+   this.$navigateTo(Chatroom, {
+                    props: {chatRoom: item},
+                    animated: false,
+                    clearHistory: true
+                }); 
             }
         }
     };
