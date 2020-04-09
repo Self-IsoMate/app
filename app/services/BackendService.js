@@ -115,6 +115,18 @@ export default class BackendService {
             })
     }
 
+    async updateUser (userId, newUser) {
+        return await axios.put(API+`users/${userId}`, newUser)
+            .then((res) => {
+                if (res) {
+                    return { result: res };
+                }
+            })
+            .catch((err) => {
+                if (err) console.log(err);
+            })
+    }
+
     async getProfilePosts(user) {
         return axios.get(API+`posts?user.username=${user.username}`)
             .then((res) => {

@@ -16,23 +16,46 @@
 
         <StackLayout ~mainContent>
                 <!-- Actual page content goes here (in dock top) -->
-			<StackLayout width="100%" margin="15">
+			<StackLayout width="100%">
 
-				<Label text="Edit Username" />
+			    <StackLayout margin="15">
 
-				<GridLayout columns="auto" rows="auto">
-					<Label text="" class="font-awesome"/>
-					<Image :src="currentUser.profilePicture"
-						stretch="aspectFill" class="profilePic"
-						@tap="pickProfile">
-					</Image>
-				</GridLayout>
+                    <!-- Edit username -->
+                    <Label text="Edit Username" class="field-header" />
+                    <TextView :text="editedUser.username" />
+
+                    <!-- Edit profile picture -->
+                    <FlexboxLayout width="100%" alignItems="center" justifyContent="center">
+                        <AbsoluteLayout>
+                            <Label text="" class="font-awesome icon" top="20" left="130"/>
+                            <Image :src="editedUser.profilePicture"
+                                stretch="aspectFill" class="profilePic"
+                                @tap="pickProfile" top="0" right="0">
+                            </Image>
+                        </AbsoluteLayout>
+                    </FlexboxLayout>
+
+                    <!-- Edit communities -->
+                    <Label text="Edit communities" class="field-header" />
+
+                    <WrapLayout>
+                        <Label v-for="(com, index) in editedUser.communities" :text="com.name" :key="index" />
+                    </WrapLayout>
+
+                    <Button text="Confirm Changes" @tap="confirmChanges" />
+
+			    </StackLayout>
 
 			</StackLayout>
 		</StackLayout>
 	</Page>
 </template>
 <script>
+import BackendService from "../services/BackendService";
+import * as imagepicker from "nativescript-imagepicker";
+import { ItemEventData } from "tns-core-modules/ui/list-view";
+import { Observable } from "tns-core-modules/data/observable";
+
 export default {
 	methods: {
 		pickProfile () {
@@ -42,20 +65,16 @@ export default {
                     .authorize()
                     .then(() => {
                         return context.present()
+                        this.editedUser.profilePicture = null;
                     })
                     .then((selection) => {
                         if (selection) {
                             let image = selection[0];
                             image.options.width = 300;
                             image.options.height = 300;
-                            this.currentUser.profilePicture = image;
-                            this.uploadImage()
-                                .then((res) => {
-                                    if (res) {
-                                        console.log("got response");
-                                        this.currentUser.profilePicture = res;
-                                    }
-                                });
+                            this.editedUser.profilePicture = image;
+                            console.log(this.editedUser.profilePicture);
+                            return;
                         } else {
                             console.log("no image selected");
                         }
@@ -67,23 +86,46 @@ export default {
             },
             
             async uploadImage () {
+                // run when you click save
                 let backendService = new BackendService();
                 console.log("uploading image");
-                return await backendService.changeProfilePicture(this.currentUser).newLocation;
+                this.currentUser.profilePicture = this.editedUser.profilePicture;
+                return backendService.changeProfilePicture(this.currentUser).newLocation;
+            },
+            
+            confirmChanges () {
+                console.log(this.editedUser.profilePicture);
+                this.editedUser.username = "I will actually ";
+            },
+
+            resetProfile() {
+                this.editedUser.username = this.currentUser.username;
+                this.editedUser.profilePicture = this.currentUser.profilePicture;
+                this.editedUser.communities = Array.from(this.currentUser.communities);
             }
 	},
 	data () {
 		return {
 			drawerToggle: false,
 			drawer1: "", //the three dots vertically
-			drawer2: "", //the three dots horizontally
+            drawer2: "", //the three dots horizontally
+            editedUser: {
+                username: '',
+                profilePicture: '',
+                communities: []
+            },
+            hasEdits: false
 		}
 	},
 	computed: {
 		currentUser: function () { 
 			return this.$store.state.user
 		}
-	}
+    },
+    created () {
+        this.resetProfile();
+        console.log(this.editedUser);
+    }
 	
 }
 </script>
@@ -102,6 +144,19 @@ export default {
 	border-radius:100;
 	margin:20;
 	border-color: #4db8ff;
-	border-width: 1;
+    border-width: 3;
+}
+
+.icon {
+    padding: 10;
+    border-radius: 50%;
+    background: #4db8ff;
+    color: white;
+    font-size: 20;
+    z-index: 1;
+}
+
+.field-header {
+    font-size: 18;
 }
 </style>
