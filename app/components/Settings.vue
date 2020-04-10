@@ -23,67 +23,81 @@
             <StackLayout ~mainContent>
                 <!-- Actual page content goes here (in dock top) -->
                 <StackLayout dock="top" width="100%" style="">
-                    <StackLayout margin="15">
-                        <!-- Profile Settings -->
-                        <Label text="Profile" class="setting-header" />
+                    <ScrollView>
+                        <StackLayout margin="15">
+                            <!-- Profile Settings -->
+                            <Label text="Profile" class="setting-header" />
 
-                        <Label text="Edit your profile" class="setting-text emphasis" @tap="navigateEditProfile" />
-
-                        <StackLayout class="hr m-10 divider"/>
-
-                        <!-- Security & Privacy Settings -->
-                        <Label text="Security &amp; Privacy" class="setting-header" />
-
-                        <Label text="Change password" class="setting-text" />
-                        <Label text="Change email" class="setting-text" />
-                        <Button text="Delete your account" backgroundColor="red"/>
-
-                        <StackLayout class="hr m-10 divider"/>
-
-                        <!-- Notification Settings -->
-                        <Label text="Notifications" class="setting-header" />
-                        <GridLayout columns="*, auto" rows="auto">
-
-                            <Label col="0" text="Toggle all Notifications" class="setting-text" />
-                            <check-box col="1" />
-
-                        </GridLayout>
+                            <Label text="Edit your profile" class="setting-text emphasis" @tap="navigateEditProfile" />
 
                             <StackLayout class="hr m-10 divider"/>
 
-                        <GridLayout columns="*, auto" rows="auto">
+                            <!-- Security & Privacy Settings -->
+                            <Label text="Security &amp; Privacy" class="setting-header" />
 
-                            <Label col="0" text="Toggle comments" class="setting-text" />
-                            <check-box col="1" />
+                            <Label text="Change password" class="setting-text" />
+                            <TextField v-model="settingsValues.newPassword" secure="true" hint="Enter new password" />
+                            <TextField v-model="settingsValues.confirmNewPassword" secure="true" hint="Confirm new password" />
 
-                        </GridLayout>
+                            <Label text="Change email" class="setting-text" />
+
+                            <TextField v-model="settingsValues.newEmail" hint="Enter new email" keyboardType="email" />
+                            <TextField v-model="settingsValues.confirmNewEmail" hint="Confirm new email" keyboardType="email" />
+
+                            <GridLayout columns="*, *" rows="auto">
+
+                                <Button text="Confirm changes" col="0" row="0" @tap="changeDetails"/>
+                                <Button text="Delete your account" col="1" backgroundColor="red" @tap="deleteAccount"/>
+
+                            </GridLayout>
 
                             <StackLayout class="hr m-10 divider"/>
 
-                        <GridLayout columns="*, auto" rows="auto">
+                            <!-- Notification Settings -->
+                            <Label text="Notifications" class="setting-header" />
+                            <GridLayout columns="*, auto" rows="auto">
 
-                            <Label col="0" text="Toggle new posts" class="setting-text" />
-                            <check-box col="1"/>
+                                <Label col="0" text="Toggle all Notifications" class="setting-text" />
+                                <check-box col="1" />
 
-                        </GridLayout>
+                            </GridLayout>
+
+                                <StackLayout class="hr m-10 divider"/>
+
+                            <GridLayout columns="*, auto" rows="auto">
+
+                                <Label col="0" text="Toggle comments" class="setting-text" />
+                                <check-box col="1" />
+
+                            </GridLayout>
+
+                                <StackLayout class="hr m-10 divider"/>
+
+                            <GridLayout columns="*, auto" rows="auto">
+
+                                <Label col="0" text="Toggle new posts" class="setting-text" />
+                                <check-box col="1"/>
+
+                            </GridLayout>
+
+                                <StackLayout class="hr m-10 divider"/>
+
+                            <GridLayout columns="*, auto" rows="auto">
+
+                                <Label col="0" text="Toggle new challenges" class="setting-text" />
+                                <check-box col="1" />
+
+                            </GridLayout>
 
                             <StackLayout class="hr m-10 divider"/>
 
-                        <GridLayout columns="*, auto" rows="auto">
+                            <!-- Display Settings -->
+                            <Label text="Display" class="setting-header" />
 
-                            <Label col="0" text="Toggle new challenges" class="setting-text" />
-                            <check-box col="1" />
-
-                        </GridLayout>
-
-                        <StackLayout class="hr m-10 divider"/>
-
-                        <!-- Display Settings -->
-                        <Label text="Display" class="setting-header" />
-
-                        <Label text="Font Size" class="setting-text"/>
-                        <Label text="Dark Mode" class="setting-text"/>
-                    </StackLayout>
+                            <Label text="Font Size" class="setting-text"/>
+                            <Label text="Dark Mode" class="setting-text"/>
+                        </StackLayout>
+                    </ScrollView>
 
                 </StackLayout>
             </StackLayout>
@@ -112,6 +126,12 @@
                 drawerToggle: false,
                 drawer1: "", //the three dots vertically
                 drawer2: "", //the three dots horizontally
+                settingsValues: {
+                    newPassword: '',
+                    confirmNewPassword: '',
+                    newEmail: '',
+                    confirmNewEmail: ''
+                }
             }
         },
         methods: {
@@ -126,6 +146,18 @@
             },
             navigateEditProfile(event) {
                 this.$navigateTo(EditProfile);
+            },
+            changeDetails(event) {
+                // check if password is being updated, and then update
+                if (this.newPassword) {
+                    
+                }
+
+                // check if email is being updated and then update
+
+            },
+            deleteAccount(event) {
+
             }
         }
     };
