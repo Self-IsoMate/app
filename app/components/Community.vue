@@ -36,7 +36,7 @@
                             <v-template>
 
                             <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
-                                    <StackLayout class="postContainer">
+                                    <StackLayout class="post-container">
                                         <StackLayout orientation="horizontal"
                                             padding="10">
                                             <Image :src="item.authorImg"
@@ -93,28 +93,28 @@ export default {
             drawer1: "",
             drawer2: "",
             posts: [{
-                    authorImg: "~/assets/images/Sebastian.jpg",
-                    autorName: "Sebastian",
+                    authorImg: "https://www.istudy.org.uk/wp-content/uploads/2017/08/PP18-DIPLOMA-IN-PROFESSIONAL-CHEF.jpg",
+                    autorName: "ratatouilefan123",
                     color: "#747474",
                     date: "Today at 13:45",
-                    title: "Thanks guys! Finally broken it out",
-                    postImg: "~/assets/images/Violin.jpg",
+                    title: "Just cooked my favourite food! yum",
+                    postImg: "~/assets/pizza.jpg",
                     likes: "30",
                     comments: "14",
                     reposts: "8",
-                    categories: "#music #learningviolin"
+                    categories: "#food #cooking"
                 },
                 {
-                    authorImg: "~/assets/images/large.jpg",
-                    autorName: "Cristine",
+                    authorImg: "~/assets/profile1.jpg",
+                    autorName: "cdog",
                     color: "#E15050",
                     date: "Today at 16:21",
-                    title: "What a treat! Super rich 👌",
-                    postImg: "~/assets/images/ChocolateTart.jpg",
+                    title: "Oh look at the thyme 🕒",
+                    postImg: "~/assets/plant.jpg",
                     likes: "150",
                     comments: "21",
                     reposts: "11",
-                    categories: "#recipes #trysomethingnew"
+                    categories: "#gardening #herbs"
                 }
             ]
         };
@@ -133,4 +133,9 @@ export default {
 }
 </script>
 <style scoped>
+
+.post-container {
+    background-color: white;
+}
+
 </style>
