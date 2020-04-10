@@ -282,7 +282,7 @@ export default class BackendService {
     }
 
     async getChatroomObj(chatroomId) {
-      32
+      
         return axios.get(API+`chatrooms/`+chatroomId)
         .then((res) => {
             return { chatroom: res.data };
