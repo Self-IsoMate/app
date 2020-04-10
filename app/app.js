@@ -3,6 +3,8 @@ import Home from './components/Home'
 import userStore from "./store/index";
 import routes from "./routes/routes";
 import Vuex from "vuex";
+import RadListView from 'nativescript-ui-listview/vue';
+Vue.use(RadListView);
 Vue.use(Vuex);
 
 

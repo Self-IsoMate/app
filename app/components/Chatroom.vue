@@ -20,21 +20,19 @@
 
                 <DockLayout>
                     <StackLayout dock="top" height="80%" width="100%" style="">
-
-
-                        <ListView for="item in conversations" 
+                        <RadListView ref="listView" for="item in conversations" 
                             height="100%" separatorColor="transparent" id="listView">
                             <v-template>
 
                                 <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
                                     padding="10">
                                     <StackLayout width="20%">
-                                        <Image :src="item.profilePicture"
+                                       <Image :src="item.profilePicture"
                                             stretch="aspectFill" class="conImg" />
                                     </StackLayout>
                                     <StackLayout marginLeft="10" paddingTop="3"
                                         width="50%">
-                                        <Label :text="item.username"
+                                            <Label :text="item.username"
                                             :class="'convFriendName ' + item.read" />
                                         <Label :text="item.message" textWrap="true" :class="'convTextOut ' + item.read" />
                                     </StackLayout>
@@ -44,7 +42,7 @@
                                 </StackLayout>
 
                             </v-template>
-                        </ListView>
+                        </RadListView>
 
                     </StackLayout>
                         <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
@@ -124,38 +122,7 @@
     export default {
         props: ['chatRoom'],
         created() {
-                        
-                  service.getMessagesfromID(this.$props.chatRoom._id).then(res=>{
-                                               if (res) {
-                     
-                                            res.messages.forEach(val => {
-
-                        
-
-                             service.getUserfromId(val.userID).then(resUser=>{
-                               if (resUser) {
-
-                                    //console.log(resUser);
-
-                                    val = { ...val, username: resUser.user.username, profilePicture: resUser.user.profilePicture};
-                                   
-                                    this.conversations.push(val);                               
-                   
-                                }else{
-                                    console.log("error on getting chatrooms objects");
-                                }
-
-
-                                    });
-
-
-                                           });
-                                                }else{
-                                                    console.log("error on getting messages");
-                                               }
-                                                   });
-
-
+               this.creatingMessages();     
         },
         data() {
             return {
@@ -166,6 +133,30 @@
             };
         },
         methods: {
+            async creatingMessages(){
+                         service.getMessagesfromID(this.$props.chatRoom._id).then(res=>{
+                                if (res) {
+                                this.conversations = res.messages.map(
+                                    async function(val)
+                                    {
+                                        //console.log("val ");
+                                        //console.log(val);
+                                        var userObj =  await service.getUserfromId(val.userID);
+                                        console.log("userObj");
+                                        console.log(userObj);
+                                        val = { ...val, username: userObj.user.username, profilePicture: userObj.user.profilePicture};
+                                            return val;
+                                                                        });            
+                                    //console.log("created");
+                                    console.log(res.messages);
+                                    }else{
+                                            console.log("error on getting messages");
+                                        }
+                                    }).catch(err=>{
+                                        console.log("error: ");
+                                        console.log(err);
+                                    });
+            },
             onDrawerClosed() {
                 this.drawerToggle = false;
             },
@@ -231,44 +222,17 @@
             }, 
             showDetails() {},
             sendTap(events){
-  
-                  var service = new BackendService();
+                           
+       var service = new BackendService();
                
                service.saveMessage(this.$store.state.user._id,this.$props.chatRoom._id,this.message ).then((response) => {
 
    				if (response) {
                     console.log(response);
                     this.message = "";
-this.conversations=[];
-                                     service.getMessagesfromID(this.$props.chatRoom._id).then(res=>{
-                                               if (res) {
-                     
-                                            res.messages.forEach(val => {
-
-                        
-
-                             service.getUserfromId(val.userID).then(resUser=>{
-                               if (resUser) {
-
-                                    //console.log(resUser);
-
-                                    val = { ...val, username: resUser.user.username, profilePicture: resUser.user.profilePicture};
-                                   
-                                    this.conversations.push(val);                               
-                   
-                                }else{
-                                    console.log("error on getting chatrooms objects");
-                                }
-
-
-                                    });
-
-
-                                           });
-                                                }else{
-                                                    console.log("error on getting messages");
-                                               }
-                                                   });
+                    this.conversations=[]; //empty where you write
+ //               this.creatingMessages();     
+//refresh the chat ↑
 
                    }else{
                        console.log("Error: No Response")

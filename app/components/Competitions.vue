@@ -91,10 +91,9 @@
                             <StackLayout class="navItem" @tap="communityTap()">
                                 <Label text="" android:class="notificationAndroid"
                                     ios:class="notification" opacity="0" />
-                                <Label text="" :color="profileColor"
-                                    android:style="font-size:25;margin-top:-15"
+                                <Label text=""  android:style="font-size:25;margin-top:-15"
                                     ios:style="font-size:30;margin-top:-15"
-                                    class="font-awesome" />
+                                    class="font-awesome"  />
                             </StackLayout>
                             <StackLayout class="navItem" @tap="chatTap()">
                                 <Label text="" android:class="notificationAndroid"
