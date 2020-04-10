@@ -131,8 +131,13 @@
     import Chatroom from "./Chatroom";
     import BackendService from "../services/BackendService";
     var service = new BackendService();
+    import { timer } from 'vue-timers'
+
     
     export default {
+        timers: {
+            log: { time: 10000, autostart: true, repeat: true }
+        },
         mounted() {
             var service = new BackendService();
 
@@ -152,6 +157,12 @@
                     console.log("error on getting Chatroom Ids");
                 }
             });
+            
+            this.$timer.start('log')
+
+        },
+        beforeDestroy () {
+            clearInterval(this.$options.interval)
         },
         data() {
             return {
@@ -164,6 +175,25 @@
             };
         },
         methods: {
+            log () {
+                this.chatRoomsList=[];
+                             service.getChatroomIds(this.$store.state.user._id).then(res=>{
+                if (res) {
+                    res.chatrooms.forEach(val => {
+                        service.getChatroomObj(val).then(response=>{
+                            if (response) {
+                                //console.log(response.chatroom);
+                                this.chatRoomsList.push(response.chatroom);    
+                            } else {
+                                console.log("error on getting chatrooms objects");
+                            }
+                        });
+                    });
+                } else {
+                    console.log("error on getting Chatroom Ids");
+                }
+                      });
+             },
             onDrawerClosed() {
                 this.drawerToggle = false;
             },

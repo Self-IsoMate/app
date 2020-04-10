@@ -116,10 +116,15 @@
     import Chat from "./Chat";
     import moment from "moment";
     import BackendService from "../services/BackendService";
+    import { timer } from 'vue-timers'
+
 
     export default {
         props: ['chatRoom'],
-        created() {
+        timers: {
+              log: { time: 2000, autostart: true, repeat: true }
+        },
+      created() {
 
             var service = new BackendService();
 
@@ -146,7 +151,12 @@
                             })
                     }
                 })
+                this.$timer.start('log')
+
         },
+          beforeDestroy () {
+    clearInterval(this.$options.interval)
+  },
         data() {
             return {
                 back:"",
@@ -156,6 +166,35 @@
             };
         },
         methods: {
+                log () {
+
+                                    var service = new BackendService();
+
+            var getUserFromMessage = async (message) => {
+                return service.getUserfromId(message.userID)
+                    .then((res) => {
+                        return { ...message, username: res.user.username, profilePicture: res.user.profilePicture };
+                    });
+            }
+
+            var mutateMessages = async (messages) => {
+                return Promise.all(messages.map((message) => getUserFromMessage(message)));
+            }
+
+            service.getMessagesfromID(this.$props.chatRoom._id)
+                .then((res) => {
+                    if (res) {
+                        var messages = res.messages;
+                        console.log(messages);
+                        mutateMessages(messages)
+                            .then((result) => {
+                                console.log(result);
+                                this.conversations = result;
+                            })
+                    }
+                })
+
+},
             onDrawerClosed() {
                 this.drawerToggle = false;
             },
