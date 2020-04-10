@@ -244,10 +244,7 @@
                 }); 
             },
             addTap(){
-                 this.$navigateTo(ChatroomAdd, {
-                    animated: false,
-                    clearHistory: true
-                }); 
+                 this.$navigateTo(ChatroomAdd); 
             }
         }
     };

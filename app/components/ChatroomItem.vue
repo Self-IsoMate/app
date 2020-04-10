@@ -34,7 +34,7 @@ export default {
     },
     methods: {
         onTap(){
-            if (this.userHasChatroomhasChatroom){
+            if (this.userHasChatroom){
                 this.removeChatroom(this.$props.chatroom._id);
             } else {
                 this.addChatroom(this.$props.chatroom._id);
