@@ -9,7 +9,7 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <Label class = "action-bar-title" :text= "$props.challenge.title" paddingTop = "7.5%" color="white" id="searchField"></Label>
+                    <Label class = "challengeTitle" :text= "$props.challenge.title" paddingTop = "7.5%" color="white" id="searchField"></Label>
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -23,9 +23,9 @@
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
                         <Label text="Description"/>
-                        <Label text="$props.challenge.description"/>
+                        <Label :text="$props.challenge.description" textWrap="true"/>
                         <Label text="Deadline"/>
-                        <Label text="$props.challenge.deadline"/>
+                        <Label :text="$props.challenge.deadline" textWrap="true"/>
                     </StackLayout>
 
                     <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
@@ -109,6 +109,7 @@
         },
         data() {
             return {
+                back:"",
                 drawerToggle: false,
                 drawer1: "",
                 drawer2: "",

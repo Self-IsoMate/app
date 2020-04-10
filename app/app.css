@@ -197,6 +197,9 @@ The imported CSS rules must precede all other types of rules.
 	border:1px solid red;
 	margin-left: 5.5%;
 }
+.challengeTitle{
+	font-size: 18;
+}
 .HMid{
 	width:70%;
 }
