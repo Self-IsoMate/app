@@ -17,55 +17,11 @@
             </StackLayout>
         </ActionBar>
 
-        <RadSideDrawer ref="drawer" @drawerOpened="onDrawerOpened()"
-            @drawerClosed="onDrawerClosed()">
-            <StackLayout ~drawerContent backgroundColor="#eee">
-                <StackLayout height="2%"></StackLayout>
-                <StackLayout class="">
-                    <StackLayout class = "prof" @tap="profileTap()">
-                    <Label text="  Profile" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "notif" @tap="notificationTap()">
-                    <Label text="  Notifications" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "settings" @tap="settingsTap()">
-                    <Label text="  Settings" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "help" @tap="helpTap()">
-                    <Label text="  Help" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "logout" @tap="logOut()">
-                    <Label text="  Log out" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                </StackLayout>
-            </StackLayout>
-
             <StackLayout ~mainContent>
 
                 <DockLayout>
 
-                    <StackLayout dock="top" height="90%" width="100%" style="">
-
-                        <ListView for="challenge in challenges" key="index" height="100%"
-                            backgroundColor="#E8E8E8" separatorColor="transparent"
-                            id="listView">
-                            <v-template>
-
-                                <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
-                                    <StackLayout class="postContainer">
-                                        <Image :src="challenge.image" marginTop="10" />
-                                    </StackLayout>
-                                </StackLayout>
-
-                            </v-template>
-                        </ListView>
-
-                    </StackLayout>
+                    <StackLayout dock="top" height="90%" width="100%" style=""></StackLayout>
 
                     <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
                         <StackLayout orientation="horizontal">
@@ -105,7 +61,6 @@
                 </DockLayout>
 
             </StackLayout>
-        </RadSideDrawer>
 
     </page>
 </template>

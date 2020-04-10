@@ -49,7 +49,21 @@
 
                 <DockLayout>
 
-                    <StackLayout dock="top" height="90%" width="100%" style=""></StackLayout>
+                    <StackLayout dock="top" height="90%" width="100%" style="">
+                        <ListView for="challenge in challenges" key="index" height="100%"
+                            backgroundColor="#E8E8E8" separatorColor="transparent"
+                            id="listView">
+                            <v-template>
+
+                                <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
+                                    <StackLayout class="postContainer">
+                                        <Image :src="challenge.image" marginTop="10" />
+                                    </StackLayout>
+                                </StackLayout>
+
+                            </v-template>
+                        </ListView>
+                    </StackLayout>
 
                     <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
                         <StackLayout orientation="horizontal">
