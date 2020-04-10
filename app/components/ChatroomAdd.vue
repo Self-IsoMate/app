@@ -10,7 +10,9 @@
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
                     <TextField placeholderColor="white" id="searchField"
-                        editable="true" hint="      Search for a Chatroom" returnKeyType="search"
+                        editable="true" hint="      Search for a Chatroom" v-model="searchPhrase" 
+                        @textChange="filter()" 
+                        returnKeyType="search"
                         ios:height="30" ios:marginTop="3"
                         android:paddingBottom="5" class="searchField font-awesome"
                         color="#fff" />
@@ -126,12 +128,13 @@
             backend.getAllChatrooms()
                 .then((res) => {
                     if (res){
-                        this.chatrooms = res.chatrooms;
+                        this.allChatrooms = res.chatrooms;
                     } 
                 })
             .catch((err) => {
                 if (err) console.log(err);
             }) 
+            this.chatrooms = Array.from(this.allChatrooms);
         },
         components: {
             ChatroomItem
@@ -143,10 +146,16 @@
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
+                allChatrooms: [],
                 chatrooms: []
             };
         },
          methods: {
+            filter() {
+                this.chatrooms = this.allChatrooms.filter((c)=>{
+                   return c.chatroomName.toUpperCase().startsWith(this.searchPhrase.toUpperCase());
+                });
+            },
             onDrawerClosed() {
                 this.drawerToggle = false;
             },

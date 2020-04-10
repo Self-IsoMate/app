@@ -9,7 +9,7 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <SearchBar hint="Search hint" v-model="searchPhrase" @textChange="filter" />
+                    <SearchBar hint="Search" v-model="searchPhrase" @textChange="filter" />
                 </StackLayout>
                 <StackLayout class="HRight">
 
