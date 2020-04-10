@@ -157,7 +157,7 @@ export default class BackendService {
             if (err) console.log(err);
         }) 
     }
-=======
+}
 import axios from "axios";
 const API = "https://self-isomate-api.appspot.com/api/";
 const BUCKET_NAME = "self-isomate-images";
