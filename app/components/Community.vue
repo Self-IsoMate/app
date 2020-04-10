@@ -16,7 +16,8 @@
                         color="#fff" />
                 </StackLayout>
                 <StackLayout class="HRight">
-
+                    <Label text="+" style="font-size:40;color:#fff;" paddingLeft="15%"
+                        class="font-awesome" />
                 </StackLayout>
             </StackLayout>
         </ActionBar>
