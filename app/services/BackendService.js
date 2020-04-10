@@ -125,6 +125,18 @@ export default class BackendService {
             })
     }
 
+
+    async getChallenges() {
+        return axios.get(API + 'challenges')
+        .then((res) => {
+            if (res) {
+                return {challenges: res.data};
+            }
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+
     async getCategories() {
         return axios.get(API+'categories?isChild=false')
             .then((res) => {
@@ -154,7 +166,7 @@ export default class BackendService {
 
     async getCommunities(communityIds) {
         var promises = communityIds.map((id) => {
-            return axios.get( API + `communities?_id=${id}` )
+            return axios.get( `API + communities?_id=${id}` )
         });
 
         return Promise.all(promises)
@@ -170,7 +182,17 @@ export default class BackendService {
                 }
             })
     }
-
+    async getAllCommunities() {
+        return axios.get(API + 'communities')
+        .then((res) => {
+            if (res) {
+                return {communities: res.data};
+            }
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+      
     async getResources(categoryId) {
         return axios.get( API + `resources?categoryId=${categoryId}` )
             .then((res) => {

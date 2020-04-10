@@ -86,10 +86,7 @@ The imported CSS rules must precede all other types of rules.
 	border-width: 1;
 }
 
-.postContainer{
-	margin-top: 10;
-	background: #fff;
-}
+
 
 .aboutContainer{
 	width:85%;
@@ -199,6 +196,9 @@ The imported CSS rules must precede all other types of rules.
 	float: left;
 	border:1px solid red;
 	margin-left: 5.5%;
+}
+.challengeTitle{
+	font-size: 18;
 }
 .HMid{
 	width:70%;
