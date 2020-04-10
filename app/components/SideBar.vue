@@ -2,7 +2,7 @@
 	<StackLayout backgroundColor="#eee">
 		<StackLayout height="2%"></StackLayout>
 		<StackLayout>
-			<StackLayout class = "notif" @tap="notificationTap()">
+			<StackLayout class="notif" @tap="notificationTap()">
 			<Label text="  Notifications" paddingLeft="15%" color="black"
 				class="drawerItemText font-awesome" margin="15" />
 			</StackLayout>
