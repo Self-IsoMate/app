@@ -53,6 +53,7 @@
                         <ListView for="challenge in challenges" key="index" height="100%"
                             backgroundColor="#E8E8E8" separatorColor="transparent"
                             id="listView">
+                            <StackLayout @tap="showDetails(challenge.title)">
                             <v-template>
 
                                 <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
@@ -62,6 +63,7 @@
                                 </StackLayout>
 
                             </v-template>
+                            </StackLayout>
                         </ListView>
                     </StackLayout>
 
