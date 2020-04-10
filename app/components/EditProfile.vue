@@ -63,51 +63,89 @@ import _ from "underscore";
 export default {
 	methods: {
 		pickProfile () {
-                let context = imagepicker.create({ mode: "single", mediaType: 1 });
+            let context = imagepicker.create({ mode: "single", mediaType: 1 });
 
-                context
-                    .authorize()
-                    .then(() => {
-                        return context.present()
-                        this.editedUser.profilePicture = null;
-                    })
-                    .then((selection) => {
-                        if (selection) {
-                            let image = selection[0];
-                            image.options.width = 300;
-                            image.options.height = 300;
-                            this.editedUser.profilePicture = image;
-                            console.log(this.editedUser.profilePicture);
-                            return;
-                        } else {
-                            console.log("no image selected");
+            context
+                .authorize()
+                .then(() => {
+                    return context.present()
+                    this.editedUser.profilePicture = null;
+                })
+                .then((selection) => {
+                    if (selection) {
+                        let image = selection[0];
+                        image.options.width = 300;
+                        image.options.height = 300;
+                        this.editedUser.profilePicture = image;
+                        console.log(this.editedUser.profilePicture);
+                        return;
+                    } else {
+                        console.log("no image selected");
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+
+        },
+            
+        async uploadImage () {
+            // run when you click save
+            console.log("uploading image");
+            return this.service.changeProfilePicture(this.editedUser)
+                .then((res) => {
+                    if (res) {
+                        console.log("RESPONSE");
+                        console.log(res);
+                    }
+                });
+        },
+        
+        confirmChanges () {
+            // 1. update user
+            // 2. if there's a profile picture, then do that
+
+            var edit = {};
+            Object.assign(edit, this.editedUser);
+            // making sure the profile picture isn't updated
+            delete edit.profilePicture;
+            
+            var updateUser = this.service.updateUser(this.currentUser._id, edit)
+                .then((res) => {
+                    if (res) {
+                        this.$store.commit("setUser", {user: res.user});
+
+                        if (this.editedUser.profilePicture != this.currentUser.profilePicture) {
+                            this.uploadImage()
+                                .then((res => {
+                                    if (res) {
+                                        console.log("current user before");
+                                        console.log(this.currentUser.profilePicture);
+                                        console.log("response");
+                                        console.log(res);
+                                        this.$store.commit("setUserProfilePicture", { profilePicture: res });
+                                        console.log("current user after");
+                                        console.log(this.currentUser.profilePicture);
+                                    }
+                                }))
+                                .catch((errr) => {
+                                    console.log(errr);
+                                });
                         }
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    })
+                    }
+                })
+                .catch((err) => {
+                    console.log(err)
+                });
 
-            },
-            
-            async uploadImage () {
-                // run when you click save
-                let backendService = new BackendService();
-                console.log("uploading image");
-                this.currentUser.profilePicture = this.editedUser.profilePicture;
-                return backendService.changeProfilePicture(this.currentUser).newLocation;
-            },
-            
-            confirmChanges () {
-                console.log(this.editedUser.profilePicture);
-                this.editedUser.username = "I will actually ";
-                console.log(this.hasEdits);
-            },
+        },
 
-            resetProfile() {
-                this.editedUser.username = this.currentUser.username;
-                this.editedUser.profilePicture = this.currentUser.profilePicture;
-                this.editedUser.communities = Array.from(this.currentUser.communities);
-            }
+        resetProfile() {
+            this.editedUser.username = this.currentUser.username;
+            this.editedUser.profilePicture = this.currentUser.profilePicture;
+            this.editedUser.communities = Array.from(this.currentUser.communities);
+            this.editedUser._id = this.currentUser._id;
+        }
 	},
 	data () {
 		return {
@@ -118,7 +156,8 @@ export default {
                 username: '',
                 profilePicture: '',
                 communities: []
-            }
+            },
+            service: new BackendService()
 		}
 	},
 	computed: {

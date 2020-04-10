@@ -95,7 +95,14 @@ export default class BackendService {
 
         task.on("error", (err) => console.log(err));
         task.on("complete", (e) => {
-            this.updateUserProfilePicture(user, link);
+            this.updateUserProfilePicture(user, link)
+                .then((res) => {
+                    if (res) {
+                        console.log("inner return");
+                        console.log(res);
+                        return { newLocation: res.newLocation };
+                    }
+                });
         });
 
     }
@@ -119,7 +126,7 @@ export default class BackendService {
         return await axios.put(API+`users/${userId}`, newUser)
             .then((res) => {
                 if (res) {
-                    return { result: res };
+                    return { user: res.data.update };
                 }
             })
             .catch((err) => {
@@ -234,7 +241,7 @@ export default class BackendService {
             })
     }
 
-	async getMessagesfromID(chatroomId) {
+    async getMessagesfromID(chatroomId) {
       
         return axios.get(API+`messages?chatroomID=`+chatroomId)
         .then((res) => {
