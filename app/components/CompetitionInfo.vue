@@ -9,7 +9,7 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <Label class = "action-bar-title" :text= "$props.title" paddingTop = "7.5%" color="white" id="searchField"></Label>
+                    <Label class = "action-bar-title" :text= "$props.challenge.title" paddingTop = "7.5%" color="white" id="searchField"></Label>
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -21,7 +21,12 @@
 
                 <DockLayout>
 
-                    <StackLayout dock="top" height="90%" width="100%" style=""></StackLayout>
+                    <StackLayout dock="top" height="90%" width="100%" style="">
+                        <Label text="Description"/>
+                        <Label text="$props.challenge.description"/>
+                        <Label text="Deadline"/>
+                        <Label text="$props.challenge.deadline"/>
+                    </StackLayout>
 
                     <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
                         <StackLayout orientation="horizontal">
@@ -78,7 +83,7 @@
     import Competitions from "./Competitions";
 
     export default {
-        props: ['title'],
+        props: ['challenge'],
         created() {
             var backend = new BackendService();
             backend.getChallenges()

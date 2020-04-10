@@ -53,7 +53,7 @@
                         <ListView for="challenge in challenges" key="index" height="100%"
                             backgroundColor="#E8E8E8" separatorColor="transparent"
                             id="listView">
-                            <StackLayout @tap="showDetails(challenge.title)">
+                            <StackLayout @tap="showDetails(challenge)">
                             <v-template>
 
                                 <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
@@ -226,9 +226,9 @@
                     clearHistory: true
                 });
             }, //put in here navigate to log-in screen
-            showDetails(name){
+            showDetails(challenge){
                 this.$navigateTo(CompetitionInfo, {
-                    props: {title: name},
+                    props: {challenge: challenge},
                     animated: false,
                     clearHistory: true
                 });
