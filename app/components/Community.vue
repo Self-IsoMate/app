@@ -4,7 +4,7 @@
         <ActionBar title="" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
-                <StackLayout class="HLeft" style="margin-top:10;" @tap="toggleDrawer()">
+                <StackLayout class="HLeft" style="margin-top:10;" @tap="toggleDrawer">
                     <Label :text="drawerToggle ? drawer2: drawer1" style="font-size:27;color:#fff;"
                         class="font-awesome" />
                 </StackLayout>
@@ -22,37 +22,13 @@
             </StackLayout>
         </ActionBar>
 
-        <RadSideDrawer ref="drawer" @drawerOpened="onDrawerOpened()"
-            @drawerClosed="onDrawerClosed()">
-                      <StackLayout ~drawerContent backgroundColor="#eee">
-                <StackLayout height="2%"></StackLayout>
-                <StackLayout class="">
-                    <StackLayout class = "prof" @tap="profileTap()">
-                    <Label text="  Profile" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "notif" @tap="notificationTap()">
-                    <Label text="  Notifications" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "settings" @tap="settingsTap()">
-                    <Label text="  Settings" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "help" @tap="helpTap()">
-                    <Label text="  Help" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "logout" @tap="logOut()">
-                    <Label text="  Log out" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                </StackLayout>
-            </StackLayout>
+        <RadSideDrawer ref="drawer" @drawerOpened="onDrawerOpened()" @drawerClosed="onDrawerClosed()">
+            
+            <SideBar ~drawerContent />
 
             <StackLayout ~mainContent>
-
                 <DockLayout>
+                    <!-- Actual page content goes here (in dock top) -->
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
                         <ListView for="item in posts" :key="index" height="100%"
@@ -61,7 +37,7 @@
                             <v-template>
 
                             <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
-                                    <StackLayout class="postContainer">
+                                    <StackLayout class="post-container">
                                         <StackLayout orientation="horizontal"
                                             padding="10">
                                             <Image :src="item.authorImg"
@@ -99,156 +75,68 @@
 
                     </StackLayout>
 
-
-                    <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
-                        <StackLayout orientation="horizontal">
-                            <StackLayout class="navItem" @tap="homeTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text="" android:style="font-size:23;margin-top:-15"
-                                    ios:style="font-size:29;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                            <StackLayout class="navItem" @tap="competitionTap()">
-                                <Label text="0" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text=" " android:style="font-size:23;margin-top:-15"
-                                    ios:style="font-size:29;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                            <StackLayout class="navItem" @tap="communityTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text="" :color="mainColor"
-                                    android:style="font-size:25;margin-top:-15"
-                                    ios:style="font-size:30;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                            <StackLayout class="navItem" @tap="chatTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text="" android:style="font-size:25;margin-top:-15"
-                                    ios:style="font-size:30;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                        </StackLayout>
-                    </StackLayout>
+                    <NavBar dock="bottom" height="10%" selectedtab="community" />
 
                 </DockLayout>
-
             </StackLayout>
         </RadSideDrawer>
 
-    </page>
+    </Page>
 </template>
 
 <script>
-    import Home from "./Home";
-    import Chat from "./Chat";
-    import Competitions from "./Competitions"
-    import Profile from "./Profile";
-    import Notifications from "./Notifications";
-    import Settings from "./Settings";
-    import Help from "./Help";
-    import LoginScreen from "./LoginMain";
 
-     export default {
-        created() {},
-        data() {
-            return {
-                drawerToggle: false,
-                drawer1: "",
-                drawer2: "",
-                mainColor: "#00ff92",
-                posts: [{
-                        authorImg: "~/assets/images/Sebastian.jpg",
-                        autorName: "Sebastian",
-                        color: "#747474",
-                        date: "Today at 13:45",
-                        title: "Thanks guys! Finally broken it out",
-                        postImg: "~/assets/images/Violin.jpg",
-                        likes: "30",
-                        comments: "14",
-                        reposts: "8",
-                        categories: "#music #learningviolin"
-                    },
-                    {
-                        authorImg: "~/assets/images/large.jpg",
-                        autorName: "Cristine",
-                        color: "#E15050",
-                        date: "Today at 16:21",
-                        title: "What a treat! Super rich 👌",
-                        postImg: "~/assets/images/ChocolateTart.jpg",
-                        likes: "150",
-                        comments: "21",
-                        reposts: "11",
-                        categories: "#recipes #trysomethingnew"
-                    }
-                ]
-            };
+export default {
+    name: "Community",
+    data() {
+        return {
+            drawerToggle: false,
+            drawer1: "",
+            drawer2: "",
+            posts: [{
+                    authorImg: "https://www.istudy.org.uk/wp-content/uploads/2017/08/PP18-DIPLOMA-IN-PROFESSIONAL-CHEF.jpg",
+                    autorName: "ratatouilefan123",
+                    color: "#747474",
+                    date: "Today at 13:45",
+                    title: "Just cooked my favourite food! yum",
+                    postImg: "~/assets/pizza.jpg",
+                    likes: "30",
+                    comments: "14",
+                    reposts: "8",
+                    categories: "#food #cooking"
+                },
+                {
+                    authorImg: "~/assets/profile1.jpg",
+                    autorName: "cdog",
+                    color: "#E15050",
+                    date: "Today at 16:21",
+                    title: "Oh look at the thyme 🕒",
+                    postImg: "~/assets/plant.jpg",
+                    likes: "150",
+                    comments: "21",
+                    reposts: "11",
+                    categories: "#gardening #herbs"
+                }
+            ]
+        };
+    },
+    methods: {
+        onDrawerClosed() {
+            this.drawerToggle = false;
         },
-         methods: {
-            onDrawerClosed() {
-                this.drawerToggle = false;
-            },
-            onDrawerOpened() {
-                this.drawerToggle = true;
-            },
-            toggleDrawer() {
-                this.$refs.drawer.nativeView.toggleDrawerState();
-            },
-            homeTap() {
-                this.$navigateTo(Home, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            communityTap() {},
-            chatTap() {
-                this.$navigateTo(Chat, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            competitionTap() {
-                this.$navigateTo(Competitions, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            profileTap() {
-                this.$navigateTo(Profile, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            notificationTap() {
-                this.$navigateTo(Notifications, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            settingsTap() {
-                this.$navigateTo(Settings, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            helpTap(){
-                this.$navigateTo(Help, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            logOut(){
-                this.$navigateTo(LoginScreen, {
-                    animated: false,
-                    clearHistory: true
-                });
-            }, //put in here navigate to log-in screen
-            showDetails() {}
+        onDrawerOpened() {
+            this.drawerToggle = true;
+        },
+        toggleDrawer() {
+            this.$refs.drawer.nativeView.toggleDrawerState();
         }
-    };
+    }
+}
 </script>
 <style scoped>
+
+.post-container {
+    background-color: white;
+}
+
 </style>

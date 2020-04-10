@@ -58,28 +58,22 @@
                     <StackLayout dock="top" height="90%" width="100%" style="">
 
 
-                        <ListView for="item in conversations"
+                        <ListView for="item in chatRoomsList"
                             height="100%" separatorColor="transparent" id="listView">
                             <v-template>
 
                                 <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
+
                                     padding="10" @tap="chatroomTap">
+
                                     <StackLayout width="20%">
-                                        <Image :src="item.convFriendImg"
+                                        <Image :src="item.chatroomPicture"
                                             stretch="aspectFill" class="conImg" />
                                     </StackLayout>
                                     <StackLayout marginLeft="10" paddingTop="3"
                                         width="50%">
-                                        <Label :text="item.convFriendName"
-                                            :class="'convFriendName ' + item.read" />
-                                        <Label :text="item.convText" :class="'convTextOut ' + item.read" />
-                                    </StackLayout>
-                                    <StackLayout marginLeft="10" paddingTop="3"
-                                        width="60%">
-                                        <Label :text="item.convDate" :class="'convDateOut ' + item.read" />
-                                        <Label text="" :visibility="item.seenVisibility"
-                                            style="font-size:17;text-align:center;margin-top:12;color:#1aa3ff;"
-                                            class="font-awesome" />
+                                        <Label :text="item.chatroomName"
+                                            class="chatroomNameTitle" />
                                     </StackLayout>
                                 </StackLayout>
 
@@ -107,9 +101,8 @@
                             <StackLayout class="navItem" @tap="communityTap()">
                                 <Label text="" android:class="notificationAndroid"
                                     ios:class="notification" opacity="0" />
-                                <Label text="" :color="profileColor"
-                                    android:style="font-size:25;margin-top:-15"
-                                    ios:style="font-size:30;margin-top:-15"
+                                <Label text="" android:style="font-size:23;margin-top:-15"
+                                    ios:style="font-size:29;margin-top:-15"
                                     class="font-awesome" />
                             </StackLayout>
                             <StackLayout class="navItem" @tap="chatTap()">
@@ -141,42 +134,71 @@
     import Chatroom from "./Chatroom";
     import ChatroomAdd from "./ChatroomAdd";
 
+    import BackendService from "../services/BackendService";
+    var service = new BackendService();
+    import { timer } from 'vue-timers'
+
+    
     export default {
-        created() {},
+        timers: {
+            log: { time: 10000, autostart: true, repeat: true }
+        },
+        mounted() {
+            var service = new BackendService();
+
+            service.getChatroomIds(this.$store.state.user._id).then(res=>{
+                if (res) {
+                    res.chatrooms.forEach(val => {
+                        service.getChatroomObj(val).then(response=>{
+                            if (response) {
+                                //console.log(response.chatroom);
+                                this.chatRoomsList.push(response.chatroom);    
+                            } else {
+                                console.log("error on getting chatrooms objects");
+                            }
+                        });
+                    });
+                } else {
+                    console.log("error on getting Chatroom Ids");
+                }
+            });
+            
+            this.$timer.start('log')
+
+        },
+        beforeDestroy () {
+            clearInterval(this.$options.interval)
+        },
         data() {
             return {
                 drawerToggle: false,
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
-                conversations: [{
-                        convFriendImg: "~/assets/images/violinGroup.png",
-                        read: "notRead",
-                        convFriendName: "#ViolinIntermediate",
-                        convText: "Lindsay21: can anyone help me with my double stops?",
-                        convDate: "19:01",
-                        seenVisibility: "collapse"
-                    },
-                    {
-                        convFriendImg: "~/assets/images/uk.png",
-                        read: "notRead",
-                        convFriendName: "#UnitedKingdom",
-                        convText: "DiscoDan: Honestly not surprised Boris has it",
-                        convDate: "18:43",
-                        seenVisibility: "collapse"
-                    },
-                    {
-                        convFriendImg: "~/assets/images/musicCollaboration.jpeg",
-                        read: "read",
-                        convFriendName: "#MusicCollaborate",
-                        convText: "You: Any guitarists out there? Need background instrumentals for my new track",
-                        convDate: "2 minutes ago",
-                        seenVisibility: "visible"
-                    }
+                chatRoomsList: [
                 ]
             };
         },
         methods: {
+            log () {
+                this.chatRoomsList=[];
+                             service.getChatroomIds(this.$store.state.user._id).then(res=>{
+                if (res) {
+                    res.chatrooms.forEach(val => {
+                        service.getChatroomObj(val).then(response=>{
+                            if (response) {
+                                //console.log(response.chatroom);
+                                this.chatRoomsList.push(response.chatroom);    
+                            } else {
+                                console.log("error on getting chatrooms objects");
+                            }
+                        });
+                    });
+                } else {
+                    console.log("error on getting Chatroom Ids");
+                }
+                      });
+             },
             onDrawerClosed() {
                 this.drawerToggle = false;
             },
@@ -236,9 +258,9 @@
                 }); 
             }, //put in here navigate to log-in screen
             showDetails() {},
-            chatroomTap(name){
+            chatroomTap(item){    	
                 this.$navigateTo(Chatroom, {
-                    props: {chatName: name},
+                    props: {chatRoom: item},
                     animated: false,
                     clearHistory: true
                 }); 
