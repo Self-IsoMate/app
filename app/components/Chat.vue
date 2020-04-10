@@ -136,37 +136,22 @@
         mounted() {
             var service = new BackendService();
 
-                service.getChatroomIds(this.$store.state.user._id).then(res=>{
+            service.getChatroomIds(this.$store.state.user._id).then(res=>{
                 if (res) {
-            var index = 0; 
-            res.chatrooms.forEach(val => {
-             
-                               service.getChatroomObj(val).then(response=>{
-                               if (response) {
-                         //console.log(response.chatroom);
-                                        this.chatRoomsList.push(response.chatroom);     
-                   
-                                }else{
-                                    console.log("error on getting chatrooms objects");
-                                }
-
-
-                                    });
-
-
-
-
-                });
- 
-            }else{
-                console.log("error on getting Chatroom Ids");
-            }
-
-
-                });
-           
-
-        
+                    res.chatrooms.forEach(val => {
+                        service.getChatroomObj(val).then(response=>{
+                            if (response) {
+                                //console.log(response.chatroom);
+                                this.chatRoomsList.push(response.chatroom);    
+                            } else {
+                                console.log("error on getting chatrooms objects");
+                            }
+                        });
+                    });
+                } else {
+                    console.log("error on getting Chatroom Ids");
+                }
+            });
         },
         data() {
             return {
@@ -239,7 +224,7 @@
             }, //put in here navigate to log-in screen
             showDetails() {},
             chatroomTap(item){    	
-   this.$navigateTo(Chatroom, {
+                this.$navigateTo(Chatroom, {
                     props: {chatRoom: item},
                     animated: false,
                     clearHistory: true

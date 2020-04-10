@@ -32,9 +32,8 @@
                                     </StackLayout>
                                     <StackLayout marginLeft="10" paddingTop="3"
                                         width="50%">
-                                            <Label :text="item.username"
-                                            :class="'convFriendName ' + item.read" />
-                                        <Label :text="item.message" textWrap="true" :class="'convTextOut ' + item.read" />
+                                            <Label :text="item.username" />
+                                        <Label :text="item.message" textWrap="true" />
                                     </StackLayout>
                                     <StackLayout marginLeft="10" paddingTop="3"
                                         width="60%">
@@ -117,12 +116,36 @@
     import Chat from "./Chat";
     import moment from "moment";
     import BackendService from "../services/BackendService";
-    var service = new BackendService();
 
     export default {
         props: ['chatRoom'],
         created() {
-               this.creatingMessages();     
+
+            var service = new BackendService();
+
+            var getUserFromMessage = async (message) => {
+                return service.getUserfromId(message.userID)
+                    .then((res) => {
+                        return { ...message, username: res.user.username, profilePicture: res.user.profilePicture };
+                    });
+            }
+
+            var mutateMessages = async (messages) => {
+                return Promise.all(messages.map((message) => getUserFromMessage(message)));
+            }
+
+            service.getMessagesfromID(this.$props.chatRoom._id)
+                .then((res) => {
+                    if (res) {
+                        var messages = res.messages;
+                        console.log(messages);
+                        mutateMessages(messages)
+                            .then((result) => {
+                                console.log(result);
+                                this.conversations = result;
+                            })
+                    }
+                })
         },
         data() {
             return {
@@ -133,30 +156,6 @@
             };
         },
         methods: {
-            async creatingMessages(){
-                         service.getMessagesfromID(this.$props.chatRoom._id).then(res=>{
-                                if (res) {
-                                this.conversations = res.messages.map(
-                                    async function(val)
-                                    {
-                                        //console.log("val ");
-                                        //console.log(val);
-                                        var userObj =  await service.getUserfromId(val.userID);
-                                        console.log("userObj");
-                                        console.log(userObj);
-                                        val = { ...val, username: userObj.user.username, profilePicture: userObj.user.profilePicture};
-                                            return val;
-                                                                        });            
-                                    //console.log("created");
-                                    console.log(res.messages);
-                                    }else{
-                                            console.log("error on getting messages");
-                                        }
-                                    }).catch(err=>{
-                                        console.log("error: ");
-                                        console.log(err);
-                                    });
-            },
             onDrawerClosed() {
                 this.drawerToggle = false;
             },
@@ -222,26 +221,23 @@
             }, 
             showDetails() {},
             sendTap(events){
-                           
-       var service = new BackendService();
-               
-               service.saveMessage(this.$store.state.user._id,this.$props.chatRoom._id,this.message ).then((response) => {
+                var service = new BackendService();
+                service.saveMessage(this.$store.state.user._id,this.$props.chatRoom._id,this.message )
+                    .then((response) => {
 
-   				if (response) {
-                    console.log(response);
-                    this.message = "";
-                    this.conversations=[]; //empty where you write
- //               this.creatingMessages();     
-//refresh the chat ↑
+                        if (response) {
+                            console.log(response);
+                            this.message = "";
+                            this.conversations=[]; //empty where you write
+                            //               this.creatingMessages();     
+                            //refresh the chat ↑
 
-                   }else{
-                       console.log("Error: No Response")
-                   }
-                });
-                //this.message = "" -- THIS CLEARS IT BUT NOT VISUALLY
-                //better implementation so all messages send from bottom and push up
-            
-           }
+                        }else{
+                            console.log("Error: No Response")
+                        }
+                    });
+                    //better implementation so all messages send from bottom and push up
+            }
         }
     };
 </script>
