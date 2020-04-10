@@ -9,12 +9,17 @@ import VueTimers from 'vue-timers'
  
 Vue.use(VueTimers)
 Vue.use(RadListView);
+import SideBar from "./components/SideBar";
+import NavBar from "./components/NavBar";
 Vue.use(Vuex);
 
 
 // Vue.config.silent = true;
 
 Vue.registerElement('RadSideDrawer', () => require('nativescript-ui-sidedrawer').RadSideDrawer);
+Vue.registerElement("CardView", () => require('nativescript-cardview').CardView);
+Vue.component('SideBar', SideBar);
+Vue.component('NavBar', NavBar);
 
 Vue.config.silent = false;
 

@@ -4,12 +4,12 @@
         <ActionBar title="" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
-                <StackLayout class="HLeft" style="margin-top:10;" @tap="toggleDrawer()">
+                <StackLayout class="HLeft" style="margin-top:10;" @tap="toggleDrawer">
                     <Label :text="drawerToggle ? drawer2: drawer1" style="font-size:27;color:#fff;"
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <SearchBar hint="Search hint" v-model="searchPhrase" @textChange="filter" />
+                    <SearchBar hint="Search" v-model="searchPhrase" @textChange="filter()" />
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -17,145 +17,72 @@
             </StackLayout>
         </ActionBar>
 
-        <RadSideDrawer ref="drawer" @drawerOpened="onDrawerOpened()"
-            @drawerClosed="onDrawerClosed()">
-            <StackLayout ~drawerContent backgroundColor="#eee">
-                <StackLayout height="2%"></StackLayout>
-                <StackLayout class="">
-                    <StackLayout class = "prof" @tap="profileTap()">
-                    <Label text="  Profile" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "notif" @tap="notificationTap()">
-                    <Label text="  Notifications" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "settings" @tap="settingsTap()">
-                    <Label text="  Settings" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "help" @tap="helpTap()">
-                    <Label text="  Help" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                    <StackLayout class = "logout" @tap="logOut()">
-                    <Label text="  Log out" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
-                </StackLayout>
-            </StackLayout>
-
+        <RadSideDrawer ref="drawer" @drawerOpened="onDrawerOpened" @drawerClosed="onDrawerClosed">
+            
+            <SideBar ~drawerContent />
             <StackLayout ~mainContent>
-
                 <DockLayout>
+                    <!-- Actual page content goes here (in dock top) -->
 
-                    <StackLayout dock="top" height="90%" width="100%" style="">
+                    <ScrollView dock="top" scrollBarIndicatorVisible="true" height="90%" padding="0 10">
+                        <WrapLayout>
+                            <CategoryThumb v-for="category in categories" :key="category._id" :category="category" @tap="selectCategory" />
+                        </WrapLayout>
+                    </ScrollView>
 
-                        <ListView for="item in homePosts" key="item.title" height="100%"
-                            backgroundColor="#E8E8E8" separatorColor="transparent"
-                            id="listView">
-                            <v-template>
-
-                                <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
-                                    <StackLayout class="postContainer">
-                                        <Image :src="item.postImg" marginTop="10" />
-                                    </StackLayout>
-                                </StackLayout>
-
-                            </v-template>
-                        </ListView>
-
-                    </StackLayout>
-
-                    <StackLayout dock="bottom" height="10%" style="border-color:#E8E8E8;border-width:1;background:#fff;">
-                        <StackLayout orientation="horizontal">
-                            <StackLayout class="navItem" @tap="homeTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text="" :color="mainColor"
-                                    android:style="font-size:25;margin-top:-15"
-                                    ios:style="font-size:30;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                            <StackLayout class="navItem" @tap="competitionTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text=" " android:style="font-size:23;margin-top:-15"
-                                    ios:style="font-size:29;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                            <StackLayout class="navItem" @tap="communityTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text=""
-                                    android:style="font-size:25;margin-top:-15"
-                                    ios:style="font-size:30;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                            <StackLayout class="navItem" @tap="chatTap()">
-                                <Label text="" android:class="notificationAndroid"
-                                    ios:class="notification" opacity="0" />
-                                <Label text="" android:style="font-size:25;margin-top:-15"
-                                    ios:style="font-size:30;margin-top:-15"
-                                    class="font-awesome" />
-                            </StackLayout>
-                        </StackLayout>
-                    </StackLayout>
+                    <NavBar dock="bottom" height="10%" selectedtab="home" />
 
                 </DockLayout>
-
             </StackLayout>
         </RadSideDrawer>
 
     </page>
 </template>
 <script>
-    import Community from "./Community";
-    import Chat from "./Chat";
-    import Competitions from "./Competitions"
-    import Profile from "./Profile";
-    import Notifications from "./Notifications";
-    import Settings from "./Settings";
-    import Help from "./Help";
-    import LoginScreen from "./LoginMain";
+    import CategoryThumb from "./CategoryThumb";
+    import BackendService from "../services/BackendService";
+    import Category from "./Category";
 
     export default {
-        computed: {},
-        watch: {},
-        created() {
-            this.homePosts = Array.from(this.allHomePosts);
-        },
+        name: "Home",
         data() {
             return {
                 drawerToggle: false,
+                allCategories: [],
+                categories: [],
                 drawer1: "",
                 drawer2: "",
-                mainColor: "#00ff92",
-                searchPhrase: "",
-                allHomePosts: [ {
-                        title: "Try Something New",
-                        postImg: "~/assets/images/TrySomethingNew.png",
-                    },
-                    {
-                        title: "Art",
-                        postImg: "~/assets/images/Art.png",
-                    },
-                    {
-                        title: "Music",
-                        postImg: "~/assets/images/music.png",
-                    },
-                ],
-                homePosts:[]
+                service: new BackendService(),
+                searchPhrase: ""
             };
         },
+        components: {
+            CategoryThumb
+        },
+        mounted () {
+            var service = new BackendService();
+
+            service.getCategories()
+                .then((res) => {
+                    if (res) {
+                        console.log("this is the response");
+                        console.log(res.categories);
+                        this.allCategories = res.categories;
+                        this.categories = Array.from(this.allCategories);
+                    }
+                })
+                .catch((err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                })
+        },
         methods: {
-            ///
             filter() {
-                this.homePosts = this.allHomePosts.filter((h)=>{
-                   return h.title.toUpperCase().startsWith(this.searchPhrase.toUpperCase());
+                this.categories = this.allCategories.filter((h)=>{
+                   return h.name.toUpperCase().startsWith(this.searchPhrase.toUpperCase());
                 });
             },
-            ///
             onDrawerClosed() {
                 this.drawerToggle = false;
             },
@@ -164,57 +91,17 @@
             },
             toggleDrawer() {
                 this.$refs.drawer.nativeView.toggleDrawerState();
-            },
-            homeTap() {},
-            communityTap() {
-                this.$navigateTo(Community, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            chatTap() {
-                this.$navigateTo(Chat, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            competitionTap() {
-                this.$navigateTo(Competitions, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            profileTap() {
-                this.$navigateTo(Profile, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            notificationTap() {
-                this.$navigateTo(Notifications, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            settingsTap() {
-                this.$navigateTo(Settings, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            helpTap(){
-                this.$navigateTo(Help, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            logOut(){
-                this.$navigateTo(LoginScreen, {
-                    animated: false,
-                    clearHistory: true
-                });
             }, //put in here navigate to log-in screen
-            showDetails() {}
+            selectCategory(event) {
+                this.service.getSubcategories(event.category)
+                    .then((res) => {
+                        this.$navigateTo(Category, {
+                            props: {
+                                subcategories: res.subcategories
+                            }
+                        })
+                    });
+            }
         }
     };
 </script>
