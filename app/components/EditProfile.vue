@@ -22,7 +22,7 @@
 
                     <!-- Edit username -->
                     <Label text="Edit Username" class="field-header" />
-                    <TextView :text="editedUser.username" />
+                    <TextView v-model="editedUser.username" :text="editedUser.username" />
 
                     <!-- Edit profile picture -->
                     <FlexboxLayout width="100%" alignItems="center" justifyContent="center">
@@ -42,7 +42,10 @@
                         <Label v-for="(com, index) in editedUser.communities" :text="com.name" :key="index" />
                     </WrapLayout>
 
-                    <Button text="Confirm Changes" @tap="confirmChanges" :isEnabled="hasEdits" />
+                    <GridLayout columns="*, *" rows="auto">
+                        <Button col="0" text="Confirm Changes" @tap="confirmChanges" :isEnabled="hasEdits" />
+                        <Button col="1" text="Revert Changes" @tap="resetProfile" :isEnabled="hasEdits" />
+                    </GridLayout>
 
 			    </StackLayout>
 
@@ -55,6 +58,7 @@ import BackendService from "../services/BackendService";
 import * as imagepicker from "nativescript-imagepicker";
 import { ItemEventData } from "tns-core-modules/ui/list-view";
 import { Observable } from "tns-core-modules/data/observable";
+import _ from "underscore";
 
 export default {
 	methods: {
@@ -96,6 +100,7 @@ export default {
             confirmChanges () {
                 console.log(this.editedUser.profilePicture);
                 this.editedUser.username = "I will actually ";
+                console.log(this.hasEdits);
             },
 
             resetProfile() {
@@ -122,7 +127,7 @@ export default {
         },
         hasEdits: function () {
             return this.currentUser.username != this.editedUser.username
-                || this.currentUser.communities != this.editedUser.communities
+                || !_.isEqual(this.currentUser.communities, this.editedUser.communities)
                 || this.currentUser.profilePicture != this.editedUser.profilePicture;
         }
     },
