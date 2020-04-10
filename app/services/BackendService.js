@@ -136,7 +136,7 @@ export default class BackendService {
 
     async getCommunities(communityIds) {
         var promises = communityIds.map((id) => {
-            return axios.get( API + communities?_id=${id} )
+            return axios.get( `API + communities?_id=${id}` )
         });
 
         return Promise.all(promises)

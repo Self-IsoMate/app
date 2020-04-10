@@ -87,7 +87,7 @@
                             <StackLayout class="navItem" @tap="communityTap()">
                                 <Label text="" android:class="notificationAndroid"
                                     ios:class="notification" opacity="0" />
-                                <Label text="" :color="profileColor"
+                                <Label text=""
                                     android:style="font-size:25;margin-top:-15"
                                     ios:style="font-size:30;margin-top:-15"
                                     class="font-awesome" />
@@ -125,23 +125,25 @@ import { backgroundInternalProperty } from 'tns-core-modules/ui/page/page';
         created() {
             var backend = new BackendService();
             backend.getChallenges()
-            .then((res) => {
-                if (res) {
-                    this.challenges = res.challenges;
-                }
-            })
-            .catch((err) => {
-                if (err) console.log(err);
-            })
+                .then((res) => {
+                    if (res) {
+                        this.allChallenges = res.challenges;
+                        this.challenges = Array.from(this.allChallenges);
+                    }
+                })
+                .catch((err) => {
+                    if (err) console.log(err);
+                })
+            
             backend.getAllCommunities()
-            .then((res) => {
-                if (res) {
-                    this.communities = res.communities;
-                }
-            })
-            .catch((err) => {
-                if (err) console.log(err);
-            })
+                .then((res) => {
+                    if (res) {
+                        this.communities = res.communities;
+                    }
+                })
+                .catch((err) => {
+                    if (err) console.log(err);
+                })
         },
         data() {
             return {
@@ -158,12 +160,12 @@ import { backgroundInternalProperty } from 'tns-core-modules/ui/page/page';
         methods: {
             filter(){
                 var filteredCommunities = this.communities.filter((community) => {
-                    community.name.startsWith(this.searchValue);
-                })
+                    return community.name.toUpperCase().startsWith(this.searchValue.toUpperCase());
+                });
 
-                this.challenges = Array.from(this.allChallenges.filter((challenge) => {
-                    challenge.communities.some((c) => filteredCommunities.includes((c1) => c1._id == c))
-                }))
+                this.challenges = Array.from(this.allChallenges).filter((challenge) => {
+                    return challenge.communities.some((c) => filteredCommunities.some((c1) => c1._id == c))
+                });
             },
             onDrawerClosed() {
                 this.drawerToggle = false;
@@ -229,5 +231,10 @@ import { backgroundInternalProperty } from 'tns-core-modules/ui/page/page';
 </script>
 
 <style scoped>
+
+.postContainer{
+	margin-top: 10;
+	background: #fff;
+}
 
 </style>
