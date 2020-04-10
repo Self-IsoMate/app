@@ -136,6 +136,7 @@ export default class BackendService {
         .catch((err) => {
             if (err) console.log(err);
         })
+    }
 
     async getCategories() {
         return axios.get(API+'categories?isChild=false')
@@ -192,6 +193,7 @@ export default class BackendService {
         .catch((err) => {
             if (err) console.log(err);
         })
+    }
       
     async getResources(categoryId) {
         return axios.get( API + `resources?categoryId=${categoryId}` )
