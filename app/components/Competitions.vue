@@ -50,15 +50,15 @@
                 <DockLayout>
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
-                        <ListView for="challenge in challenges" key="index" height="100%"
+                        <ListView for="item in challenges" key="index" height="100%"
                             backgroundColor="#E8E8E8" separatorColor="transparent"
                             id="listView">
-                            <StackLayout @tap="showDetails(challenge)">
+                            <StackLayout>
                             <v-template>
 
                                 <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
-                                    <StackLayout class="postContainer">
-                                        <Image :src="challenge.image" marginTop="10" />
+                                    <StackLayout class="item"  @tap="showDetails(item)">
+                                        <Image :src="item.image" marginTop="10" />
                                     </StackLayout>
                                 </StackLayout>
 
@@ -130,6 +130,8 @@
                     if (res) {
                         this.allChallenges = res.challenges;
                         this.challenges = Array.from(this.allChallenges);
+                        console.log(this.challenges);
+
                     }
                 })
                 .catch((err) => {
@@ -226,9 +228,9 @@
                     clearHistory: true
                 });
             }, //put in here navigate to log-in screen
-            showDetails(challenge){
+            showDetails(challengeVariable){
                 this.$navigateTo(CompetitionInfo, {
-                    props: {challenge: challenge},
+                    props: {challenge: challengeVariable},
                     animated: false,
                     clearHistory: true
                 });
