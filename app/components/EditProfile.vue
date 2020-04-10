@@ -42,7 +42,7 @@
                         <Label v-for="(com, index) in editedUser.communities" :text="com.name" :key="index" />
                     </WrapLayout>
 
-                    <Button text="Confirm Changes" @tap="confirmChanges" />
+                    <Button text="Confirm Changes" @tap="confirmChanges" :isEnabled="hasEdits" />
 
 			    </StackLayout>
 
@@ -113,14 +113,18 @@ export default {
                 username: '',
                 profilePicture: '',
                 communities: []
-            },
-            hasEdits: false
+            }
 		}
 	},
 	computed: {
 		currentUser: function () { 
 			return this.$store.state.user
-		}
+        },
+        hasEdits: function () {
+            return this.currentUser.username != this.editedUser.username
+                || this.currentUser.communities != this.editedUser.communities
+                || this.currentUser.profilePicture != this.editedUser.profilePicture;
+        }
     },
     created () {
         this.resetProfile();
@@ -136,7 +140,6 @@ export default {
 	color: white;
 	margin: 5 0 0 0
 }
-
 
 .profilePic{
 	width:150;
