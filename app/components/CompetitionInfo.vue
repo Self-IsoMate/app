@@ -1,15 +1,15 @@
 <template>
     <Page class="page">
 
-        <ActionBar title="" class="action-bar header">
+        <ActionBar title="HHHH" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
-                <StackLayout class="HLeft" style="margin-top:10;" @tap="toggleDrawer()">
-                    <Label :text="drawerToggle ? drawer2: drawer1" style="font-size:27;color:#fff;"
+                <StackLayout class="HLeft" style="margin-top:10;" @tap="competitionTap()">
+                    <Label :text="back" style="font-size:27;color:#fff;"
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <SearchBar hint="Search hint" v-model="searchValue" @textChange="filter" />
+                    <Label class = "action-bar-title" :text= "$props.title" paddingTop = "7.5%" color="white" id="searchField"></Label>
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -49,7 +49,23 @@
 
                 <DockLayout>
 
-                    <StackLayout dock="top" height="90%" width="100%" style=""></StackLayout>
+                    <StackLayout dock="top" height="90%" width="100%" style="">
+
+                        <ListView for="challenge in challenges" key="index" height="100%"
+                            backgroundColor="#E8E8E8" separatorColor="transparent"
+                            id="listView">
+                            <v-template>
+
+                                <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
+                                    <StackLayout class="postContainer">
+                                        <Image :src="challenge.image" marginTop="10" />
+                                    </StackLayout>
+                                </StackLayout>
+
+                            </v-template>
+                        </ListView>
+
+                    </StackLayout>
 
                     <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
                         <StackLayout orientation="horizontal">
@@ -104,9 +120,10 @@
     import LoginScreen from "./LoginMain";
     import BackendService from "../services/BackendService";
     import { backgroundInternalProperty } from 'tns-core-modules/ui/page/page';
-    import CompetitionInfo from "./CompetitionInfo";
+    import Competitions from "./Competitions";
 
     export default {
+        props: ['title'],
         created() {
             var backend = new BackendService();
             backend.getChallenges()
@@ -179,7 +196,12 @@
                     clearHistory: true
                 });
             },
-            competitionTap() {},
+            competitionTap() {
+                this.$navigateTo(Competitions, {
+                    animated: false,
+                    clearHistory: true
+                });
+            },
             profileTap() {
                 this.$navigateTo(Profile, {
                     animated: false,
@@ -210,13 +232,7 @@
                     clearHistory: true
                 });
             }, //put in here navigate to log-in screen
-            showDetails(name){
-                this.$navigateTo(CompetitionInfo, {
-                    props: {title: name},
-                    animated: false,
-                    clearHistory: true
-                });
-            }
+            showDetails() {}
         }
     };
 </script>
