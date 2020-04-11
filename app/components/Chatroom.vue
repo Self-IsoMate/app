@@ -19,9 +19,9 @@
             <StackLayout ~mainContent>
 
                 <DockLayout>
-                    <StackLayout dock="top" height="80%" width="100%" style="">
-                        <RadListView ref="listView" for="item in conversations" 
-                            height="100%" separatorColor="transparent" id="listView">
+                    <StackLayout dock="top" height="80%" width="100%" >
+                        <RadListView  ref="listView" for="item in conversations" 
+                            separatorColor="transparent" id="listView">
                             <v-template>
 
                                 <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
@@ -117,12 +117,14 @@
     import moment from "moment";
     import BackendService from "../services/BackendService";
     import { timer } from 'vue-timers'
+    import { RadListView, ListViewItemSnapMode } from "nativescript-ui-listview";
+
 
 
     export default {
         props: ['chatRoom'],
         timers: {
-              log: { time: 2000, autostart: true, repeat: true }
+              log: { time: 4000, autostart: true, repeat: true }
         },
       created() {
 
@@ -154,9 +156,10 @@
                                 if (err) console.log("err: "+err);
                                          }) 
                                     }
-                })
-                this.$timer.start('log')
+                });
+                    this.$timer.start('log')
 
+               
         },
           beforeDestroy () {
     clearInterval(this.$options.interval)
@@ -192,15 +195,43 @@
             service.getMessagesfromID(this.$props.chatRoom._id)
                 .then((res) => {
                     if (res) {
-                        var messages = res.messages;
+                        var messages = res.messages.filter( e=> {
+                        
+                             
+                            var matchingConvs =  this.conversations.every(
+                                conv => {
+                                    
+                                    return (conv._id != e._id);
+                                    } 
+                                );
+                            return  matchingConvs;
+
+                        });
+                        console.log("messages");
+                        console.log(messages);
+                        // check if id is not already in the list
+                        // if not mutate message
+                        //this.conversation. push (result)
+                        if(messages.length>0){
                         mutateMessages(messages)
                             .then((result) => {//it does not run mutate Messages
-                                this.conversations = result;
+                                if(result) {
+                                    console.log("result");
+                                    console.log(result);
+                                    this.conversations = this.conversations.concat(result);
+                                    var lastEl = (this.conversations.length-2);
+                                    this.$refs.listView.scrollToIndex(25);//(20,false, ListViewItemSnapMode.Start);
+
+                                }
                             }).catch((err) => {
                                 if (err) console.log("err: "+err);
-                                         }) 
-                                    }
-                })
+                                         })
+                        } 
+                    }
+                 }).catch((err) => {
+                                if (err) console.log("err: "+err);
+                                         });
+
 
 },
             onDrawerClosed() {
@@ -283,6 +314,7 @@
                         }
                     });
                     //better implementation so all messages send from bottom and push up
+
             }
         }
     };
