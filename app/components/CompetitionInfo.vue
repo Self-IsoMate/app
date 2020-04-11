@@ -22,9 +22,9 @@
                 <DockLayout>
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
-                        <Label text="Description"/>
+                        <Label text="DESCRIPTION" fontAttributes="Bold"/>
                         <Label text="$props.challenge.description"/>
-                        <Label text="Deadline"/>
+                        <Label text="DEADLINE" fontAttributes="Bold"/>
                         <Label text="$props.challenge.deadline"/>
                     </StackLayout>
 
