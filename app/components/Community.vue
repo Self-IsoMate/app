@@ -44,7 +44,7 @@
                                                 stretch="aspectFill" class="postImageSmall" />
                                             <StackLayout>
                                                 <Label :text="item.username"
-                                                    class="postAuthotName" />
+                                                    class="postAuthorName" />
                                                 <Label :text="item.datePosted"
                                                     class="postDateSmall" />
                                             </StackLayout>
@@ -81,6 +81,7 @@ export default {
               log: { time: 4000, autostart: true, repeat: true }
         },
     created() {
+        var service = new BackendService();
 
         var getUserFromPosts = async (post) => {
                         return service.getUserfromId(post.userId)
@@ -97,7 +98,6 @@ export default {
             }
 
 
-        var service = new BackendService();
         service.getAllPosts()
                 .then((res) => {
                         var posts = res.posts;
@@ -111,7 +111,7 @@ export default {
                                          })    ;     
 
                 });
-                   // this.$timer.start('log');
+                    this.$timer.start('log');
     },
     beforeDestroy () {
         clearInterval(this.$options.interval)
@@ -125,11 +125,10 @@ export default {
         };
     },
     methods: {
-                        log () {
+         log () {
 
-            var service = new BackendService();
-      
-      var getUserFromPosts = async (post) => {
+        var service = new BackendService();
+                var getUserFromPosts = async (post) => {
                         return service.getUserfromId(post.userId)
                             .then((res) => {
 
@@ -138,61 +137,42 @@ export default {
                                         if (err) console.log("err: "+err);
                                                 });
                     }
-
-            var getUserFromMessage = async (message) => {
-                return service.getUserfromId(message.userID)
-                    .then((res) => {
-
-                        return { ...message, username: res.user.username, profilePicture: res.user.profilePicture };
-                    }).catch((err) => {
-                                if (err) console.log("err: "+err);
-                                         });
+        
+        var mutatePosts = async (posts) => {
+                return Promise.all(posts.map((post) => getUserFromPosts(post)));//error
             }
 
-            var mutateMessages = async (messages) => {
-                return Promise.all(messages.map((message) => getUserFromMessage(message)));//error
-            }
 
-                     
-            service.getMessagesfromID(this.$props.chatRoom._id)
+        service.getAllPosts()
                 .then((res) => {
-                    if (res) {
-                        var messages = res.messages.filter( e=> {
-                        
-                             
-                            var matchingConvs =  this.conversations.every(
-                                conv => {
+     if (res) {
+                       var posts = res.posts.filter( e=> {
+                                                    
+                            var matchingPosts =  this.posts.every(
+                                post => {
                                     
-                                    return (conv._id != e._id);
+                                    return (post._id != e._id);
                                     } 
                                 );
-                            return  matchingConvs;
+                            return  matchingPosts;
 
                         });
-                        console.log("messages");
-                        console.log(messages);
-                        // check if id is not already in the list
-                        // if not mutate message
-                        //this.conversation. push (result)
-                        if(messages.length>0){
-                        mutateMessages(messages)
+                       
+                        if(posts.length>0){
+                        mutatePosts(posts)
                             .then((result) => {//it does not run mutate Messages
                                 if(result) {
-                                    console.log("result");
-                                    console.log(result);
-                                    this.conversations = this.conversations.concat(result);
-                                    var lastEl = (this.conversations.length-2);
-                                    this.$refs.listView.scrollToIndex(lastEl/2);
-
+                                    
+                                    this.posts = this.posts.concat(result);
                                 }
                             }).catch((err) => {
                                 if (err) console.log("err: "+err);
                                          })
                         } 
                     }
-                 }).catch((err) => {
-                                if (err) console.log("err: "+err);
-                                         });
+           
+                });
+
     },
         onDrawerClosed() {
             this.drawerToggle = false;

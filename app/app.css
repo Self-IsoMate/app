@@ -72,13 +72,7 @@ The imported CSS rules must precede all other types of rules.
 	font-size: 17;
 	height: 20;
 	color:#000;
-	text-align: center;
-	display: inline-block;
-	left: 50%;
-	vertical-align: middle;
-	justify-content: center;
-	align-items: center;
-	margin-bottom: 3;
+	margin-bottom: 5;
 
 }
 
@@ -112,7 +106,7 @@ The imported CSS rules must precede all other types of rules.
 	color:#858585;
 }
 
-.postAuthotName{
+.postAuthorName{
 	font-size: 17;
 	color: #000;
 	margin-left:10;
@@ -126,7 +120,6 @@ The imported CSS rules must precede all other types of rules.
 	color: #000;
 	margin-left:10;
 	margin-top:2;
-	text-align: justify;
 
 }
 
