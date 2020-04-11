@@ -390,4 +390,16 @@ export default class BackendService {
         }) 
     }
 
+    async getAllPosts(){
+        return axios.get(API + 'posts')
+        .then((res) => {
+            if (res){
+                return {posts: res.data};
+            } 
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        }) 
+    }
+
 }

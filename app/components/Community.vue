@@ -31,7 +31,7 @@
                     <!-- Actual page content goes here (in dock top) -->
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
-                        <ListView for="item in posts" :key="index" height="100%"
+                        <ListView for="item in posts" height="100%"
                             backgroundColor="#E8E8E8" separatorColor="transparent"
                             id="listView">
                             <v-template>
@@ -40,33 +40,20 @@
                                     <StackLayout class="post-container">
                                         <StackLayout orientation="horizontal"
                                             padding="10">
-                                            <Image :src="item.authorImg"
+                                            <Image :src="item.profilePicture"
                                                 stretch="aspectFill" class="postImageSmall" />
                                             <StackLayout>
-                                                <Label :text="item.autorName"
+                                                <Label :text="item.username"
                                                     class="postAuthotName" />
-                                                <Label :text="item.date"
-                                                    class="postDateSmall" />
-                                                <Label :text="item.categories"
+                                                <Label :text="item.datePosted"
                                                     class="postDateSmall" />
                                             </StackLayout>
                                         </StackLayout>
                                         <Label marginLeft="10" marginRight="10"
                                             class="postTitle" :text="item.title" />
-                                        <Image :src="item.postImg" marginTop="10" />
-                                        <StackLayout orientation="horizontal"
-                                            padding="10" marginLeft="10%">
-                                            <Label text=" " style="font-size:18;margin-top:-1;"
-                                                :color="item.color" class="font-awesome" />
-                                            <Label :text="item.likes" style="font-size:12;color:#1aa3ff;" />
-                                            <Label text=" " style="font-size:19;margin-left:23%;margin-top:-3;color:#747474;"
-                                                class="font-awesome" />
-                                            <Label :text="item.comments"
-                                                style="font-size:12;color:#1aa3ff;" />
-                                            <Label text=" " style="font-size:22;margin-left:23%;margin-top:-1;color:#747474;"
-                                                class="font-awesome" />
-                                            <Label :text="item.reposts" style="font-size:12;color:#1aa3ff;" />
-                                        </StackLayout>
+                                            <Label :text="item.body"
+                                                    class="postBody" textWrap="true" />
+                                        <Image :src="item.media" marginTop="10" />
                                     </StackLayout>
                                 </StackLayout>
 
@@ -85,42 +72,128 @@
 </template>
 
 <script>
+import BackendService from "../services/BackendService";
+import { timer } from 'vue-timers'
 
 export default {
     name: "Community",
+       timers: {
+              log: { time: 4000, autostart: true, repeat: true }
+        },
+    created() {
+
+        var getUserFromPosts = async (post) => {
+                        return service.getUserfromId(post.userId)
+                            .then((res) => {
+
+                                return { ...post, username: res.user.username, profilePicture: res.user.profilePicture };
+                            }).catch((err) => {
+                                        if (err) console.log("err: "+err);
+                                                });
+                    }
+        
+        var mutatePosts = async (posts) => {
+                return Promise.all(posts.map((post) => getUserFromPosts(post)));//error
+            }
+
+
+        var service = new BackendService();
+        service.getAllPosts()
+                .then((res) => {
+                        var posts = res.posts;
+                mutatePosts(posts)
+                            .then((result) => {
+                                //console.log("result");
+                                //console.log(result);
+                                this.posts = result;
+                            }).catch((err) => {
+                                if (err) console.log("err: "+err);
+                                         })    ;     
+
+                });
+                   // this.$timer.start('log');
+    },
+    beforeDestroy () {
+        clearInterval(this.$options.interval)
+  },
     data() {
         return {
             drawerToggle: false,
             drawer1: "",
             drawer2: "",
-            posts: [{
-                    authorImg: "https://www.istudy.org.uk/wp-content/uploads/2017/08/PP18-DIPLOMA-IN-PROFESSIONAL-CHEF.jpg",
-                    autorName: "ratatouilefan123",
-                    color: "#747474",
-                    date: "Today at 13:45",
-                    title: "Just cooked my favourite food! yum",
-                    postImg: "~/assets/pizza.jpg",
-                    likes: "30",
-                    comments: "14",
-                    reposts: "8",
-                    categories: "#food #cooking"
-                },
-                {
-                    authorImg: "~/assets/profile1.jpg",
-                    autorName: "cdog",
-                    color: "#E15050",
-                    date: "Today at 16:21",
-                    title: "Oh look at the thyme 🕒",
-                    postImg: "~/assets/plant.jpg",
-                    likes: "150",
-                    comments: "21",
-                    reposts: "11",
-                    categories: "#gardening #herbs"
-                }
-            ]
+            posts: []
         };
     },
     methods: {
+                        log () {
+
+            var service = new BackendService();
+      
+      var getUserFromPosts = async (post) => {
+                        return service.getUserfromId(post.userId)
+                            .then((res) => {
+
+                                return { ...post, username: res.user.username, profilePicture: res.user.profilePicture };
+                            }).catch((err) => {
+                                        if (err) console.log("err: "+err);
+                                                });
+                    }
+
+            var getUserFromMessage = async (message) => {
+                return service.getUserfromId(message.userID)
+                    .then((res) => {
+
+                        return { ...message, username: res.user.username, profilePicture: res.user.profilePicture };
+                    }).catch((err) => {
+                                if (err) console.log("err: "+err);
+                                         });
+            }
+
+            var mutateMessages = async (messages) => {
+                return Promise.all(messages.map((message) => getUserFromMessage(message)));//error
+            }
+
+                     
+            service.getMessagesfromID(this.$props.chatRoom._id)
+                .then((res) => {
+                    if (res) {
+                        var messages = res.messages.filter( e=> {
+                        
+                             
+                            var matchingConvs =  this.conversations.every(
+                                conv => {
+                                    
+                                    return (conv._id != e._id);
+                                    } 
+                                );
+                            return  matchingConvs;
+
+                        });
+                        console.log("messages");
+                        console.log(messages);
+                        // check if id is not already in the list
+                        // if not mutate message
+                        //this.conversation. push (result)
+                        if(messages.length>0){
+                        mutateMessages(messages)
+                            .then((result) => {//it does not run mutate Messages
+                                if(result) {
+                                    console.log("result");
+                                    console.log(result);
+                                    this.conversations = this.conversations.concat(result);
+                                    var lastEl = (this.conversations.length-2);
+                                    this.$refs.listView.scrollToIndex(lastEl/2);
+
+                                }
+                            }).catch((err) => {
+                                if (err) console.log("err: "+err);
+                                         })
+                        } 
+                    }
+                 }).catch((err) => {
+                                if (err) console.log("err: "+err);
+                                         });
+    },
         onDrawerClosed() {
             this.drawerToggle = false;
         },

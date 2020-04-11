@@ -220,7 +220,7 @@
                                     console.log(result);
                                     this.conversations = this.conversations.concat(result);
                                     var lastEl = (this.conversations.length-2);
-                                    this.$refs.listView.scrollToIndex(25);//(20,false, ListViewItemSnapMode.Start);
+                                    this.$refs.listView.scrollToIndex(lastEl/2);
 
                                 }
                             }).catch((err) => {
