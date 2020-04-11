@@ -2,10 +2,6 @@
 	<StackLayout backgroundColor="#eee">
 		<StackLayout height="2%"></StackLayout>
 		<StackLayout>
-			<StackLayout class="notif" @tap="notificationTap()">
-			<Label text="  Notifications" paddingLeft="15%" color="black"
-				class="drawerItemText font-awesome" margin="15" />
-			</StackLayout>
 			<StackLayout class = "settings" @tap="settingsTap()">
 			<Label text="  Settings" paddingLeft="15%" color="black"
 				class="drawerItemText font-awesome" margin="15" />
@@ -26,7 +22,6 @@
 import Community from "./Community";
 import Chat from "./Chat";
 import Competitions from "./Competitions"
-import Notifications from "./Notifications";
 import Settings from "./Settings";
 import Help from "./Help";
 import LoginScreen from "./LoginMain";
@@ -38,9 +33,6 @@ export default {
 	methods: {
             profileTap() {
                 this.$navigateTo(Profile);
-            },
-            notificationTap() {
-                this.$navigateTo(Notifications);
             },
             settingsTap() {
                 this.$navigateTo(Settings);
