@@ -273,9 +273,8 @@
                     .then((response) => {
 
                         if (response) {
-                            console.log(response);
                             this.message = "";
-                            this.conversations=[]; //empty where you write
+                            //empty where you write
                             //               this.creatingMessages();     
                             //refresh the chat ↑
 
