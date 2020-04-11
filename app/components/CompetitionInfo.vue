@@ -20,12 +20,16 @@
             <StackLayout ~mainContent>
 
                 <DockLayout>
-
+                    <!--HEY OVER HERE!! -->
                     <StackLayout dock="top" height="90%" width="100%" style="">
+                        <!--So bold isnt't working, and my WiFi crashes too much to test this new solution-->
                         <Label text="DESCRIPTION" fontWeight="bold"/> <!-- if fontWeight doesn't work try style="font-weight: bold" -->
                         <Label :text="$props.challenge.description"/>
                         <Label text="DEADLINE" fontWeight="bold"/>
                         <Label :text="$props.challenge.deadline"/>
+                        <!--The commented out code below should replace the line above-->
+                        <!--The reason it is commented out is because it renders the challenges unclickable-->
+                        <!-- Needs to be debugged -->
                        <!-- <Label :text="moment(String($props.challenge.deadline)).format('DD/MM/YYYY')"/> -->
                     </StackLayout>
 
