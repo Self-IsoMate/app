@@ -22,7 +22,7 @@
                 <DockLayout>
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
-                        <Label text="DESCRIPTION" fontWeight="bold"/>
+                        <Label text="DESCRIPTION" fontWeight="bold"/> <!-- if fontWeight doesn't work try style="font-weight: bold" -->
                         <Label :text="$props.challenge.description"/>
                         <Label text="DEADLINE" fontWeight="bold"/>
                         <Label :text="$props.challenge.deadline"/>
