@@ -9,7 +9,7 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <Label class = "challengeTitle" :text= "$props.challenge.title" paddingTop = "7.5%" color="white" id="searchField"></Label>
+                    <Label class = "challengeTitle" :text="$props.challenge.title" paddingTop = "7.5%" color="white" id="searchField"></Label>
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -23,9 +23,10 @@
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
                         <Label text="DESCRIPTION" fontAttributes="Bold"/>
-                        <Label text="$props.challenge.description"/>
+                        <Label :text="$props.challenge.description"/>
                         <Label text="DEADLINE" fontAttributes="Bold"/>
-                        <Label text="$props.challenge.deadline"/>
+                        <Label :text="$props.challenge.deadline"/>
+                        <Label :text="moment(String($props.challenge.deadline)).format('DD/MM/YYYY')"/>
                     </StackLayout>
 
                     <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
@@ -81,6 +82,7 @@
     import BackendService from "../services/BackendService";
     import { backgroundInternalProperty } from 'tns-core-modules/ui/page/page';
     import Competitions from "./Competitions";
+    import moment from "moment";
 
     export default {
         props: ['challenge'],
