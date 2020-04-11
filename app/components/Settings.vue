@@ -50,52 +50,6 @@
                                 <Button text="Delete your account" col="1" backgroundColor="red" @tap="deleteAccount"/>
 
                             </GridLayout>
-
-                            <StackLayout class="hr m-10 divider"/>
-
-                            <!-- Notification Settings -->
-                            <Label text="Notifications" class="setting-header" />
-                            <GridLayout columns="*, auto" rows="auto">
-
-                                <Label col="0" text="Toggle all Notifications" class="setting-text" />
-                                <check-box col="1" />
-
-                            </GridLayout>
-
-                                <StackLayout class="hr m-10 divider"/>
-
-                            <GridLayout columns="*, auto" rows="auto">
-
-                                <Label col="0" text="Toggle comments" class="setting-text" />
-                                <check-box col="1" />
-
-                            </GridLayout>
-
-                                <StackLayout class="hr m-10 divider"/>
-
-                            <GridLayout columns="*, auto" rows="auto">
-
-                                <Label col="0" text="Toggle new posts" class="setting-text" />
-                                <check-box col="1"/>
-
-                            </GridLayout>
-
-                                <StackLayout class="hr m-10 divider"/>
-
-                            <GridLayout columns="*, auto" rows="auto">
-
-                                <Label col="0" text="Toggle new challenges" class="setting-text" />
-                                <check-box col="1" />
-
-                            </GridLayout>
-
-                            <StackLayout class="hr m-10 divider"/>
-
-                            <!-- Display Settings -->
-                            <Label text="Display" class="setting-header" />
-
-                            <Label text="Font Size" class="setting-text"/>
-                            <Label text="Dark Mode" class="setting-text"/>
                         </StackLayout>
                     </ScrollView>
 
