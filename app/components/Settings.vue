@@ -112,6 +112,7 @@
     import SelectedPageService from "../shared/selected-page-service";
     import EditProfile from "./EditProfile";
     import BackendService from '../services/BackendService';
+    import LoginMain from "./LoginMain";
 
     export default {
         mounted() {
@@ -210,7 +211,24 @@
 
             },
             deleteAccount(event) {
+                this.service.deleteAccount((this.$store.state.user._id))
+                    .then((res) => {
+                        if (res) {
+                            if (res.success) {
+                                alert({ title: "Deleted", message: "Your account has been successfully deleted" })
+                                    .then((res) => {
+                                        this.$navigateTo(LoginMain, {
+                                            clearHistory: true, 
+                                            animated: false
+                                        });
+                                    });
+                            }
 
+                            if (!res.success) {
+                                alert({ title: "Unsuccessful", message: "Unfortunately, there was an error deleting your account. Please contact us at <our email>" });
+                            }
+                        }
+                    })
             },
             clearDetails () {
                 this.settingsValues = {

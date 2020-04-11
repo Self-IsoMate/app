@@ -3,7 +3,7 @@
 		<ActionBar title="Self-IsoMate" class="action-bar header"/>
 		<ScrollView>
 			<StackLayout margin="50 50 50 50">
-				<TextField v-model="username" hint="Username" autoCapitalizationType="none" autocorrect="false"/>
+				<TextField v-model="username" hint="Username" autocapitalizationType="none" autocorrect="false"/>
 				<TextField v-model="password" hint="Password" secure="true"/>
 				<Button text="LOGIN" @tap="handleLogin($event)" ></Button>
 				<GridLayout columns="*, *" rows="*, *">
