@@ -17,7 +17,7 @@
                 </StackLayout>
                 <StackLayout class="HRight">
                     <Label text="+" style="font-size:40;color:#fff;" paddingLeft="15%"
-                        class="font-awesome" />
+                        class="font-awesome" @tap="createNewPost" />
                 </StackLayout>
             </StackLayout>
         </ActionBar>
@@ -75,6 +75,7 @@
 import BackendService from "../services/BackendService";
 import { timer } from 'vue-timers'
 import moment from "moment";
+import NewPost from "./NewPost";
 
 export default {
     name: "Community",
@@ -184,6 +185,9 @@ export default {
         },
         toggleDrawer() {
             this.$refs.drawer.nativeView.toggleDrawerState();
+        },
+        createNewPost() {
+            this.$navigateTo(NewPost);
         }
     }
 }
