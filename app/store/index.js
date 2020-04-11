@@ -9,6 +9,10 @@ export default new Vuex.Store({
     mutations: {
 		setUser(state, data) {
 			this.state.user = data.user;
+		},
+		setUserProfilePicture(state, data) {
+			console.log("we're setting it up!!!");
+			this.state.user.profilePicture = data.profilePicture;
 		}
     }
 });

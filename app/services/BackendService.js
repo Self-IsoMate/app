@@ -3,6 +3,11 @@ const API = "https://self-isomate-api.appspot.com/api/";
 const BUCKET_NAME = "self-isomate-images";
 const BUCKET_PROFILE_PICTURES = "https://storage.googleapis.com/self-isomate-images/profile-pictures/";
 var bghttp = require("nativescript-background-http");
+import store from "../store/index";
+/**
+ * TO DO: 
+ * something to show that a user is uploading something (will use the store for this);
+ */
 
 
 export default class BackendService {
@@ -15,32 +20,31 @@ export default class BackendService {
 
         console.log(`username: ${username} password: ${password}`);
 
-        return axios.post(API+"login", {
-            username: username,
-            password: password
-        })
-        .then((res, err) => {
+        return axios.post(API+"login", { username: username, password: password })
+            .then((res) => {
 
-            if (err) {
-                return {success : false, message: err};
-            }
+                if (res) {
 
-            if (res) {
+                    var loginSuccessful = res.data.loginSuccess;
 
-                var loginSuccessful = res.data.loginSuccess;
-
-                if (loginSuccessful) {
-                    console.log("login successful");
-                    this.loggedIn = true;
-                    return { success : true, user: res.data.user };
-                } 
-                else 
-                {
-                    console.log("login failed");
-                    return { success : false };
+                    if (loginSuccessful) {
+                        console.log("login successful");
+                        this.loggedIn = true;
+                        return { success : true, user: res.data.user };
+                    } 
+                    else 
+                    {
+                        console.log("login failed");
+                        return { success : false };
+                    }
                 }
-            }
-        });
+            })
+            .catch((err) => {
+                if (err) {
+                    console.log(err);
+                    return { success: false, message: err };
+                }
+            });
 
     }
 
@@ -92,7 +96,14 @@ export default class BackendService {
 
         task.on("error", (err) => console.log(err));
         task.on("complete", (e) => {
-            this.updateUserProfilePicture(user, link);
+            this.updateUserProfilePicture(user, link)
+                .then((res) => {
+                    if (res) {
+                        console.log("inner return");
+                        console.log(res);
+                        return { newLocation: res.newLocation };
+                    }
+                });
         });
 
     }
@@ -112,6 +123,18 @@ export default class BackendService {
             })
     }
 
+    async updateUser (userId, newUser) {
+        return await axios.put(API+`users/${userId}`, newUser)
+            .then((res) => {
+                if (res) {
+                    return { user: res.data.update };
+                }
+            })
+            .catch((err) => {
+                if (err) console.log(err);
+            })
+    }
+
     async getProfilePosts(user) {
         return axios.get(API+`posts?user.username=${user.username}`)
             .then((res) => {
@@ -122,19 +145,181 @@ export default class BackendService {
             })
     }
 
-    async getAllChatrooms(){
-        return axios.get(API + 'chatrooms')
+    async getCategories() {
+        return axios.get(API+'categories?isChild=false')
+            .then((res) => {
+                if (res) {
+                    return { categories: res.data }
+                }
+            })
+            .catch((err) => {
+                if (err)
+                    return { success: false, message: err }
+            })
+    }
+
+    async getSubcategories(parent) {
+        return axios.get( API + `categories?parentId=${parent._id}` )
+            .then((res) => {
+                if (res) {
+                    return { subcategories: res.data }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err }
+                }
+            })
+    }
+
+    async getCommunities(communityIds) {
+        var promises = communityIds.map((id) => {
+            return axios.get( API + `communities?_id=${id}` )
+        });
+
+        return Promise.all(promises)
+            .then((res) => {
+                if (res) {
+                    var commies = res.map((r) => r.data[0]);
+                    return { success: true, communities: commies }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success : false, message: err }
+                }
+            })
+    }
+
+    async getResources(categoryId) {
+        return axios.get( API + `resources?categoryId=${categoryId}` )
+            .then((res) => {
+                if (res && res.data.success) {
+                    return { success: res.data.success, resources: res.data.resources };
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err };
+                }
+            })
+    }
+
+    async subscribeUserToCommunity(user, communityId) {
+        return axios.post( API + `users/${user._id}/communities`, { communityId: communityId })
+            .then((res) => {
+                if (res && res.data.success) {
+                    return { success: true, user: res.data.user };
+                }
+
+                if (res && !res.data.success) {
+                    return { success: false, message: res.data.message };
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err }
+                }
+            })
+    }
+
+    async unSubscribeUserFromCommunity(user, communityId) {
+        return axios.delete( API + `users/${user._id}/communities/${communityId}`)
+            .then((res) => {
+                if (res && res.data.success) {
+                    return { success: true, user: res.data.user };
+                }
+
+                if (res && !res.data.success) {
+                    console.log(res);
+                    return { success: false, message: res.data.message };
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err }
+                }
+            })
+    }
+
+    async deleteAccount(userId) {
+        return axios.delete(API + `users/${userId}`)
+            .then((res) => {
+                if (res) {
+                    return { success: res.data.success };
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err };
+                }
+            })
+    }
+
+    async getMessagesfromID(chatroomId) {
+      
+        return axios.get(API+`messages?chatroomID=`+chatroomId)
         .then((res) => {
-            if (res){
-                return {chatrooms: res.data};
-            } 
+            return { messages: res.data };
         })
         .catch((err) => {
             if (err) console.log(err);
-        }) 
+        })
+    }
+	
+	async saveMessage(userID,chatroomID,message) {
+      
+        return axios.post(API+"messages", {
+                userID: userID,
+				chatroomID: chatroomID,
+                message: message
+        })
+        .then((res, err) => {
+
+     
+                return {success : true, message: res};  
+        
+            }).catch((err) => {
+                if (err) console.log(err);
+            })
     }
 
-    async addChatroom(userID, chatroomID){
+    async getChatroomObj(chatroomId) {
+      
+        return axios.get(API+`chatrooms/`+chatroomId)
+        .then((res) => {
+            return { chatroom: res.data };
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+	
+	async getAllCommunities() {
+        return axios.get(API + 'communities')
+        .then((res) => {
+            if (res) {
+                return {communities: res.data};
+            }
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+	
+	async getChallenges() {
+        return axios.get(API + 'challenges')
+        .then((res) => {
+            if (res) {
+                return {challenges: res.data};
+            }
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+	
+	async addChatroom(userID, chatroomID){
         return axios.post(API + 'users/' + userID + "/chatrooms", {"chatroomId": [chatroomID]})
         .then((res) => {
             if (res){
@@ -182,166 +367,27 @@ export default class BackendService {
             if (err) console.log(err);
         })
     }
-    
-
-
-    async getChallenges() {
-        return axios.get(API + 'challenges')
-        .then((res) => {
-            if (res) {
-                return {challenges: res.data};
-            }
-        })
-        .catch((err) => {
-            if (err) console.log(err);
-        })
-    }
-
-    async getCategories() {
-        return axios.get(API+'categories?isChild=false')
+	
+	async getProfilePosts(user) {
+        return axios.get(API+`posts?user.username=${user.username}`)
             .then((res) => {
-                if (res) {
-                    return { categories: res.data }
-                }
+                return { posts: res.data };
             })
             .catch((err) => {
-                if (err)
-                    return { success: false, message: err }
-            })
-    }
-
-    async getSubcategories(parent) {
-        return axios.get( API + `categories?parentId=${parent._id}` )
-            .then((res) => {
-                if (res) {
-                    return { subcategories: res.data }
-                }
-            })
-            .catch((err) => {
-                if (err) {
-                    return { success: false, message: err }
-                }
-            })
-    }
-
-    async getCommunities(communityIds) {
-        var promises = communityIds.map((id) => {
-            return axios.get( `API + communities?_id=${id}` )
-        });
-
-        return Promise.all(promises)
-            .then((res) => {
-                if (res) {
-                    var commies = res.map((r) => r.data[0]);
-                    return { success: true, communities: commies }
-                }
-            })
-            .catch((err) => {
-                if (err) {
-                    return { success : false, message: err }
-                }
-            })
-    }
-    async getAllCommunities() {
-        return axios.get(API + 'communities')
-        .then((res) => {
-            if (res) {
-                return {communities: res.data};
-            }
-        })
-        .catch((err) => {
-            if (err) console.log(err);
-        })
-    }
-      
-    async getResources(categoryId) {
-        return axios.get( API + `resources?categoryId=${categoryId}` )
-            .then((res) => {
-                if (res && res.data.success) {
-                    return { success: res.data.success, resources: res.data.resources };
-                }
-            })
-            .catch((err) => {
-                if (err) {
-                    return { success: false, message: err };
-                }
-            })
-    }
-
-    async subscribeUserToCommunity(user, communityId) {
-        return axios.post( API + `users/${user._id}/communities`, { communityId: communityId })
-            .then((res) => {
-                if (res && res.data.success) {
-                    return { success: true, user: res.data.user };
-                }
-
-                if (res && !res.data.success) {
-                    return { success: false, message: res.data.message };
-                }
-            })
-            .catch((err) => {
-                if (err) {
-                    return { success: false, message: err }
-                }
-            })
-    }
-
-    async saveMessage(userID,chatroomID,message) {
-      
-        return axios.post(API+"messages", {
-                userID: userID,
-				chatroomID: chatroomID,
-                message: message
-        })
-        .then((res, err) => {
-
-     
-                return {success : true, message: res};  
-        
-            }).catch((err) => {
                 if (err) console.log(err);
             })
     }
 
-    async getChatroomObj(chatroomId) {
-      
-        return axios.get(API+`chatrooms/`+chatroomId)
+    async getAllChatrooms(){
+        return axios.get(API + 'chatrooms')
         .then((res) => {
-            return { chatroom: res.data };
+            if (res){
+                return {chatrooms: res.data};
+            } 
         })
         .catch((err) => {
             if (err) console.log(err);
-        })
+        }) 
     }
 
-
-    async unSubscribeUserFromCommunity(user, communityId) {
-        return axios.delete( API + `users/${user._id}/communities/${communityId}`)
-            .then((res) => {
-                if (res && res.data.success) {
-                    return { success: true, user: res.data.user };
-                }
-
-                if (res && !res.data.success) {
-                    console.log(res);
-                    return { success: false, message: res.data.message };
-                }
-            })
-            .catch((err) => {
-                if (err) {
-                    return { success: false, message: err }
-                }
-            })
-    }
-
-    async getMessagesfromID(chatroomId) {
-      
-        return axios.get(API+`messages?chatroomID=`+chatroomId)
-        .then((res) => {
-            return { messages: res.data };
-        })
-        .catch((err) => {
-            if (err) console.log(err);
-        })
-    }
 }

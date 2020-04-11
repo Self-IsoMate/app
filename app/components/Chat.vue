@@ -29,10 +29,6 @@
             <StackLayout ~drawerContent backgroundColor="#eee">
                 <StackLayout height="2%"></StackLayout>
                 <StackLayout class="">
-                    <StackLayout class = "prof" @tap="profileTap()">
-                    <Label text="  Profile" paddingLeft="15%" color="black"
-                        class="drawerItemText font-awesome" margin="15" />
-                    </StackLayout>
                     <StackLayout class = "notif" @tap="notificationTap()">
                     <Label text="  Notifications" paddingLeft="15%" color="black"
                         class="drawerItemText font-awesome" margin="15" />
@@ -126,7 +122,6 @@
     import Home from "./Home";
     import Community from "./Community";
     import Competitions from "./Competitions"
-    import Profile from "./Profile";
     import Notifications from "./Notifications";
     import Settings from "./Settings";
     import Help from "./Help";
@@ -223,12 +218,6 @@
             chatTap(){},
             competitionTap() {
                 this.$navigateTo(Competitions, {
-                    animated: false,
-                    clearHistory: true
-                });
-            },
-            profileTap() {
-                this.$navigateTo(Profile, {
                     animated: false,
                     clearHistory: true
                 });
