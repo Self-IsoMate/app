@@ -25,7 +25,7 @@
                         <Label text="Description" fontAttributes="Bold"/>
                         <Label :text="$props.challenge.description" textWrap="true"/>
                         <Label text="Deadline" fontAttributes="Bold"/>
-                        <Label :text="$props.challenge.deadline" textWrap="true"/>
+                        <Label :text="$props.formattedTime" textWrap="true"/>
                     </StackLayout>
 
                     <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
@@ -78,35 +78,10 @@
     import Settings from "./Settings";
     import Help from "./Help";
     import LoginScreen from "./LoginMain";
-    import BackendService from "../services/BackendService";
-    import { backgroundInternalProperty } from 'tns-core-modules/ui/page/page';
     import Competitions from "./Competitions";
 
     export default {
-        props: ['challenge'],
-        created() {
-            var backend = new BackendService();
-            backend.getChallenges()
-                .then((res) => {
-                    if (res) {
-                        this.allChallenges = res.challenges;
-                        this.challenges = Array.from(this.allChallenges);
-                    }
-                })
-                .catch((err) => {
-                    if (err) console.log(err);
-                })
-            
-            backend.getAllCommunities()
-                .then((res) => {
-                    if (res) {
-                        this.communities = res.communities;
-                    }
-                })
-                .catch((err) => {
-                    if (err) console.log(err);
-                })
-        },
+        props: ['challenge','formattedTime'],
         data() {
             return {
                 back:"",
@@ -121,15 +96,6 @@
             };
         },
         methods: {
-            filter(){
-                var filteredCommunities = this.communities.filter((community) => {
-                    return community.name.toUpperCase().startsWith(this.searchValue.toUpperCase());
-                });
-
-                this.challenges = Array.from(this.allChallenges).filter((challenge) => {
-                    return challenge.communities.some((c) => filteredCommunities.some((c1) => c1._id == c))
-                });
-            },
             onDrawerClosed() {
                 this.drawerToggle = false;
             },

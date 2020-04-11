@@ -121,6 +121,7 @@
     import BackendService from "../services/BackendService";
     import { backgroundInternalProperty } from 'tns-core-modules/ui/page/page';
     import CompetitionInfo from "./CompetitionInfo";
+    import moment from "moment";
 
     export default {
         created() {
@@ -230,7 +231,7 @@
             }, //put in here navigate to log-in screen
             showDetails(challengeVariable){
                 this.$navigateTo(CompetitionInfo, {
-                    props: {challenge: challengeVariable},
+                    props: {challenge: challengeVariable, formattedTime: moment(String(challengeVariable.deadline)).format('DD/MM/YYYY')},
                     animated: false,
                     clearHistory: true
                 });
