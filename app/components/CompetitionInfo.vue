@@ -22,9 +22,9 @@
                 <DockLayout>
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
-                        <Label text="DESCRIPTION" fontAttributes="Bold"/>
+                        <Label text="DESCRIPTION" fontWeight="bold"/>
                         <Label :text="$props.challenge.description"/>
-                        <Label text="DEADLINE" fontAttributes="Bold"/>
+                        <Label text="DEADLINE" fontWeight="bold"/>
                         <Label :text="$props.challenge.deadline"/>
                        <!-- <Label :text="moment(String($props.challenge.deadline)).format('DD/MM/YYYY')"/> -->
                     </StackLayout>
