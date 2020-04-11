@@ -22,10 +22,10 @@
                 <DockLayout>
 
                     <StackLayout dock="top" height="90%" width="100%" style="">
-                        <Label text="Description"/>
-                        <Label :text="$props.challenge.description" textWrap="true"/>
-                        <Label text="Deadline"/>
-                        <Label :text="$props.challenge.deadline" textWrap="true"/>
+                        <Label text="DESCRIPTION" fontAttributes="Bold"/>
+                        <Label text="$props.challenge.description"/>
+                        <Label text="DEADLINE" fontAttributes="Bold"/>
+                        <Label text="$props.challenge.deadline"/>
                     </StackLayout>
 
                     <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
