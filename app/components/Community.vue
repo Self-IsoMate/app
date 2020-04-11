@@ -45,7 +45,7 @@
                                             <StackLayout>
                                                 <Label :text="item.username"
                                                     class="postAuthorName" />
-                                                <Label :text="item.datePosted"
+                                                <Label :text="item.dataFormat"
                                                     class="postDateSmall" />
                                             </StackLayout>
                                         </StackLayout>
@@ -74,6 +74,7 @@
 <script>
 import BackendService from "../services/BackendService";
 import { timer } from 'vue-timers'
+import moment from "moment";
 
 export default {
     name: "Community",
@@ -86,8 +87,8 @@ export default {
         var getUserFromPosts = async (post) => {
                         return service.getUserfromId(post.userId)
                             .then((res) => {
-
-                                return { ...post, username: res.user.username, profilePicture: res.user.profilePicture };
+                                var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
+                                return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
                             }).catch((err) => {
                                         if (err) console.log("err: "+err);
                                                 });
@@ -131,8 +132,9 @@ export default {
                 var getUserFromPosts = async (post) => {
                         return service.getUserfromId(post.userId)
                             .then((res) => {
-
-                                return { ...post, username: res.user.username, profilePicture: res.user.profilePicture };
+                                    console.log(post.datePosted);
+                                var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
+                                return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
                             }).catch((err) => {
                                         if (err) console.log("err: "+err);
                                                 });

@@ -37,6 +37,7 @@
                                     </StackLayout>
                                     <StackLayout marginLeft="10" paddingTop="3"
                                         width="60%">
+                                        <Label :text="item.dataFormat"  class="convDateOut" />
                                     </StackLayout>
                                 </StackLayout>
 
@@ -133,8 +134,9 @@
             var getUserFromMessage = async (message) => {
                 return service.getUserfromId(message.userID)
                     .then((res) => {
-
-                        return { ...message, username: res.user.username, profilePicture: res.user.profilePicture };
+                                var newFormat = moment(String(message.dateSent)).format('HH:mm');
+                        console.log(newFormat);
+                        return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };
                     }).catch((err) => {
                                 if (err) console.log("err: "+err);
                                          });
@@ -181,8 +183,9 @@
                 return service.getUserfromId(message.userID)
                     .then((res) => {
 
-                        return { ...message, username: res.user.username, profilePicture: res.user.profilePicture };
-                    }).catch((err) => {
+         var newFormat = moment(String(message.dateSent)).format('HH:mm');
+                        console.log(newFormat);
+                        return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };                    }).catch((err) => {
                                 if (err) console.log("err: "+err);
                                          });
             }
