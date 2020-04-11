@@ -390,4 +390,25 @@ export default class BackendService {
         }) 
     }
 
+    async addPost(post) {
+        return axios.post(`${API}posts`, post)
+            .then((res) => {
+                if (res) {
+                    if (res.data.success) {
+                        console.log("successfully posted");
+                        return { success: true, post: res.data.post };
+                    }
+
+                    if (!res.data.success) {
+                        return { success: false, message: res.data.message };
+                    }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err };
+                }
+            })
+    }
+
 }

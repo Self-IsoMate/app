@@ -25,12 +25,13 @@
 					<TextView v-model="post.body" hint="Your post..." height="100" class="outline-field text-field" />
 
 					<StackLayout>
-						<TextView v-model="searchCommunity" hint="Search communities..." @textChange="filterCommunities" />
-						<ListView for="commie in availableCommunities" @itemTap="toggleCommunity" height="300" >
-							<v-template>
-								<CommunityItemPost :community="commie" />
-							</v-template>
-						</ListView>
+						<TextView v-model="searchCommunity" hint="Search communities..." />
+						<ScrollView height="300" >
+							<StackLayout>
+								<CommunityItemPost v-for="a in availableCommunities" :key="a._id"
+									:community="a" @tap="toggleCommunity" />
+							</StackLayout>
+						</ScrollView>
 						<WrapLayout orientation="horizontal">
 							<Label v-for="item in post.communities" :key="item._id" :text="item.name" />
 						</WrapLayout>
@@ -40,7 +41,7 @@
 						<Button col="1" text="Add Post" @tap="addPost" />
 						<Button col="0" text="Discard" backgroundColor="red" color="white" @tap="$navigateBack"/>
 					</GridLayout>
-					
+
 			    </StackLayout>
 
 			</StackLayout>
@@ -104,12 +105,31 @@ export default {
 	},
 	methods: {
 		addPost (event) {
-			console.log("HHAHAHAHHAHAHA");
 			this.post.userId = this.currentUser._id;
-			console.log(this.post);
+			this.post.communities = this.post.communities.map((c) => { 
+				return c._id
+			});
+			console.log(this.post.communities.length);
+			this.service.addPost(this.post)
+				.then((res) => {
+					if (res && res.success) {
+						alert({ title: "Added post", message: "Successfully added post!" })
+							.then((res) => {
+								this.$navigateBack();
+							});
+					}
+
+					if (res && !res.success) {
+						console.log(res.message);
+						alert({ title: "Failed", message: "Failed to add post" })
+							.then((res) => {
+								this.$navigateBack();
+							});
+					}
+				})
 		},
-		toggleCommunity (event) {
-			var commie = event.item;
+		toggleCommunity (param) {
+			var commie = param.item;
 			console.log("you may proceed.... but be warned......");
 			if (this.isSelected(commie)) {
 				console.log("i must retreat!");
