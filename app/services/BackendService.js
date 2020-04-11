@@ -3,6 +3,11 @@ const API = "https://self-isomate-api.appspot.com/api/";
 const BUCKET_NAME = "self-isomate-images";
 const BUCKET_PROFILE_PICTURES = "https://storage.googleapis.com/self-isomate-images/profile-pictures/";
 var bghttp = require("nativescript-background-http");
+import store from "../store/index";
+/**
+ * TO DO: 
+ * something to show that a user is uploading something (will use the store for this);
+ */
 
 
 export default class BackendService {
@@ -15,35 +20,31 @@ export default class BackendService {
 
         console.log(`username: ${username} password: ${password}`);
 
-        return axios.post(API+"login", {
-            username: username,
-            password: password
-        })
-        .then((res, err) => {
+        return axios.post(API+"login", { username: username, password: password })
+            .then((res) => {
 
-            if (err) {
-                return {success : false, message: err};
-            }
+                if (res) {
 
-            if (res) {
+                    var loginSuccessful = res.data.loginSuccess;
 
-                var loginSuccessful = res.data.loginSuccess;
-
-                if (loginSuccessful) {
-                    console.log("login successful");
-                    this.loggedIn = true;
-                    return { success : true, user: res.data.user };
-                } 
-                else 
-                {
-                    console.log("login failed");
-                    return { success : false };
+                    if (loginSuccessful) {
+                        console.log("login successful");
+                        this.loggedIn = true;
+                        return { success : true, user: res.data.user };
+                    } 
+                    else 
+                    {
+                        console.log("login failed");
+                        return { success : false };
+                    }
                 }
-            }
-        })
-        .catch((err) => {
-            if (err) console.log(err);
-        });
+            })
+            .catch((err) => {
+                if (err) {
+                    console.log(err);
+                    return { success: false, message: err };
+                }
+            });
 
     }
 
@@ -237,6 +238,20 @@ export default class BackendService {
             .catch((err) => {
                 if (err) {
                     return { success: false, message: err }
+                }
+            })
+    }
+
+    async deleteAccount(userId) {
+        return axios.delete(API + `users/${userId}`)
+            .then((res) => {
+                if (res) {
+                    return { success: res.data.success };
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err };
                 }
             })
     }
