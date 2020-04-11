@@ -9,7 +9,7 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <Label class = "challengeTitle" :text= "$props.challenge.title" paddingTop = "7.5%" color="white" id="searchField"></Label>
+                    <Label class = "challengeTitle" :text="$props.challenge.title" paddingTop = "7.5%" color="white" id="searchField"></Label>
                 </StackLayout>
                 <StackLayout class="HRight">
 
