@@ -15,7 +15,8 @@ export default {
 			}
 		},
 		emitTap (event) {
-			this.$emit('tap', event);
+			console.log(this.$props.community);
+			this.$emit('tap', { item: this.$props.community });
 			this.toggleSelected();
 		}
 	},
