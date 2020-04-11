@@ -64,7 +64,7 @@
 
                                 <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
 
-                                    padding="10" @tap="chatroomTap">
+                                    padding="10" @tap="chatroomTap(item)">
 
                                     <StackLayout width="20%">
                                         <Image :src="item.chatroomPicture"

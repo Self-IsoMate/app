@@ -131,25 +131,29 @@
             var getUserFromMessage = async (message) => {
                 return service.getUserfromId(message.userID)
                     .then((res) => {
+
                         return { ...message, username: res.user.username, profilePicture: res.user.profilePicture };
-                    });
+                    }).catch((err) => {
+                                if (err) console.log("err: "+err);
+                                         });
             }
 
             var mutateMessages = async (messages) => {
-                return Promise.all(messages.map((message) => getUserFromMessage(message)));
+                return Promise.all(messages.map((message) => getUserFromMessage(message)));//error
             }
 
+                     
             service.getMessagesfromID(this.$props.chatRoom._id)
                 .then((res) => {
                     if (res) {
                         var messages = res.messages;
-                        console.log(messages);
                         mutateMessages(messages)
-                            .then((result) => {
-                                console.log(result);
+                            .then((result) => {//it does not run mutate Messages
                                 this.conversations = result;
-                            })
-                    }
+                            }).catch((err) => {
+                                if (err) console.log("err: "+err);
+                                         }) 
+                                    }
                 })
                 this.$timer.start('log')
 
@@ -168,30 +172,34 @@
         methods: {
                 log () {
 
-                                    var service = new BackendService();
+            var service = new BackendService();
 
             var getUserFromMessage = async (message) => {
                 return service.getUserfromId(message.userID)
                     .then((res) => {
+
                         return { ...message, username: res.user.username, profilePicture: res.user.profilePicture };
-                    });
+                    }).catch((err) => {
+                                if (err) console.log("err: "+err);
+                                         });
             }
 
             var mutateMessages = async (messages) => {
-                return Promise.all(messages.map((message) => getUserFromMessage(message)));
+                return Promise.all(messages.map((message) => getUserFromMessage(message)));//error
             }
 
+                     
             service.getMessagesfromID(this.$props.chatRoom._id)
                 .then((res) => {
                     if (res) {
                         var messages = res.messages;
-                        console.log(messages);
                         mutateMessages(messages)
-                            .then((result) => {
-                                console.log(result);
+                            .then((result) => {//it does not run mutate Messages
                                 this.conversations = result;
-                            })
-                    }
+                            }).catch((err) => {
+                                if (err) console.log("err: "+err);
+                                         }) 
+                                    }
                 })
 
 },
