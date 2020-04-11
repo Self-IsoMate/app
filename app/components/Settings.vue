@@ -111,6 +111,7 @@
     import * as utils from "~/shared/utils";
     import SelectedPageService from "../shared/selected-page-service";
     import EditProfile from "./EditProfile";
+    import BackendService from '../services/BackendService';
 
     export default {
         mounted() {
@@ -131,7 +132,8 @@
                     confirmNewPassword: '',
                     newEmail: '',
                     confirmNewEmail: ''
-                }
+                },
+                service: new BackendService()
             }
         },
         methods: {
@@ -148,9 +150,60 @@
                 this.$navigateTo(EditProfile);
             },
             changeDetails(event) {
-                // check if password is being updated, and then update
-                if (this.newPassword) {
-                    
+
+                console.log("tapped");
+
+                if (this.settingsValues.newPassword && this.settingsValues.newPassword != this.settingsValues.confirmNewPassword) {
+                    // throw error
+                    console.log("not matching");
+                    return;
+                }
+
+                if (this.settingsValues.newEmail && this.settingsValues.newEmail != this.settingsValues.confirmNewEmail) {
+                    // throw error
+                    console.log("not matching");
+                    return;
+                }
+
+                if (this.settingsValues.newPassword) {
+                    // change password
+                    this.service.updateUser(this.$store.state.user._id, { password: this.settingsValues.newPassword })
+                        .then((res) => {
+                            if (res) {
+                                console.log("updated password");
+                                alert({ title: "Password", message: "Successfully changed your password" })
+                                    .then((res) => {
+                                        this.clearDetails();
+                                    });
+                            }
+                        })
+                        .catch((err) => {
+                            if (err) {
+                                console.log(err);
+                                alert({ title: "Error", message: "There was a problem changing your password" })
+                                    .then((res) => {
+                                        console.log("acknowledged");
+                                    });
+                            }
+                        })
+                }
+
+                if (this.settingsValues.newEmail) {
+                    this.service.updateUser(this.$store.state.user._id, { email: this.settingsValues.newEmail })
+                        .then((res) => {
+                            if (res) {
+                                console.log("updated email");
+                                alert({ title: "Email", message: "Successfully changed your email" })
+                                    .then((res) => {
+                                        this.clearDetails();
+                                    })
+                            }
+                        })
+                        .catch((err) => {
+                            if (err) {
+                                console.log(err);
+                            }
+                        })
                 }
 
                 // check if email is being updated and then update
@@ -158,6 +211,14 @@
             },
             deleteAccount(event) {
 
+            },
+            clearDetails () {
+                this.settingsValues = {
+                    newPassword: '',
+                    confirmNewPassword: '',
+                    newEmail: '',
+                    confirmNewEmail: ''
+                }
             }
         }
     };
