@@ -26,7 +26,7 @@
                         <Label :text="$props.challenge.description"/>
                         <Label text="DEADLINE" fontAttributes="Bold"/>
                         <Label :text="$props.challenge.deadline"/>
-                        <Label :text="moment(String($props.challenge.deadline)).format('DD/MM/YYYY')"/>
+                       <!-- <Label :text="moment(String($props.challenge.deadline)).format('DD/MM/YYYY')"/> -->
                     </StackLayout>
 
                     <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
