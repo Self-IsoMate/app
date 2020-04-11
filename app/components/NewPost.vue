@@ -32,9 +32,6 @@
 									:community="a" @tap="toggleCommunity" />
 							</StackLayout>
 						</ScrollView>
-						<WrapLayout orientation="horizontal">
-							<Label v-for="item in post.communities" :key="item._id" :text="item.name" />
-						</WrapLayout>
 					</StackLayout>
 
 					<GridLayout rows="auto" columns="*, *">
@@ -130,12 +127,9 @@ export default {
 		},
 		toggleCommunity (param) {
 			var commie = param.item;
-			console.log("you may proceed.... but be warned......");
 			if (this.isSelected(commie)) {
-				console.log("i must retreat!");
 				this.post.communities = this.post.communities.filter((c) => c._id != commie._id );
 			} else {
-				console.log("finally! i have been chosen.")
 				this.post.communities.push(commie);
 			}
 
@@ -147,8 +141,6 @@ export default {
 			});
 		},
 		isSelected (community) {
-			console.log("we're here");
-			console.log(this.post.communities.find((c) => c._id == community._id) != null);
 			return this.post.communities.find((c) => c._id == community._id) != null;
 		}
 	},
