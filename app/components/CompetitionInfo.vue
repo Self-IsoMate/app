@@ -24,7 +24,8 @@
                     <StackLayout dock="top" height="90%" width="100%" style="">
                         <Label text="Description" style="font-weight: bold"/>
                         <Label :text="$props.challenge.description" textWrap="true"/>
-                        <Label text="Deadline" style="font-weight: bold"/>
+                        <Label class="newParagraph"/>
+                        <Label text="Deadline:" style="font-weight: bold"/>
                         <Label :text="$props.formattedTime" textWrap="true"/>
                     </StackLayout>
 
