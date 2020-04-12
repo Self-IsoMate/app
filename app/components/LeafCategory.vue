@@ -84,25 +84,26 @@ export default {
 		ResourceCard
 	},
 	created() {
-		console.log(this.category.communities);
-		this.service.getCommunities(this.category.communities)
-			.then((res) => {
-				if (res) {
-					console.log(res);
-					this.communities = res.communities;
-				}
+		if (this.$props.category.communities) {
+			this.service.getCommunities(this.category.communities)
+				.then((res) => {
+					if (res) {
+						console.log(res);
+						this.communities = res.communities;
+					}
 
-				if (!res.success) {
-					console.log("failed");
-				}
-			})
-			.catch((err) => {
-				if (err) {
-					console.log(err);
-				}
-			});
+					if (!res.success) {
+						console.log("failed");
+					}
+				})
+				.catch((err) => {
+					if (err) {
+						console.log(err);
+					}
+				});
+		}
 
-		this.service.getResources(this.category._id)
+		this.service.getResources(this.$props.category._id)
 			.then((res) => {
 				if (res && res.success) {
 					console.log(":)");

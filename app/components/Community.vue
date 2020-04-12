@@ -17,7 +17,7 @@
                 </StackLayout>
                 <StackLayout class="HRight">
                     <Label text="+" style="font-size:40;color:#fff;" paddingLeft="15%"
-                        class="font-awesome" />
+                        class="font-awesome" @tap="createNewPost" />
                 </StackLayout>
             </StackLayout>
         </ActionBar>
@@ -75,48 +75,51 @@
 import BackendService from "../services/BackendService";
 import { timer } from 'vue-timers'
 import moment from "moment";
+import NewPost from "./NewPost";
 
 export default {
     name: "Community",
-       timers: {
-              log: { time: 4000, autostart: true, repeat: true }
-        },
+    timers: {
+        log: { time: 4000, autostart: true, repeat: true }
+    },
     created() {
         var service = new BackendService();
 
         var getUserFromPosts = async (post) => {
-                        return service.getUserfromId(post.userId)
-                            .then((res) => {
-                                var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
-                                return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
-                            }).catch((err) => {
-                                        if (err) console.log("err: "+err);
-                                                });
-                    }
+            return service.getUserfromId(post.userId)
+                .then((res) => {
+                    var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
+                    return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
+                })
+                .catch((err) => {
+                    if (err) console.log("err: "+err);
+                });
+        };
         
         var mutatePosts = async (posts) => {
-                return Promise.all(posts.map((post) => getUserFromPosts(post)));//error
-            }
+            return Promise.all(posts.map((post) => getUserFromPosts(post)));//error
+        }
 
 
         service.getAllPosts()
-                .then((res) => {
-                        var posts = res.posts;
+            .then((res) => {
+                var posts = res.posts;
                 mutatePosts(posts)
-                            .then((result) => {
-                                //console.log("result");
-                                //console.log(result);
-                                this.posts = result;
-                            }).catch((err) => {
-                                if (err) console.log("err: "+err);
-                                         })    ;     
+                    .then((result) => {
+                        //console.log("result");
+                        //console.log(result);
+                        this.posts = result;
+                    })
+                    .catch((err) => {
+                        if (err) console.log("err: "+err);
+                    });     
 
-                });
-                    this.$timer.start('log');
+            });
+            this.$timer.start('log');
     },
     beforeDestroy () {
         clearInterval(this.$options.interval)
-  },
+    },
     data() {
         return {
             drawerToggle: false,
@@ -126,56 +129,50 @@ export default {
         };
     },
     methods: {
-         log () {
+        log() {
+            var service = new BackendService();
 
-        var service = new BackendService();
-                var getUserFromPosts = async (post) => {
-                        return service.getUserfromId(post.userId)
-                            .then((res) => {
-                                    console.log(post.datePosted);
-                                var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
-                                return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
-                            }).catch((err) => {
-                                        if (err) console.log("err: "+err);
-                                                });
-                    }
-        
-        var mutatePosts = async (posts) => {
+            var getUserFromPosts = async (post) => {
+                return service.getUserfromId(post.userId)
+                    .then((res) => {
+                        console.log(post.datePosted);
+                        var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
+                        return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
+                    })
+                    .catch((err) => {
+                        if (err) console.log("err: "+err);
+                    });
+            }
+
+            var mutatePosts = async (posts) => {
                 return Promise.all(posts.map((post) => getUserFromPosts(post)));//error
             }
 
-
-        service.getAllPosts()
-                .then((res) => {
-     if (res) {
-                       var posts = res.posts.filter( e=> {
-                                                    
-                            var matchingPosts =  this.posts.every(
-                                post => {
-                                    
-                                    return (post._id != e._id);
-                                    } 
-                                );
-                            return  matchingPosts;
-
+            service.getAllPosts()
+            .then((res) => {
+                if (res) {
+                    var posts = res.posts.filter((e)=> {
+                        var matchingPosts =  this.posts.every( post => {
+                            return (post._id != e._id);
                         });
-                       
-                        if(posts.length>0){
-                        mutatePosts(posts)
-                            .then((result) => {//it does not run mutate Messages
-                                if(result) {
-                                    
-                                    this.posts = this.posts.concat(result);
-                                }
-                            }).catch((err) => {
-                                if (err) console.log("err: "+err);
-                                         })
-                        } 
-                    }
-           
-                });
+                        return matchingPosts;
+                    });
 
-    },
+                    if(posts.length>0) {
+                        mutatePosts(posts)
+                        .then((result) => {
+                            if (result) {
+                                this.posts = this.posts.concat(result);
+                            }
+                        })
+                        .catch((err) => {
+                            if (err) console.log("err: "+err);
+                        });
+                    } 
+                }
+            });
+
+        },
         onDrawerClosed() {
             this.drawerToggle = false;
         },
@@ -184,6 +181,9 @@ export default {
         },
         toggleDrawer() {
             this.$refs.drawer.nativeView.toggleDrawerState();
+        },
+        createNewPost() {
+            this.$navigateTo(NewPost);
         }
     }
 }
