@@ -20,24 +20,33 @@
 
 			    <StackLayout margin="15">
 
-					<TextField v-model="post.title" hint="Title..." class="text-field" />
+					<DockLayout height="100%">
 
-					<TextView v-model="post.body" hint="Your post..." height="100" class="outline-field text-field" />
+						<StackLayout dock="top">
 
-					<StackLayout>
-						<TextView v-model="searchCommunity" hint="Search communities..." />
-						<ScrollView height="300" >
+							<TextField v-model="post.title" hint="Title..." class="text-field" />
+
+							<TextView v-model="post.body" hint="Your post..." height="100" class="outline-field text-field" />
+
 							<StackLayout>
-								<CommunityItemPost v-for="a in availableCommunities" :key="a._id"
-									:community="a" @tap="toggleCommunity" />
+								<TextView v-model="searchCommunity" hint="Search communities..." />
+								<ScrollView height="300" >
+									<StackLayout>
+										<CommunityItemPost v-for="a in availableCommunities" :key="a._id"
+											:community="a" @tap="toggleCommunity" />
+									</StackLayout>
+								</ScrollView>
 							</StackLayout>
-						</ScrollView>
-					</StackLayout>
 
-					<GridLayout rows="auto" columns="*, *">
-						<Button col="1" text="Add Post" @tap="addPost" />
-						<Button col="0" text="Discard" backgroundColor="red" color="white" @tap="$navigateBack"/>
-					</GridLayout>
+							<Button text="Upload image" @tap="selectImage" />
+
+						</StackLayout>
+
+						<GridLayout dock="bottom" rows="auto" columns="*, *">
+							<Button col="1" text="Add Post" @tap="addPost" />
+							<Button col="0" text="Discard" backgroundColor="red" color="white" @tap="$navigateBack"/>
+						</GridLayout>
+					</DockLayout>
 
 			    </StackLayout>
 
@@ -49,6 +58,7 @@
 <script>
 import BackendService from '../services/BackendService';
 import CommunityItemPost from "./CommunityItemPost";
+import * as imagepicker from "nativescript-imagepicker";
 
 export default {
 	components: {
@@ -67,7 +77,8 @@ export default {
 			allAvailableCommunities: [],
 			service: new BackendService(),
 			searchCommunity: '',
-            back:""
+			back:"",
+			selectedImage: null
 		}
 	},
 	created() {
@@ -102,13 +113,13 @@ export default {
 		}
 	},
 	methods: {
-		addPost (event) {
-			this.post.userId = this.currentUser._id;
-			this.post.communities = this.post.communities.map((c) => { 
+		uploadPost(post) {
+			post.userId = this.currentUser._id;
+			post.communities = post.communities.map((c) => { 
 				return c._id
 			});
-			console.log(this.post.communities.length);
-			this.service.addPost(this.post)
+			
+			this.service.addPost(post)
 				.then((res) => {
 					if (res && res.success) {
 						alert({ title: "Added post", message: "Successfully added post!" })
@@ -125,6 +136,43 @@ export default {
 							});
 					}
 				})
+		},
+
+		addPost (event) {
+			if (this.selectedImage) {
+				console.log(this.selectedImage);
+				var taskInfo = this.service.uploadPostImage(this.selectedImage);
+
+				if (taskInfo) {
+
+					console.log(taskInfo);
+					console.log(taskInfo.task);
+
+					var task = taskInfo.task;
+					
+
+					var link = taskInfo.link;
+
+					task.on("error", (err) => {
+						if (err) {
+							console.log(err);
+							alert({ title: "Error", message: err });
+						}
+					});
+
+					task.on("complete", (e) => {
+						if (e) {
+							console.log("got response");
+							console.log(e);
+							this.post.media = link;
+							this.uploadPost(this.post);
+						}
+					})
+				}
+
+			} else {
+				this.uploadPost(this.post);
+			}
 		},
 		toggleCommunity (param) {
 			var commie = param.item;
@@ -143,7 +191,57 @@ export default {
 		},
 		isSelected (community) {
 			return this.post.communities.find((c) => c._id == community._id) != null;
-		}
+		},
+		selectImage(event) {
+			let context = imagepicker.create({ mode: "single", mediaType: 1 });
+
+            context
+                .authorize()
+                .then(() => {
+                    return context.present()
+                    this.editedUser.profilePicture = null;
+                })
+                .then((selection) => {
+                    if (selection) {
+                        let image = selection[0];
+                        image.options.width = 300;
+                        image.options.height = 300;
+                        this.selectedImage = image;
+                        return;
+                    } else {
+                        console.log("no image selected");
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+		},
+		pickProfile () {
+            let context = imagepicker.create({ mode: "single", mediaType: 1 });
+
+            context
+                .authorize()
+                .then(() => {
+                    return context.present()
+                    this.editedUser.profilePicture = null;
+                })
+                .then((selection) => {
+                    if (selection) {
+                        let image = selection[0];
+                        image.options.width = 300;
+                        image.options.height = 300;
+                        this.editedUser.profilePicture = image;
+                        console.log(this.editedUser.profilePicture);
+                        return;
+                    } else {
+                        console.log("no image selected");
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+
+        },
 	},
 	computed: {
 		currentUser () {

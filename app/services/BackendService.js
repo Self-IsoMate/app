@@ -2,6 +2,7 @@ import axios from "axios";
 const API = "https://self-isomate-api.appspot.com/api/";
 const BUCKET_NAME = "self-isomate-images";
 const BUCKET_PROFILE_PICTURES = "https://storage.googleapis.com/self-isomate-images/profile-pictures/";
+const BUCKET_POST_IMAGES = "https://storage.googleapis.com/self-isomate-images/post-images/";
 var bghttp = require("nativescript-background-http");
 import store from "../store/index";
 /**
@@ -94,16 +95,23 @@ export default class BackendService {
 
         var task = session.uploadFile(imageUri, request);
 
-        task.on("error", (err) => console.log(err));
+        task.on("error", (err) => {
+            if (err) {
+                console.log(err);
+            }
+        });
+
         task.on("complete", (e) => {
-            this.updateUserProfilePicture(user, link)
-                .then((res) => {
-                    if (res) {
-                        console.log("inner return");
-                        console.log(res);
-                        return { newLocation: res.newLocation };
-                    }
-                });
+            if (e) {
+                this.updateUserProfilePicture(user, link)
+                    .then((res) => {
+                        if (res) {
+                            console.log("inner return");
+                            console.log(res);
+                            return { newLocation: res.newLocation };
+                        }
+                    });
+                }
         });
 
     }
@@ -421,6 +429,43 @@ export default class BackendService {
                     return { success: false, message: err };
                 }
             })
+    }
+
+    uploadPostImage (image) {
+        // checking if image uses android or apple file system uri
+        var imageUri = null;
+
+        imageUri = image._android ?? image._ios;
+
+        if (!imageUri) {
+            console.log("No image found");
+            return;
+        }
+
+        var imgArr = imageUri.split('/');
+
+        var name = imgArr.pop();
+
+        var link = BUCKET_POST_IMAGES + name;
+
+        var type = name.split('.').pop();
+
+        var session = bghttp.session("image-upload");
+
+        var request = {
+            url: `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=post-images/${name}`,
+            method: "POST",
+            headers: {
+                "Content-Type": `image/${type}`
+            }
+        };
+
+        return { task: session.uploadFile(imageUri, request), link: link };
+    }
+
+    async giveImageLink(e, image) {
+        console.log("returning image?")
+        return { success: true, image: image }
     }
 
 }
