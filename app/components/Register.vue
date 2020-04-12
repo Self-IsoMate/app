@@ -9,7 +9,7 @@
                 <TextField secure="true" v-model="confirmpassword" hint="Confirm password" />
                 <Label v-if="invalidPasswords" text="Passwords need to match" class="error" />
                 <TextField v-model="email" hint="Email" />
-                <Button text="CONTINUE" @tap="navigateQuestions" />
+                <Button text="Register" @tap="navigateQuestions" />
             </StackLayout>
         </ScrollView>
     </Page>
@@ -17,8 +17,9 @@
 </template>
 
 <script>
-
+import Home from "./Home";
 import LoginQuestionsMentor from "./LoginQuestionsMentor";
+import BackendService from "../services/BackendService";
 
 export default {
     name: "Register",
@@ -35,15 +36,32 @@ export default {
     methods: {
         navigateQuestions (event) {
             if (!this.isInvalid()) {
-                this.$navigateTo(LoginQuestionsMentor, {
-                    props: {
-                        newUser: {
-                            username: this.username,
-                            password: this.password,
-                            email: this.email
+                var newUser = {
+                    username: this.username,
+                    password: this.password,
+                    email: this.email
+                }
+
+                var backend = new BackendService();
+
+				backend.register(newUser)
+					.then((response) => {
+						if (response && response.success) {
+                            this.$store.commit("setUser", { user: response.user });
+							this.$navigateTo(Home,  {
+								animated: false,
+								clearHistory: true
+							});
                         }
-                    }
-                });
+
+                        if (response && !response.success) {
+                            alert({ title: "Error", message: response.message });
+                        }
+                        
+                    })
+                    .catch((err) => {
+                        alert({ title: "Error", message: err });
+                    });
             } else {
                 this.invalidPasswords = true;
                 setTimeout(() => { this.invalidPasswords = false }, 3000);

@@ -61,19 +61,7 @@ export default {
 			} else {
 				// register
 
-				var backend = new BackendService();
-
-				backend.register(this.newUser)
-					.then((response) => {
-						if (response.success) {
-							this.$navigateTo(Home,  {
-								animated: false,
-								clearHistory: true
-							});
-						} else {
-							console.log("login failed");
-						}
-					});
+				
 			}
 		}
 	}

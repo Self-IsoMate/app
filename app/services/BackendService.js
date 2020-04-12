@@ -56,10 +56,16 @@ export default class BackendService {
     register (user) {
         return axios.post(API+"users", user)
             .then((res) => {
-                if (res.data.success) {
-                    return { success: true }
-                } else {
-                    return { success: false }
+                if (res && res.data.success) {
+                    return { success: true, user: res.data.user }
+                }
+                if (res && !res.data.success) {
+                    return { success: false, message: res.data.message }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err } 
                 }
             });
     }
