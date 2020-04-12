@@ -20,17 +20,15 @@
 
 			    <StackLayout margin="15">
 
-					<DockLayout height="100%">
-
-						<StackLayout dock="top">
-
+					<ScrollView>
+						<StackLayout>
 							<TextField v-model="post.title" hint="Title..." class="text-field" />
 
 							<TextView v-model="post.body" hint="Your post..." height="100" class="outline-field text-field" />
 
 							<StackLayout>
 								<TextView v-model="searchCommunity" hint="Search communities..." />
-								<ScrollView height="300" >
+								<ScrollView height="150" >
 									<StackLayout>
 										<CommunityItemPost v-for="a in availableCommunities" :key="a._id"
 											:community="a" @tap="toggleCommunity" />
@@ -38,15 +36,17 @@
 								</ScrollView>
 							</StackLayout>
 
-							<Button text="Upload image" @tap="selectImage" />
+							<GridLayout rows="auto, auto" columns="*">
+								<Button row="0" text="Upload image" @tap="selectImage" />
+								<Image row="1" :src="selectedImage" class="image" fill="aspectFill" />
+							</GridLayout>
 
+							<GridLayout rows="auto" columns="*, *">
+								<Button col="1" text="Add Post" @tap="addPost" />
+								<Button col="0" text="Discard" backgroundColor="red" color="white" @tap="$navigateBack"/>
+							</GridLayout>
 						</StackLayout>
-
-						<GridLayout dock="bottom" rows="auto" columns="*, *">
-							<Button col="1" text="Add Post" @tap="addPost" />
-							<Button col="0" text="Discard" backgroundColor="red" color="white" @tap="$navigateBack"/>
-						</GridLayout>
-					</DockLayout>
+					</ScrollView>
 
 			    </StackLayout>
 
@@ -140,6 +140,8 @@ export default {
 
 		addPost (event) {
 			if (this.selectedImage) {
+				alert({ title: "Please wait", message: "Uploading your image & adding your post. Please wait." });
+
 				console.log(this.selectedImage);
 				var taskInfo = this.service.uploadPostImage(this.selectedImage);
 
@@ -271,4 +273,12 @@ export default {
 .selected {
 	background-color: green;
 }
+
+.image {
+	border-color: #dedede;
+	border-width: 1;
+	height: 100;
+	margin: 10;
+}
+
 </style>
