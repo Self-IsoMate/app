@@ -4,7 +4,7 @@
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
                 <StackLayout class="HLeft" style="vertical-align:center;" @tap="$navigateBack">
-                    <Label text="<" style="font-size:27;color:#fff;"/>
+                    <Label :text="back" class="font-awesome" style="font-size:27;color:#fff;"/>
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
                     <Label text="New Post" class="header-text" />
@@ -66,7 +66,8 @@ export default {
 			availableCommunities: [],
 			allAvailableCommunities: [],
 			service: new BackendService(),
-			searchCommunity: ''
+			searchCommunity: '',
+            back:""
 		}
 	},
 	created() {
