@@ -9,7 +9,7 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <SearchBar hint="Search" v-model="searchPhrase" @textChange="filter()" />
+                    <SearchBar hint="Search" v-model="searchPhrase" @textChange="filter()" ref="searchBar" />
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -62,6 +62,18 @@
         mounted () {
             var service = new BackendService();
 
+/////
+            fetchHole: function () { 
+                //get data
+                this.$refs.searchBar.nativeView.dismissSoftInput();
+            },
+
+            addHole: function () {
+                //my query add new
+                setTimeout(this.fetchHole, 1000);
+            }
+/////
+
             service.getCategories()
                 .then((res) => {
                     if (res) {
@@ -82,6 +94,8 @@
                 this.categories = this.allCategories.filter((h)=>{
                    return h.name.toUpperCase().startsWith(this.searchPhrase.toUpperCase());
                 });
+                ///
+                this.$refs.searchBar;
             },
             onDrawerClosed() {
                 this.drawerToggle = false;
