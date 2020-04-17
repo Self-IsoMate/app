@@ -66,7 +66,7 @@
             fetchHole: function () { 
                 //get data
                 this.$refs.searchBar.nativeView.dismissSoftInput();
-            },
+            }
 
             addHole: function () {
                 //my query add new
