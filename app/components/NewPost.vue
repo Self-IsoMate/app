@@ -27,7 +27,7 @@
 							<TextView v-model="post.body" hint="Your post..." height="100" class="outline-field text-field" />
 
 							<StackLayout>
-								<TextView v-model="searchCommunity" hint="Search communities..." />
+								<TextView v-model="searchCommunity" hint="Search communities..." @textChange="filterCommunities" />
 								<ScrollView height="150" >
 									<StackLayout>
 										<CommunityItemPost v-for="a in availableCommunities" :key="a._id"
