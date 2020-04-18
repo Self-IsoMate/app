@@ -20,7 +20,7 @@
 
                 <DockLayout>
                     <StackLayout dock="top" height="90%" width="100%" >
-                        <RadListView  ref="listView" for="item in conversations" 
+                        <ListView  ref="listView" for="item in conversations" 
                             separatorColor="transparent" id="listView">
                             <v-template>
 
@@ -42,7 +42,7 @@
                                 </StackLayout>
 
                             </v-template>
-                        </RadListView>
+                        </ListView>
 
                     </StackLayout>
                     <StackLayout dock="bottom" height="10%" style="border-color:#E4E4E4;border-width:1;background:#fff;">
@@ -114,8 +114,9 @@
                                 this.conversations = result;
                             }).catch((err) => {
                                 if (err) console.log("err: "+err);
-                                         }) 
-                                    }
+                            }) 
+                        this.$refs.listView.nativeView.scrollToIndex(0);
+                    }
                 });
                     this.$timer.start('log')
 
