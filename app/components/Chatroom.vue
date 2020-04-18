@@ -115,7 +115,6 @@
                             }).catch((err) => {
                                 if (err) console.log("err: "+err);
                             }) 
-                        this.$refs.listView.nativeView.scrollToIndex(0);
                     }
                 });
                     this.$timer.start('log')
@@ -124,6 +123,8 @@
         },
           beforeDestroy () {
     clearInterval(this.$options.interval)
+  }, onLoaded(){
+       this.$refs.listView.nativeView.scrollToIndex(10);
   },
         data() {
             return {
