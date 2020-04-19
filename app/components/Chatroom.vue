@@ -92,7 +92,11 @@
             var getUserFromMessage = async (message) => {
                 return service.getUserfromId(message.userID)
                     .then((res) => {
-                                var newFormat = moment(String(message.dateSent)).format('HH:mm');
+                        if (!res.user){
+                            res.user.username = "deleted account";
+                            res.user.profilePicture = "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png";
+                        }
+                        var newFormat = moment(String(message.dateSent)).format('HH:mm');
                         console.log(newFormat);
                         return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };
                     }).catch((err) => {
@@ -117,15 +121,14 @@
                             }) 
                     }
                 });
-                    this.$timer.start('log')
+                    //this.scrollDown();
+                    this.$timer.start('log');
 
                
         },
           beforeDestroy () {
     clearInterval(this.$options.interval)
-  }, onLoaded(){
-       this.$refs.listView.nativeView.scrollToIndex(10);
-  },
+  }, 
         data() {
             return {
                 back:"",
@@ -182,8 +185,8 @@
                                     console.log("result");
                                     console.log(result);
                                     this.conversations = this.conversations.concat(result);
-                                    var lastEl = (this.conversations.length-2);
-                                    this.$refs.listView.scrollToIndex(lastEl/2);
+                                    //var lastEl = (this.conversations.length-2);
+                                    //this.$refs.listView.scrollToIndex(lastEl/2);
 
                                 }
                             }).catch((err) => {
@@ -222,7 +225,11 @@
                         }
                     });
                     //better implementation so all messages send from bottom and push up
+                    //this.scrollDown()
 
+            },
+            scrollDown(){
+                this.$refs.listView.nativeView.scrollToIndex(this.conversations.length - 1);
             }
         }
     };
