@@ -92,7 +92,7 @@
             var getUserFromMessage = async (message) => {
                 return service.getUserfromId(message.userID)
                     .then((res) => {
-                        if (!res.user){
+                        if (res && !res.user){
                             res.user.username = "deleted account";
                             res.user.profilePicture = "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png";
                         }
