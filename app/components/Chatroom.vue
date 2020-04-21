@@ -92,9 +92,9 @@
             var getUserFromMessage = async (message) => {
                 return service.getUserfromId(message.userID)
                     .then((res) => {
+                        console.log(res.user);
                         if (res && !res.user){
-                            res.user.username = "deleted account";
-                            res.user.profilePicture = "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png";
+                            return { ...message, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
                         }
                         var newFormat = moment(String(message.dateSent)).format('HH:mm');
                         console.log(newFormat);
