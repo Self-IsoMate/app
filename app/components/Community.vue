@@ -89,6 +89,9 @@ export default {
             return service.getUserfromId(post.userId)
                 .then((res) => {
                     var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
+                        if (res && !res.user){
+                            return { ...post, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat};
+                        }
                     return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
                 })
                 .catch((err) => {
@@ -134,15 +137,17 @@ export default {
 
             var getUserFromPosts = async (post) => {
                 return service.getUserfromId(post.userId)
-                    .then((res) => {
-                        console.log(post.datePosted);
-                        var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
-                        return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
-                    })
-                    .catch((err) => {
-                        if (err) console.log("err: "+err);
-                    });
-            }
+                   .then((res) => {
+                    var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
+                        if (res && !res.user){
+                            return { ...post, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat};
+                        }
+                    return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
+                })
+                .catch((err) => {
+                    if (err) console.log("err: "+err);
+                });
+        };
 
             var mutatePosts = async (posts) => {
                 return Promise.all(posts.map((post) => getUserFromPosts(post)));//error

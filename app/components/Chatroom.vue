@@ -92,12 +92,10 @@
             var getUserFromMessage = async (message) => {
                 return service.getUserfromId(message.userID)
                     .then((res) => {
-                        console.log(res.user);
+                        var newFormat = moment(String(message.dateSent)).format('HH:mm');
                         if (res && !res.user){
                             return { ...message, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
                         }
-                        var newFormat = moment(String(message.dateSent)).format('HH:mm');
-                        console.log(newFormat);
                         return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };
                     }).catch((err) => {
                                 if (err) console.log("err: "+err);
@@ -144,11 +142,13 @@
 
             var getUserFromMessage = async (message) => {
                 return service.getUserfromId(message.userID)
-                    .then((res) => {
-
-         var newFormat = moment(String(message.dateSent)).format('HH:mm');
-                        console.log(newFormat);
-                        return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };                    }).catch((err) => {
+                              .then((res) => {
+                        var newFormat = moment(String(message.dateSent)).format('HH:mm');
+                        if (res && !res.user){
+                            return { ...message, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
+                        }
+                        return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };
+                    }).catch((err) => {
                                 if (err) console.log("err: "+err);
                                          });
             }
