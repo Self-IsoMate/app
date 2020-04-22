@@ -90,7 +90,7 @@ export default {
                 .then((res) => {
                     if (res) {
                         var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
-                        return { ...post, username: res.user.username ?? 'deleted', profilePicture: res.user.profilePicture ?? 'https://www.peakdistrict.gov.uk/__data/assets/image/0026/96038/Beeley-Moor-Heather-WEB.jpg', dataFormat: newFormat};
+                        return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
                     }
                 })
                 .catch((err) => {
@@ -112,12 +112,12 @@ export default {
                             //console.log("result");
                             //console.log(result);
                             this.posts = result;
-                            this.$timer.start('log');
                         })
                         .catch((err) => {
                             if (err) console.log("err: "+err);
                         });
                 }
+                this.$timer.start('log');
             });
     },
     beforeDestroy () {
@@ -140,8 +140,7 @@ export default {
                     .then((res) => {
                         console.log(post.datePosted);
                         var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
-                        console.table(res.user);
-                        return { ...post, username: res.user.username ?? 'deleted', profilePicture: res.user.profilePicture ?? 'https://www.peakdistrict.gov.uk/__data/assets/image/0026/96038/Beeley-Moor-Heather-WEB.jpg', dataFormat: newFormat};
+                        return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
                     })
                     .catch((err) => {
                         if (err) console.log("err: "+err);
@@ -152,30 +151,30 @@ export default {
                 return Promise.all(posts.map((post) => getUserFromPosts(post)));//error
             }
 
-            service.getAllPosts()
-            .then((res) => {
-                if (res) {
-                    var posts = res.posts.filter((e)=> {
-                        var matchingPosts =  this.posts.every( post => {
-                            return (post._id != e._id);
+            service.getFeed(this.$store.state.user._id)
+                .then((res) => {
+                    if (res) {
+                        var posts = res.posts.filter((e)=> {
+                            var matchingPosts =  this.posts.every( post => {
+                                return (post._id != e._id);
+                            });
+                            return matchingPosts;
                         });
-                        return matchingPosts;
-                    });
 
-                    if(posts.length>0) {
-                        mutatePosts(posts)
-                        .then((result) => {
-                            if (result) {
-
-                                this.posts = this.posts.concat(result);
-                            }
-                        })
-                        .catch((err) => {
-                            if (err) console.log("err: "+err);
-                        });
-                    } 
-                }
-            });
+                        if(posts.length>0) {
+                            mutatePosts(posts)
+                                .then((result) => {
+                                    if (result) {
+                                        console.log(result);
+                                        this.posts = [ ...result, ... this.posts];
+                                    }
+                                })
+                                .catch((err) => {
+                                    if (err) console.log("err: "+err);
+                                });
+                        } 
+                    }
+                });
 
         },
         onDrawerClosed() {
