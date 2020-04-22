@@ -88,8 +88,10 @@ export default {
         var getUserFromPosts = async (post) => {
             return service.getUserfromId(post.userId)
                 .then((res) => {
-                    var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
-                    return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
+                    if (res) {
+                        var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
+                        return { ...post, username: res.user.username ?? 'deleted', profilePicture: res.user.profilePicture ?? 'https://www.peakdistrict.gov.uk/__data/assets/image/0026/96038/Beeley-Moor-Heather-WEB.jpg', dataFormat: newFormat};
+                    }
                 })
                 .catch((err) => {
                     if (err) console.log("err: "+err);
@@ -101,21 +103,22 @@ export default {
         }
 
 
-        service.getAllPosts()
+        service.getFeed(this.$store.state.user._id)
             .then((res) => {
-                var posts = res.posts;
-                mutatePosts(posts)
-                    .then((result) => {
-                        //console.log("result");
-                        //console.log(result);
-                        this.posts = result;
-                    })
-                    .catch((err) => {
-                        if (err) console.log("err: "+err);
-                    });     
-
+                if (res) {
+                    var posts = res.posts;
+                    mutatePosts(posts)
+                        .then((result) => {
+                            //console.log("result");
+                            //console.log(result);
+                            this.posts = result;
+                            this.$timer.start('log');
+                        })
+                        .catch((err) => {
+                            if (err) console.log("err: "+err);
+                        });
+                }
             });
-            this.$timer.start('log');
     },
     beforeDestroy () {
         clearInterval(this.$options.interval)
@@ -137,7 +140,8 @@ export default {
                     .then((res) => {
                         console.log(post.datePosted);
                         var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
-                        return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
+                        console.table(res.user);
+                        return { ...post, username: res.user.username ?? 'deleted', profilePicture: res.user.profilePicture ?? 'https://www.peakdistrict.gov.uk/__data/assets/image/0026/96038/Beeley-Moor-Heather-WEB.jpg', dataFormat: newFormat};
                     })
                     .catch((err) => {
                         if (err) console.log("err: "+err);
@@ -162,6 +166,7 @@ export default {
                         mutatePosts(posts)
                         .then((result) => {
                             if (result) {
+
                                 this.posts = this.posts.concat(result);
                             }
                         })
