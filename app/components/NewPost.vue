@@ -1,5 +1,5 @@
 <template>
-	<Page>
+	<Page xmlns:VideoPlayer="nativescript-videoplayer">
 		<ActionBar title="" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
@@ -18,6 +18,10 @@
                 <!-- Actual page content goes here (in dock top) -->
 			<StackLayout width="100%">
 
+ <StackLayout>
+
+
+        </StackLayout>
 			    <StackLayout margin="15">
 
 					<ScrollView>
@@ -34,13 +38,17 @@
 											:community="a" @tap="toggleCommunity" />
 									</StackLayout>
 								</ScrollView>
+								  
 							</StackLayout>
 
-							<GridLayout rows="auto, auto" columns="*">
+							<GridLayout rows="auto, auto, auto, auto" columns="*">
 								<Button row="0" text="Upload image" @tap="selectImage" />
 								<Image row="1" :src="selectedImage" class="image" fill="aspectFill" />
+								<Button row="2" text="Upload video" @tap="selectVideo" />
+								<VideoPlayer row="3" ref="player"
+								controls="true" loop="true" autoplay="true" height="200"
+								:src="selectedVideo"/>
 							</GridLayout>
-
 							<GridLayout rows="auto" columns="*, *">
 								<Button col="1" text="Add Post" @tap="addPost" />
 								<Button col="0" text="Discard" backgroundColor="red" color="white" @tap="$navigateBack"/>
@@ -59,6 +67,8 @@
 import BackendService from '../services/BackendService';
 import CommunityItemPost from "./CommunityItemPost";
 import * as imagepicker from "nativescript-imagepicker";
+import  Video  from 'nativescript-videoplayer';
+
 
 export default {
 	components: {
@@ -78,7 +88,8 @@ export default {
 			service: new BackendService(),
 			searchCommunity: '',
 			back:"",
-			selectedImage: null
+			selectedImage: null,
+			selectedVideo: null
 		}
 	},
 	created() {
@@ -195,55 +206,61 @@ export default {
 			return this.post.communities.find((c) => c._id == community._id) != null;
 		},
 		selectImage(event) {
-			let context = imagepicker.create({ mode: "single", mediaType: 1 });
-
-            context
-                .authorize()
-                .then(() => {
-                    return context.present()
-                    this.editedUser.profilePicture = null;
-                })
-                .then((selection) => {
-                    if (selection) {
-                        let image = selection[0];
-                        image.options.width = 300;
-                        image.options.height = 300;
-                        this.selectedImage = image;
-                        return;
-                    } else {
-                        console.log("no image selected");
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
-		},
-		pickProfile () {
             let context = imagepicker.create({ mode: "single", mediaType: 1 });
 
             context
                 .authorize()
                 .then(() => {
                     return context.present()
-                    this.editedUser.profilePicture = null;
                 })
                 .then((selection) => {
                     if (selection) {
+						console.log("selection");
+						console.log(selection);
                         let image = selection[0];
                         image.options.width = 300;
                         image.options.height = 300;
-                        this.editedUser.profilePicture = image;
-                        console.log(this.editedUser.profilePicture);
+						this.selectedImage = image;
+						console.log("this.selectedImage");
+						console.log(this.selectedImage);
+						
                         return;
                     } else {
                         console.log("no image selected");
                     }
                 })
                 .catch((err) => {
-                    console.log(err);
+                    console.table(err); //table <- for errors
                 })
+		},
+		selectVideo(event) {
+            let context = imagepicker.create({ mode: "single", mediaType: 2 });
 
-        },
+            context
+                .authorize()
+                .then(() => {
+                    return context.present()
+                })
+                .then((selection) => {
+                    if (selection) {
+						console.log("selection");
+						console.log(selection);
+                        let video = selection[0];
+						video.options.width = 300;
+                        video.options.height = 300;
+						this.selectedVideo = video;
+						console.log("this.selectedVideo");
+						console.log(this.selectedVideo);
+						
+                        return;
+                    } else {
+                        console.log("no video selected");
+                    }
+                })
+                .catch((err) => {
+                    console.table(err); //table <- for errors
+                })
+		}
 	},
 	computed: {
 		currentUser () {

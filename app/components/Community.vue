@@ -88,6 +88,9 @@ export default {
         var getUserFromPosts = async (post) => {
             return service.getUserfromId(post.userId)
                 .then((res) => {
+                                        console.log("res1");
+                                        console.log(res);
+
                     var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
                         if (res && !res.user){
                             return { ...post, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat};
@@ -139,6 +142,8 @@ export default {
                 return service.getUserfromId(post.userId)
                    .then((res) => {
                     var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
+                    console.log("res2");
+                    console.log(res);
                         if (res && !res.user){
                             return { ...post, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat};
                         }

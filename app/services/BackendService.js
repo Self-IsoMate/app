@@ -372,7 +372,7 @@ export default class BackendService {
 
     async getChatroomIds(userId) {
       
-        return axios.get(API+`usersChat/`+userId)
+        return axios.get(`${API}users/${userId}/chatrooms`) 
         .then((res) => {
             return { chatrooms: res.data.chatrooms }; // return { chatroom: res.data };
 
