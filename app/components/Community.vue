@@ -36,7 +36,7 @@
                             id="listView">
                             <v-template>
 
-                            <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
+                                <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
                                     <StackLayout class="post-container">
                                         <StackLayout orientation="horizontal"
                                             padding="10">
@@ -54,6 +54,9 @@
                                             <Label :text="item.body"
                                                     class="postBody" textWrap="true" />
                                         <Image :src="item.media" marginTop="10" />
+                                        <WrapLayout orientation="horizontal">
+                                            <CommunityPill v-for="(c, index) in item.communities" :key="index" :communityId="c" />
+                                        </WrapLayout>
                                     </StackLayout>
                                 </StackLayout>
 
@@ -76,11 +79,15 @@ import BackendService from "../services/BackendService";
 import { timer } from 'vue-timers'
 import moment from "moment";
 import NewPost from "./NewPost";
+import CommunityPill from "./CommunityPill";
 
 export default {
     name: "Community",
     timers: {
         log: { time: 4000, autostart: true, repeat: true }
+    },
+    components: {
+        CommunityPill
     },
     created() {
         var service = new BackendService();
@@ -196,6 +203,16 @@ export default {
 
 .post-container {
     background-color: white;
+    padding: 5; 
+}
+
+.pill {
+    background-color: black;
+    color: white;
+    padding: 2 7;
+    border-radius: 50%;
+    margin: 1;
+    font-size: 10;
 }
 
 </style>
