@@ -46,8 +46,8 @@
 								<Image row="1" :src="selectedImage" class="image" fill="aspectFill" />
 								<Button row="2" text="Upload video" @tap="selectVideo" />
 								<VideoPlayer row="3" ref="player"
-								controls="true" loop="true" autoplay="true" height="200"
-								:src="selectedVideo"/>
+									controls="true" loop="true" autoplay="true" height="200"
+									:src="selectedVideo"/>
 							</GridLayout>
 							<GridLayout rows="auto" columns="*, *">
 								<Button col="1" text="Add Post" @tap="addPost" />
@@ -248,9 +248,9 @@ export default {
                         let video = selection[0];
 						video.options.width = 300;
                         video.options.height = 300;
-						this.selectedVideo = video;
+						this.selectedVideo = video._android ?? video._ios; //URI for video
 						console.log("this.selectedVideo");
-						console.log(this.selectedVideo);
+						console.log(this.selectVideo);
 						
                         return;
                     } else {
