@@ -469,6 +469,38 @@ export default class BackendService {
         return { task: session.uploadFile(imageUri, request), link: link };
     }
 
+    uploadPostVideo (image) { //TODO
+        // checking if image uses android or apple file system uri
+        var imageUri = null;
+
+        imageUri = image._android ?? image._ios;
+
+        if (!imageUri) {
+            console.log("No image found");
+            return;
+        }
+
+        var imgArr = imageUri.split('/');
+
+        var name = imgArr.pop();
+
+        var link = BUCKET_POST_IMAGES + name;
+
+        var type = name.split('.').pop();
+
+        var session = bghttp.session("image-upload");
+
+        var request = {
+            url: `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=post-images/${name}`,
+            method: "POST",
+            headers: {
+                "Content-Type": `image/${type}`
+            }
+        };
+
+        return { task: session.uploadFile(imageUri, request), link: link };
+    }
+
     async giveImageLink(e, image) {
         console.log("returning image?")
         return { success: true, image: image }

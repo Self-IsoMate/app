@@ -54,6 +54,9 @@
                                             <Label :text="item.body"
                                                     class="postBody" textWrap="true" />
                                         <Image :src="item.media" marginTop="10" />
+                                        <VideoPlayer src='https://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_480_1_5MG.mp4' ref="player"
+									controls="true" loop="true" autoplay="true" height="200"
+									marginTop="10" />
                                     </StackLayout>
                                 </StackLayout>
 
@@ -76,6 +79,8 @@ import BackendService from "../services/BackendService";
 import { timer } from 'vue-timers'
 import moment from "moment";
 import NewPost from "./NewPost";
+import  Video  from 'nativescript-videoplayer';
+
 
 export default {
     name: "Community",

@@ -43,11 +43,11 @@
 
 							<GridLayout rows="auto, auto, auto, auto" columns="*">
 								<Button row="0" text="Upload image" @tap="selectImage" />
-								<Image row="1" :src="selectedImage" class="image" fill="aspectFill" />
+								<Image row="1" :src='selectedImage' class="image" fill="aspectFill" />
 								<Button row="2" text="Upload video" @tap="selectVideo" />
 								<VideoPlayer row="3" ref="player"
 									controls="true" loop="true" autoplay="true" height="200"
-									:src="selectedVideo"/>
+									:src='selectedVideo'/>
 							</GridLayout>
 							<GridLayout rows="auto" columns="*, *">
 								<Button col="1" text="Add Post" @tap="addPost" />
@@ -183,7 +183,40 @@ export default {
 					})
 				}
 
-			} else {
+			} else if (this.selectedVideo) {
+				alert({ title: "Please wait", message: "Uploading your video & adding your post. Please wait." });
+
+				console.log(this.selectedVideo);
+				var taskInfo = this.service.uploadPostVideo(this.selectedVideo);// for video
+
+				if (taskInfo) {
+
+					console.log(taskInfo);
+					console.log(taskInfo.task);
+
+					var task = taskInfo.task;
+					
+
+					var link = taskInfo.link;
+
+					task.on("error", (err) => {
+						if (err) {
+							console.log(err);
+							alert({ title: "Error", message: err });
+						}
+					});
+
+					task.on("complete", (e) => {
+						if (e) {
+							console.log("got response");
+							console.log(e);
+							this.post.media = link;
+							this.uploadPost(this.post);
+						}
+					})
+				}
+
+			}else {
 				this.uploadPost(this.post);
 			}
 		},
@@ -250,6 +283,8 @@ export default {
                         video.options.height = 300;
 						this.selectedVideo = video._android ?? video._ios; //URI for video
 						console.log("this.selectedVideo");
+						console.log(this.selectedVideo);
+						console.log("this.selectVideo");
 						console.log(this.selectVideo);
 						
                         return;

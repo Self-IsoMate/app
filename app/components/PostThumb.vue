@@ -1,6 +1,9 @@
 <template>
 	<StackLayout class="main" backgroundColor="white">
 		<Image v-show="post.media" :src="post.media" />
+		<VideoPlayer v-show="post.media" ref="player"
+									controls="true" loop="true" autoplay="true" height="200"
+									src='https://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_480_1_5MG.mp4'/>
 		<StackLayout class="content">
 			<GridLayout columns="*, auto">
 				<Label :text="post.title" class="title" col="0" />
@@ -12,6 +15,8 @@
 </template>
 <script>
 import moment from "moment";
+import  Video  from 'nativescript-videoplayer';
+
 export default {
 
 	props: {
