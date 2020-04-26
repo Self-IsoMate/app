@@ -441,6 +441,10 @@ export default class BackendService {
         // checking if image uses android or apple file system uri
         var imageUri = null;
 
+        console.log ("image");
+        console.log (image);
+
+
         imageUri = image._android ?? image._ios;
 
         if (!imageUri) {
@@ -448,15 +452,33 @@ export default class BackendService {
             return;
         }
 
+        console.log ("imageUri");
+        console.log (imageUri);
+
         var imgArr = imageUri.split('/');
+
+        console.log ("imgArr");
+        console.log (imgArr);
 
         var name = imgArr.pop();
 
+        console.log ("name");
+        console.log (name);
+
         var link = BUCKET_POST_IMAGES + name;
+
+        console.log ("link");
+        console.log (link);
 
         var type = name.split('.').pop();
 
+        console.log ("type");
+        console.log (type);
+        
         var session = bghttp.session("image-upload");
+
+        console.log ("session");
+        console.log (session);
 
         var request = {
             url: `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=post-images/${name}`,
@@ -465,40 +487,54 @@ export default class BackendService {
                 "Content-Type": `image/${type}`
             }
         };
+
+        console.log ("request");
+        console.log (request);
 
         return { task: session.uploadFile(imageUri, request), link: link };
     }
 
-    uploadPostVideo (image) { //TODO
-        // checking if image uses android or apple file system uri
-        var imageUri = null;
+    uploadPostVideo (video) { //TODO
+        console.log ("video");
+        console.log (video);
 
-        imageUri = image._android ?? image._ios;
+        var videoArr = video.split('/');
 
-        if (!imageUri) {
-            console.log("No image found");
-            return;
-        }
+        console.log ("videoArr");
+        console.log (videoArr);
 
-        var imgArr = imageUri.split('/');
+        var name = videoArr.pop();
 
-        var name = imgArr.pop();
+        console.log ("name");
+        console.log (name);
 
         var link = BUCKET_POST_IMAGES + name;
 
+        console.log ("link");
+        console.log (link);
+
         var type = name.split('.').pop();
 
-        var session = bghttp.session("image-upload");
+        console.log ("type");
+        console.log (type);
+
+        var session = bghttp.session("video-upload");
+
+        console.log ("session");
+        console.log (session);
 
         var request = {
             url: `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=post-images/${name}`,
             method: "POST",
             headers: {
-                "Content-Type": `image/${type}`
+                "Content-Type": `video/${type}`
             }
         };
 
-        return { task: session.uploadFile(imageUri, request), link: link };
+        console.log ("request");
+        console.log (request);
+
+        return { task: session.uploadFile(video, request), link: link };
     }
 
     async giveImageLink(e, image) {

@@ -43,9 +43,9 @@
 
 							<GridLayout rows="auto, auto, auto, auto" columns="*">
 								<Button row="0" text="Upload image" @tap="selectImage" />
-								<Image row="1" :src='selectedImage' class="image" fill="aspectFill" />
+								<Image row="1" :src='selectedImage' class="image" id="imageFile" v-if="showImage" />
 								<Button row="2" text="Upload video" @tap="selectVideo" />
-								<VideoPlayer row="3" ref="player"
+								<VideoPlayer row="3" ref="player" id="videoFile" v-if="showVideo"
 									controls="true" loop="true" autoplay="true" height="200"
 									:src='selectedVideo'/>
 							</GridLayout>
@@ -76,6 +76,8 @@ export default {
 	},
 	data() {
 		return {
+			showImage: false,
+			showVideo: false,
 			post: {
 				title: '',
 				body: '',
@@ -153,18 +155,20 @@ export default {
 			if (this.selectedImage) {
 				alert({ title: "Please wait", message: "Uploading your image & adding your post. Please wait." });
 
-				console.log(this.selectedImage);
 				var taskInfo = this.service.uploadPostImage(this.selectedImage);
 
 				if (taskInfo) {
 
 					console.log(taskInfo);
-					console.log(taskInfo.task);
+					
 
 					var task = taskInfo.task;
 					
+					console.log(taskInfo.task);
 
 					var link = taskInfo.link;
+
+					console.log(taskInfo.link);
 
 					task.on("error", (err) => {
 						if (err) {
@@ -186,18 +190,20 @@ export default {
 			} else if (this.selectedVideo) {
 				alert({ title: "Please wait", message: "Uploading your video & adding your post. Please wait." });
 
-				console.log(this.selectedVideo);
 				var taskInfo = this.service.uploadPostVideo(this.selectedVideo);// for video
 
 				if (taskInfo) {
 
-					console.log(taskInfo);
-					console.log(taskInfo.task);
+							console.log(taskInfo);
+					
 
 					var task = taskInfo.task;
 					
+					console.log(taskInfo.task);
 
 					var link = taskInfo.link;
+
+					console.log(taskInfo.link);
 
 					task.on("error", (err) => {
 						if (err) {
@@ -217,7 +223,7 @@ export default {
 				}
 
 			}else {
-				this.uploadPost(this.post);
+				//this.uploadPost(this.post);
 			}
 		},
 		toggleCommunity (param) {
@@ -228,7 +234,7 @@ export default {
 				this.post.communities.push(commie);
 			}
 
-			console.log(this.post.communities);
+			//console.log(this.post.communities);
 		},
 		filterCommunities (event) {
 			this.availableCommunities = this.allAvailableCommunities.filter((commie) => {
@@ -248,14 +254,17 @@ export default {
                 })
                 .then((selection) => {
                     if (selection) {
-						console.log("selection");
-						console.log(selection);
+						/*console.log("selection");
+						console.log(selection);*/
                         let image = selection[0];
                         image.options.width = 300;
-                        image.options.height = 300;
+						image.options.height = 300;
+						this.selectedVideo = null;
+						this.showVideo =false;
+						this.showImage=true;
 						this.selectedImage = image;
-						console.log("this.selectedImage");
-						console.log(this.selectedImage);
+						/*console.log("this.selectedImage");
+						console.log(this.selectedImage);*/
 						
                         return;
                     } else {
@@ -276,16 +285,19 @@ export default {
                 })
                 .then((selection) => {
                     if (selection) {
-						console.log("selection");
-						console.log(selection);
+						/*console.log("selection");
+						console.log(selection);*/
                         let video = selection[0];
 						video.options.width = 300;
-                        video.options.height = 300;
+						video.options.height = 300;
+						this.selectedImage = null;
+						this.showImage = false
+						this.showVideo = true;
 						this.selectedVideo = video._android ?? video._ios; //URI for video
-						console.log("this.selectedVideo");
+						/*console.log("this.selectedVideo");
 						console.log(this.selectedVideo);
 						console.log("this.selectVideo");
-						console.log(this.selectVideo);
+						console.log(this.selectVideo);*/
 						
                         return;
                     } else {

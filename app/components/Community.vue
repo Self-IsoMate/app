@@ -54,7 +54,7 @@
                                             <Label :text="item.body"
                                                     class="postBody" textWrap="true" />
                                         <Image :src="item.media" marginTop="10" />
-                                        <VideoPlayer src='https://file-examples.com/wp-content/uploads/2017/04/file_example_MP4_480_1_5MG.mp4' ref="player"
+                                        <VideoPlayer :src="item.media" v-if="item.media.slice(-3)=='mp4'" ref="player"
 									controls="true" loop="true" autoplay="true" height="200"
 									marginTop="10" />
                                     </StackLayout>
