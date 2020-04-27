@@ -2,24 +2,19 @@
     <Page class="page">
 
         <ActionBar title="" class="action-bar header">
-            <StackLayout orientation="horizontal" height="38" alignItems="left"
+            <GridLayout columns="*, auto" height="38" 
                 class="actionBarContainer">
-                <StackLayout class="HLeft" style="margin-top:10;" @tap="toggleDrawer">
+                <StackLayout col="0" @tap="toggleDrawer">
                     <Label :text="drawerToggle ? drawer2: drawer1" style="font-size:27;color:#fff;"
                         class="font-awesome" />
                 </StackLayout>
-                <StackLayout class="HMid" alignItems="left">
-                    <TextField placeholderColor="white" id="searchField"
-                        editable="true" hint="      Search" returnKeyType="search"
-                        ios:height="30" ios:marginTop="3"
-                        android:paddingBottom="5" class="searchField font-awesome"
-                        color="#fff" />
+                <StackLayout col="1" orientation="horizontal" alignItems="right" marginRight="10">
+                    <Label text="" style="font-size:30;color:#fff;margin:5 15;"
+                        class="font-awesome" verticalAlignment="center" @tap="$showModal(communityFilter,{ props: { allCommunities: [] } })" />
+                    <Label text="" style="font-size:30;color:#fff;margin:5;"
+                        class="font-awesome" verticalAlignment="center" @tap="createNewPost" />
                 </StackLayout>
-                <StackLayout class="HRight">
-                    <Label text="+" style="font-size:40;color:#fff;" paddingLeft="15%"
-                        class="font-awesome" @tap="createNewPost" />
-                </StackLayout>
-            </StackLayout>
+            </GridLayout>
         </ActionBar>
 
         <RadSideDrawer ref="drawer" @drawerOpened="onDrawerOpened()" @drawerClosed="onDrawerClosed()">
@@ -80,6 +75,7 @@ import { timer } from 'vue-timers'
 import moment from "moment";
 import NewPost from "./NewPost";
 import CommunityPill from "./CommunityPill";
+import CommunityFilter from "./CommunityFilter";
 
 export default {
     name: "Community",
@@ -135,7 +131,9 @@ export default {
             drawerToggle: false,
             drawer1: "",
             drawer2: "",
-            posts: []
+            posts: [],
+            communityFilter: CommunityFilter,
+            communityFilters: []
         };
     },
     methods: {
