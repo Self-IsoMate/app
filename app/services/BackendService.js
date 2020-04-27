@@ -1,8 +1,10 @@
 import axios from "axios";
 const API = "https://self-isomate-api.appspot.com/api/";
 const BUCKET_NAME = "self-isomate-images";
+const BUCKET_NAME_VIDEOS = "self-isomate-videos";
 const BUCKET_PROFILE_PICTURES = "https://storage.googleapis.com/self-isomate-images/profile-pictures/";
 const BUCKET_POST_IMAGES = "https://storage.googleapis.com/self-isomate-images/post-images/";
+const BUCKET_POST_VIDEOS = "https://storage.googleapis.com/self-isomate-videos/post-videos/";
 var bghttp = require("nativescript-background-http");
 import store from "../store/index";
 /**
@@ -508,7 +510,7 @@ export default class BackendService {
         console.log ("name");
         console.log (name);
 
-        var link = BUCKET_POST_IMAGES + name;
+        var link = BUCKET_POST_VIDEOS + name;
 
         console.log ("link");
         console.log (link);
@@ -524,7 +526,7 @@ export default class BackendService {
         console.log (session);
 
         var request = {
-            url: `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=post-images/${name}`,
+            url: `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME_VIDEOS}/o?uploadType=media&name=post-videos/${name}`,
             method: "POST",
             headers: {
                 "Content-Type": `video/${type}`

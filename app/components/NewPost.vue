@@ -294,6 +294,9 @@ export default {
 						this.showImage = false
 						this.showVideo = true;
 						this.selectedVideo = video._android ?? video._ios; //URI for video
+						if(this.selectedVideo.slice(-3)!='mp4'){
+						alert({ title: "Only MP4 format", message: "Only .mp4 videos supported" });
+						}
 						/*console.log("this.selectedVideo");
 						console.log(this.selectedVideo);
 						console.log("this.selectVideo");
