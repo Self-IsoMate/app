@@ -1,4 +1,4 @@
-<template>
+gi<template>
     <Page class="page">
         <ActionBar title="HHHH" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
@@ -94,7 +94,7 @@
                     .then((res) => {
                         var newFormat = moment(String(message.dateSent)).format('HH:mm');
                         if (res && !res.user){
-                            return { ...message, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
+                            return { ...message, username: "🚫deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
                         }
                         return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };
                     }).catch((err) => {
@@ -185,9 +185,6 @@
                                     console.log("result");
                                     console.log(result);
                                     this.conversations = this.conversations.concat(result);
-                                    //var lastEl = (this.conversations.length-2);
-                                    //this.$refs.listView.scrollToIndex(lastEl/2);
-
                                 }
                             }).catch((err) => {
                                 if (err) console.log("err: "+err);
@@ -224,8 +221,7 @@
                             console.log("Error: No Response")
                         }
                     });
-                    //better implementation so all messages send from bottom and push up
-                    //this.scrollDown()
+                //this.scrollDown()- being here it doesn't show messages
 
             },
             scrollDown(){
