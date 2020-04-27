@@ -54,6 +54,9 @@
                                             <Label :text="item.body"
                                                     class="postBody" textWrap="true" />
                                         <Image :src="item.media" marginTop="10" />
+                                        <VideoPlayer :src="item.media" v-if="item.media.slice(-3)=='mp4'" ref="player"
+									controls="true" loop="true" autoplay="true" height="200"
+									marginTop="10" />
                                     </StackLayout>
                                 </StackLayout>
 
@@ -76,6 +79,8 @@ import BackendService from "../services/BackendService";
 import { timer } from 'vue-timers'
 import moment from "moment";
 import NewPost from "./NewPost";
+import  Video  from 'nativescript-videoplayer';
+
 
 export default {
     name: "Community",
@@ -88,7 +93,13 @@ export default {
         var getUserFromPosts = async (post) => {
             return service.getUserfromId(post.userId)
                 .then((res) => {
+                                        console.log("res1");
+                                        console.log(res);
+
                     var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
+                        if (res && !res.user){
+                            return { ...post, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat};
+                        }
                     return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
                 })
                 .catch((err) => {
@@ -134,15 +145,19 @@ export default {
 
             var getUserFromPosts = async (post) => {
                 return service.getUserfromId(post.userId)
-                    .then((res) => {
-                        console.log(post.datePosted);
-                        var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
-                        return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
-                    })
-                    .catch((err) => {
-                        if (err) console.log("err: "+err);
-                    });
-            }
+                   .then((res) => {
+                    var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
+                    console.log("res2");
+                    console.log(res);
+                        if (res && !res.user){
+                            return { ...post, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat};
+                        }
+                    return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
+                })
+                .catch((err) => {
+                    if (err) console.log("err: "+err);
+                });
+        };
 
             var mutatePosts = async (posts) => {
                 return Promise.all(posts.map((post) => getUserFromPosts(post)));//error
