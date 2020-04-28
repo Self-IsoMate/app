@@ -1,4 +1,4 @@
-<template>
+gi<template>
     <Page class="page">
         <ActionBar title="HHHH" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
@@ -94,7 +94,7 @@
                     .then((res) => {
                         var newFormat = moment(String(message.dateSent)).format('HH:mm');
                         if (res && !res.user){
-                            return { ...message, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
+                            return { ...message, username: "🚫deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
                         }
                         return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };
                     }).catch((err) => {
@@ -119,7 +119,6 @@
                             }) 
                     }
                 });
-                    //this.scrollDown();
                     this.$timer.start('log');
 
                
@@ -136,70 +135,65 @@
             };
         },
         methods: {
-                log () {
+            log () {
+                var service = new BackendService();
 
-            var service = new BackendService();
-
-            var getUserFromMessage = async (message) => {
-                return service.getUserfromId(message.userID)
-                              .then((res) => {
-                        var newFormat = moment(String(message.dateSent)).format('HH:mm');
-                        if (res && !res.user){
-                            return { ...message, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
-                        }
-                        return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };
-                    }).catch((err) => {
-                                if (err) console.log("err: "+err);
-                                         });
-            }
-
-            var mutateMessages = async (messages) => {
-                return Promise.all(messages.map((message) => getUserFromMessage(message)));//error
-            }
-
-                     
-            service.getMessagesfromID(this.$props.chatRoom._id)
-                .then((res) => {
-                    if (res) {
-                        var messages = res.messages.filter( e=> {
-                        
-                             
-                            var matchingConvs =  this.conversations.every(
-                                conv => {
-                                    
-                                    return (conv._id != e._id);
-                                    } 
-                                );
-                            return  matchingConvs;
-
-                        });
-                        console.log("messages");
-                        console.log(messages);
-                        // check if id is not already in the list
-                        // if not mutate message
-                        //this.conversation. push (result)
-                        if(messages.length>0){
-                        mutateMessages(messages)
-                            .then((result) => {//it does not run mutate Messages
-                                if(result) {
-                                    console.log("result");
-                                    console.log(result);
-                                    this.conversations = this.conversations.concat(result);
-                                    //var lastEl = (this.conversations.length-2);
-                                    //this.$refs.listView.scrollToIndex(lastEl/2);
-
+                var getUserFromMessage = async (message) => {
+                    return service.getUserfromId(message.userID)
+                    .then((res) => {
+                                var newFormat = moment(String(message.dateSent)).format('HH:mm');
+                                if (res && !res.user){
+                                    return { ...message, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
                                 }
-                            }).catch((err) => {
-                                if (err) console.log("err: "+err);
-                                         })
-                        } 
+                                return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };
+                    }).catch((err) => {
+                                 if (err) console.log("err: "+err);
+                                });
                     }
-                 }).catch((err) => {
-                                if (err) console.log("err: "+err);
-                                         });
 
+                var mutateMessages = async (messages) => {
+                     return Promise.all(messages.map((message) => getUserFromMessage(message)));//error
+                }
 
-},
+                            
+                service.getMessagesfromID(this.$props.chatRoom._id)
+                        .then((res) => {
+                            if (res) {
+                                var messages = res.messages.filter( e=> {
+                                
+                                    
+                                    var matchingConvs =  this.conversations.every(
+                                        conv => {
+                                            
+                                            return (conv._id != e._id);
+                                            } 
+                                        );
+                                    return  matchingConvs;
+
+                                });
+                                console.log("messages");
+                                console.log(messages);
+                                // check if id is not already in the list
+                                // if not mutate message
+                                //this.conversation. push (result)
+                                if(messages.length>0){
+                                mutateMessages(messages)
+                                    .then((result) => {//it does not run mutate Messages
+                                        if(result) {
+                                            console.log("result");
+                                            console.log(result);
+                                            this.conversations = this.conversations.concat(result);
+                                        }
+                                    }).catch((err) => {
+                                        if (err) console.log("err: " + err);
+                                                })
+                                } 
+                            }
+                        }).catch((err) => {
+                            if (err) console.log("err: " + err);
+                        });
+                this.scrollDown();
+            },
             onDrawerClosed() {
                 this.drawerToggle = false;
             },
@@ -216,20 +210,15 @@
 
                         if (response) {
                             this.message = "";
-                            //empty where you write
-                            //               this.creatingMessages();     
-                            //refresh the chat ↑
-
-                        }else{
+                        } else {
                             console.log("Error: No Response")
                         }
                     });
-                    //better implementation so all messages send from bottom and push up
-                    //this.scrollDown()
+                this.scrollDown(); 
 
             },
             scrollDown(){
-                this.$refs.listView.nativeView.scrollToIndex(this.conversations.length - 1);
+                this.$refs.listView.nativeView.scrollToIndex(this.conversations.length);
             }
         }
     };
