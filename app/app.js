@@ -16,6 +16,7 @@ Vue.use(Vuex);
 import { Video } from 'nativescript-videoplayer';
 
 // Vue.config.silent = true;
+Vue.registerElement('AutoFocusView', () => require('./auto-focus-view').AutoFocusView)
 Vue.registerElement("VideoPlayer", () => require('nativescript-videoplayer').Video);
 Vue.registerElement('RadSideDrawer', () => require('nativescript-ui-sidedrawer').RadSideDrawer);
 Vue.registerElement('RadListView ', () => require('nativescript-ui-listview/vue').RadListView);
