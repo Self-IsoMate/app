@@ -9,7 +9,8 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <SearchBar hint="Search" v-model="searchPhrase" @textChange="filter()" />
+                    <AutoFocusView></AutoFocusView>
+                    <SearchBar hint="Search" v-model="searchPhrase" ref="searchBar" @loaded="onSearchBarLoaded($event)" @textChange="filter()" />
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -78,6 +79,14 @@
                 })
         },
         methods: {
+            onSearchBarLoaded: function(event) {
+                if (event.object.android) {
+                    setTimeout(() => {
+                        event.object.dismissSoftInput();
+                        event.object.android.clearFocus();
+                    }, 0);
+                }
+            },
             filter() {
                 this.categories = this.allCategories.filter((h)=>{
                    return h.name.toUpperCase().startsWith(this.searchPhrase.toUpperCase());
