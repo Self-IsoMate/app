@@ -8,7 +8,8 @@
                         class="font-awesome" />
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
-                    <SearchBar hint="Search" v-model="searchPhrase" @textChange="filter()" />
+                    <AutoFocusView></AutoFocusView>
+                    <SearchBar hint="Search" v-model="searchPhrase" @loaded="onSearchBarLoaded($event)" @textChange="filter()" />
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -52,6 +53,14 @@ export default {
 		subcategories: Array
 	},
 	methods: {
+             onSearchBarLoaded: function(event) {
+                if (event.object.android) {
+                    setTimeout(() => {
+                        event.object.dismissSoftInput();
+                        event.object.android.clearFocus();
+                    }, 0);
+                }
+            },
         filter() {
             this.filteredSubcategories = this.$props.subcategories.filter((h)=>{
                 return h.name.toUpperCase().startsWith(this.searchPhrase.toUpperCase());
