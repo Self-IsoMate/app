@@ -4,7 +4,9 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-		user: {}
+		user: {},
+		spamFilterCount: 0,
+		datePosted:null
     },
     mutations: {
 		setUser(state, data) {
