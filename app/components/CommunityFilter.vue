@@ -1,19 +1,22 @@
 <template>
 	<Page>
         <ActionBar title="" class="action-bar header">
-            <GridLayout columns="*, auto" height="38" 
+            <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
-                <StackLayout col="0" @tap="confirmChanges">
-                    <Label text="O" style="font-size:27;color:#fff;" />
+                <StackLayout class="HLeft" style="vertical-align:center;" @tap="chatTap">
+                    <Label text="✓" style="font-size:27;color:#fff;"
+                        class="font-awesome" />
                 </StackLayout>
-                <StackLayout col="1" orientation="horizontal" alignItems="right" marginRight="10">
-                    <Label text="Filter by Communities" />
+                <StackLayout class="HMid" alignItems="left">
+                    <Label text="Filter" style="font-size:20;color:#fff;" />
                 </StackLayout>
-            </GridLayout>
+                <StackLayout class="HRight">
+                </StackLayout>
+            </StackLayout>
         </ActionBar>
         <StackLayout margin="15">
 
-            <SearchBar v-model="filterValue" :text="filterValue" @textChange="filter" />
+            <SearchBar hint="Community name..." v-model="filterValue" :text="filterValue" @textChange="filter" />
 
             <ScrollView>
                 <WrapLayout orientation="horizontal">

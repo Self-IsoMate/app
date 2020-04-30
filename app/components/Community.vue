@@ -4,9 +4,9 @@
         <ActionBar title="" class="action-bar header">
             <GridLayout columns="*, auto" height="38" 
                 class="actionBarContainer">
-                <StackLayout col="0" @tap="toggleDrawer">
+                <StackLayout col="0" @tap="toggleDrawer" style="vertical-alignment:center;" >
                     <Label :text="drawerToggle ? drawer2: drawer1" style="font-size:27;color:#fff;"
-                        class="font-awesome" />
+                        verticalAlignment="center" class="font-awesome" />
                 </StackLayout>
                 <StackLayout col="1" orientation="horizontal" alignItems="right" marginRight="10">
                     <Label text="" style="font-size:30;color:#fff;margin:5 15;"
