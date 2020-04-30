@@ -84,7 +84,7 @@ gi<template>
         props: ['chatRoom'],
         timers: {
               log: { time: 4000, autostart: true, repeat: true },
-              spamFilterTimer: { time: 9000, autostart: true, repeat: true }
+              spamFilterTimer: { time: 10000, autostart: true, repeat: true }
 
         },
       created() {
@@ -211,7 +211,7 @@ gi<template>
                 this.$refs.drawer.nativeView.toggleDrawerState();
             },
             sendTap(events){
-                if(this.$store.state.spamFilterCount<5){
+                if(this.$store.state.spamFilterCount<4){
                     if(this.message.trim().length>=1){
                     var service = new BackendService();
                     service.saveMessage(this.$store.state.user._id,this.$props.chatRoom._id,this.message )
