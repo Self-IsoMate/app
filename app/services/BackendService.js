@@ -1,8 +1,10 @@
 import axios from "axios";
 const API = "https://self-isomate-api.appspot.com/api/";
 const BUCKET_NAME = "self-isomate-images";
+const BUCKET_NAME_VIDEOS = "self-isomate-videos";
 const BUCKET_PROFILE_PICTURES = "https://storage.googleapis.com/self-isomate-images/profile-pictures/";
 const BUCKET_POST_IMAGES = "https://storage.googleapis.com/self-isomate-images/post-images/";
+const BUCKET_POST_VIDEOS = "https://storage.googleapis.com/self-isomate-videos/post-videos/";
 var bghttp = require("nativescript-background-http");
 import store from "../store/index";
 /**
@@ -441,6 +443,10 @@ export default class BackendService {
         // checking if image uses android or apple file system uri
         var imageUri = null;
 
+        console.log ("image");
+        console.log (image);
+
+
         imageUri = image._android ?? image._ios;
 
         if (!imageUri) {
@@ -448,15 +454,33 @@ export default class BackendService {
             return;
         }
 
+        console.log ("imageUri");
+        console.log (imageUri);
+
         var imgArr = imageUri.split('/');
+
+        console.log ("imgArr");
+        console.log (imgArr);
 
         var name = imgArr.pop();
 
+        console.log ("name");
+        console.log (name);
+
         var link = BUCKET_POST_IMAGES + name;
+
+        console.log ("link");
+        console.log (link);
 
         var type = name.split('.').pop();
 
+        console.log ("type");
+        console.log (type);
+        
         var session = bghttp.session("image-upload");
+
+        console.log ("session");
+        console.log (session);
 
         var request = {
             url: `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME}/o?uploadType=media&name=post-images/${name}`,
@@ -466,7 +490,53 @@ export default class BackendService {
             }
         };
 
+        console.log ("request");
+        console.log (request);
+
         return { task: session.uploadFile(imageUri, request), link: link };
+    }
+
+    uploadPostVideo (video) { //TODO
+        console.log ("video");
+        console.log (video);
+
+        var videoArr = video.split('/');
+
+        console.log ("videoArr");
+        console.log (videoArr);
+
+        var name = videoArr.pop();
+
+        console.log ("name");
+        console.log (name);
+
+        var link = BUCKET_POST_VIDEOS + name;
+
+        console.log ("link");
+        console.log (link);
+
+        var type = name.split('.').pop();
+
+        console.log ("type");
+        console.log (type);
+
+        var session = bghttp.session("video-upload");
+
+        console.log ("session");
+        console.log (session);
+
+        var request = {
+            url: `https://storage.googleapis.com/upload/storage/v1/b/${BUCKET_NAME_VIDEOS}/o?uploadType=media&name=post-videos/${name}`,
+            method: "POST",
+            headers: {
+                "Content-Type": `video/${type}`
+            }
+        };
+
+        console.log ("request");
+        console.log (request);
+
+        return { task: session.uploadFile(video, request), link: link };
     }
 
     async giveImageLink(e, image) {
