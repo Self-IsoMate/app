@@ -2,13 +2,17 @@
     <Page class="page">
 
         <ActionBar title="" class="action-bar header">
-            <GridLayout columns="*, auto" height="38" 
+            <GridLayout columns="auto, *, auto" height="38" 
                 class="actionBarContainer">
                 <StackLayout col="0" @tap="toggleDrawer" style="vertical-alignment:center;" >
                     <Label :text="drawerToggle ? drawer2: drawer1" style="font-size:27;color:#fff;"
                         verticalAlignment="center" class="font-awesome" />
                 </StackLayout>
-                <StackLayout col="1" orientation="horizontal" alignItems="right" marginRight="10">
+                <StackLayout col="1" orientation="horizontal" alignItems="center">
+                    <Label text="Your Feed" class="title"
+                        verticalAlignment="center" />
+                </StackLayout>
+                <StackLayout col="2" orientation="horizontal" alignItems="right" marginRight="10">
                     <Label text="" style="font-size:30;color:#fff;margin:5 15;"
                         class="font-awesome" verticalAlignment="center" @tap="showFilterModal" />
                     <Label text="" style="font-size:30;color:#fff;margin:5;"
@@ -244,6 +248,13 @@ export default {
     border-radius: 50%;
     margin: 1;
     font-size: 10;
+}
+
+.title {
+    color: white;
+    font-size: 20;
+    font-weight: bold;
+    margin: 0 15;
 }
 
 </style>

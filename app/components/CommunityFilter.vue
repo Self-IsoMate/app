@@ -3,12 +3,12 @@
         <ActionBar title="" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
-                <StackLayout class="HLeft" style="vertical-align:center;" @tap="chatTap">
+                <StackLayout class="HLeft" style="vertical-align:center;" @tap="confirmChanges">
                     <Label text="✓" style="font-size:27;color:#fff;"
                         class="font-awesome" />
                 </StackLayout>
-                <StackLayout class="HMid" alignItems="left">
-                    <Label text="Filter" style="font-size:20;color:#fff;" />
+                <StackLayout class="HMid" alignItems="left" style="vertical-align:center;">
+                    <Label text="Filter" class="title" />
                 </StackLayout>
                 <StackLayout class="HRight">
                 </StackLayout>
@@ -79,5 +79,12 @@ export default {
 <style scoped>
 .selected {
     background-color: green;
+}
+
+.title {
+    color: white;
+    font-size: 20;
+    font-weight: bold;
+    margin: 0 15;
 }
 </style>
