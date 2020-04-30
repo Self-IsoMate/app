@@ -10,7 +10,7 @@
                 </StackLayout>
                 <StackLayout col="1" orientation="horizontal" alignItems="right" marginRight="10">
                     <Label text="" style="font-size:30;color:#fff;margin:5 15;"
-                        class="font-awesome" verticalAlignment="center" @tap="$showModal(communityFilter,{ props: { allCommunities: [] } })" />
+                        class="font-awesome" verticalAlignment="center" @tap="showFilterModal" />
                     <Label text="" style="font-size:30;color:#fff;margin:5;"
                         class="font-awesome" verticalAlignment="center" @tap="createNewPost" />
                 </StackLayout>
@@ -82,6 +82,9 @@ export default {
     timers: {
         log: { time: 4000, autostart: true, repeat: true }
     },
+    props: {
+        communities: Array
+    },
     components: {
         CommunityPill
     },
@@ -114,7 +117,13 @@ export default {
                         .then((result) => {
                             //console.log("result");
                             //console.log(result);
-                            this.posts = result;
+                            if (!this.$props.communities) {
+                                this.posts = result;
+                            } else {
+                                // filter posts by communities
+                                console.log(this.$props.communities);
+                                this.posts = result.filter(post => post.communities.some(c => this.$props.communities.some(pc => pc._id == c)));
+                            }
                         })
                         .catch((err) => {
                             if (err) console.log("err: "+err);
@@ -122,6 +131,17 @@ export default {
                 }
                 this.$timer.start('log');
             });
+
+        service.getCommunities(this.$store.state.user.communities)
+            .then((res) => {
+                if (res) {
+                    console.log(res);
+                    this.allCommunities = [... res.communities];
+                }
+            })
+            .catch((err) => {
+                this.$alert({ message: "Error retrieving communities - filtering may not work as expected." })
+            })
     },
     beforeDestroy () {
         clearInterval(this.$options.interval)
@@ -133,7 +153,8 @@ export default {
             drawer2: "",
             posts: [],
             communityFilter: CommunityFilter,
-            communityFilters: []
+            communityFilters: [],
+            allCommunities: []
         };
     },
     methods: {
@@ -171,7 +192,12 @@ export default {
                                 .then((result) => {
                                     if (result) {
                                         console.log(result);
-                                        this.posts = [ ...result, ... this.posts];
+                                        if (!this.$props.communities) {
+                                            this.posts = [ ...result, ... this.posts];
+                                        } else {
+                                            var r = result.filter(post => post.communities.some(c => this.$props.communities.some(pc => pc._id == c)));
+                                            this.posts = [ ...r, ...this.posts];
+                                        }
                                     }
                                 })
                                 .catch((err) => {
@@ -193,6 +219,13 @@ export default {
         },
         createNewPost() {
             this.$navigateTo(NewPost);
+        },
+        showFilterModal() {
+            if (this.$props.communities && this.$props.communities.length > 0) {
+                this.$navigateTo(CommunityFilter, { props: { allCommunities: this.allCommunities, preSelectedCommunities: this.$props.communities} });
+            } else {
+                this.$navigateTo(CommunityFilter, { props: { allCommunities: this.allCommunities } });
+            }
         }
     }
 }
