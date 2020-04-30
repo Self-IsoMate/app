@@ -374,7 +374,7 @@ export default class BackendService {
 
     async getChatroomIds(userId) {
       
-        return axios.get(`${API}users/${userId}/chatrooms`) 
+        return axios.get(`${API}users/${userId}/chatrooms`)
         .then((res) => {
             return { chatrooms: res.data.chatrooms }; // return { chatroom: res.data };
 
@@ -542,6 +542,44 @@ export default class BackendService {
     async giveImageLink(e, image) {
         console.log("returning image?")
         return { success: true, image: image }
+    }
+
+    async getFeed(userId) {
+        return axios.get(`${API}/feed/${userId}`)
+            .then((res) => {
+                if (res && res.data.success) {
+                    return { success: true, posts: res.data.feed };
+                }
+
+                if (res && !res.data.success) {
+                    console.log(res);
+                    return { success: false, message: res.data.message }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    console.log(err);
+                    return { success: false, message: err };
+                }
+            })
+    }
+
+    async getCommunity(communityId) {
+        return axios.get(`${API}/communities/${communityId}`)
+            .then((res) => {
+                if (res) {
+                    if (res.data.success) {
+                        return { success: true, community: res.data.community };
+                    } else {
+                        return { success: false, message: res.data.message };
+                    }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err.toString() };
+                }
+            })
     }
 
 }
