@@ -83,7 +83,9 @@ gi<template>
     export default {
         props: ['chatRoom'],
         timers: {
-              log: { time: 4000, autostart: true, repeat: true }
+              log: { time: 4000, autostart: true, repeat: true },
+              spamFilterTimer: { time: 9000, autostart: true, repeat: true }
+
         },
       created() {
 
@@ -120,6 +122,8 @@ gi<template>
                     }
                 });
                     this.$timer.start('log');
+                    this.$timer.start('spamFilterTimer');
+
 
                
         },
@@ -135,6 +139,9 @@ gi<template>
             };
         },
         methods: {
+            spamFilterTimer(){
+                this.$store.state.spamFilterCount=0;
+            },
             log () {
                 var service = new BackendService();
 
@@ -204,18 +211,23 @@ gi<template>
                 this.$refs.drawer.nativeView.toggleDrawerState();
             },
             sendTap(events){
-                var service = new BackendService();
-                service.saveMessage(this.$store.state.user._id,this.$props.chatRoom._id,this.message )
-                    .then((response) => {
-
-                        if (response) {
-                            this.message = "";
-                        } else {
-                            console.log("Error: No Response")
-                        }
-                    });
-                this.scrollDown(); 
-
+                if(this.$store.state.spamFilterCount<5){
+                    if(this.message.trim().length>=1){
+                    var service = new BackendService();
+                    service.saveMessage(this.$store.state.user._id,this.$props.chatRoom._id,this.message )
+                        .then((response) => {
+                            if (response) {
+                                this.$store.state.spamFilterCount+=1;
+                                this.message = "";
+                            } else {
+                                console.log("Error: No Response")
+                            }
+                        });
+                    this.scrollDown(); 
+                    }
+                }else{
+                    alert({ title: "Spam detected", message: "Please wait before sending another message", okButtonText: "OK"  });
+                }
             },
             scrollDown(){
                 this.$refs.listView.nativeView.scrollToIndex(this.conversations.length);

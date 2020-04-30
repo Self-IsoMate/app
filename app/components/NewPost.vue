@@ -125,6 +125,7 @@ export default {
 				})
 		}
 	},
+
 	methods: {
 		uploadPost(post) {
 			post.userId = this.currentUser._id;
@@ -135,6 +136,9 @@ export default {
 			this.service.addPost(post)
 				.then((res) => {
 					if (res && res.success) {
+						this.$store.state.datePosted=Date.parse(res.post.datePosted);
+						console.log("salva la data")
+						console.log(this.$store.state.datePosted);
 						alert({ title: "Added post", message: "Successfully added post!" })
 							.then((res) => {
 								this.$navigateBack();
@@ -150,80 +154,93 @@ export default {
 					}
 				})
 		},
+		checkedSpam(){
+		if (this.selectedImage) {
+							alert({ title: "Please wait", message: "Uploading your image & adding your post. Please wait." });
 
+							var taskInfo = this.service.uploadPostImage(this.selectedImage);
+
+							if (taskInfo) {
+
+								console.log(taskInfo);
+								
+
+								var task = taskInfo.task;
+								
+								console.log(taskInfo.task);
+
+								var link = taskInfo.link;
+
+								console.log(taskInfo.link);
+
+								task.on("error", (err) => {
+									if (err) {
+										console.log(err);
+										alert({ title: "Error", message: err });
+									}
+								});
+
+								task.on("complete", (e) => {
+									if (e) {
+										console.log("got response");
+										console.log(e);
+										this.post.media = link;
+										this.uploadPost(this.post);
+									}
+								})
+							}
+
+						} else if (this.selectedVideo) {
+							alert({ title: "Please wait", message: "Uploading your video & adding your post. Please wait." });
+
+							var taskInfo = this.service.uploadPostVideo(this.selectedVideo);// for video
+
+							if (taskInfo) {
+
+										console.log(taskInfo);
+								
+
+								var task = taskInfo.task;
+								
+								console.log(taskInfo.task);
+
+								var link = taskInfo.link;
+
+								console.log(taskInfo.link);
+
+								task.on("error", (err) => {
+									if (err) {
+										console.log(err);
+										alert({ title: "Error", message: err });
+									}
+								});
+
+								task.on("complete", (e) => {
+									if (e) {
+										console.log("got response");
+										console.log(e);
+										this.post.media = link;
+										this.uploadPost(this.post);
+									}
+								})
+							}
+
+						}else {
+							this.uploadPost(this.post);
+						}
+		},
 		addPost (event) {
-			if (this.selectedImage) {
-				alert({ title: "Please wait", message: "Uploading your image & adding your post. Please wait." });
-
-				var taskInfo = this.service.uploadPostImage(this.selectedImage);
-
-				if (taskInfo) {
-
-					console.log(taskInfo);
-					
-
-					var task = taskInfo.task;
-					
-					console.log(taskInfo.task);
-
-					var link = taskInfo.link;
-
-					console.log(taskInfo.link);
-
-					task.on("error", (err) => {
-						if (err) {
-							console.log(err);
-							alert({ title: "Error", message: err });
-						}
-					});
-
-					task.on("complete", (e) => {
-						if (e) {
-							console.log("got response");
-							console.log(e);
-							this.post.media = link;
-							this.uploadPost(this.post);
-						}
-					})
-				}
-
-			} else if (this.selectedVideo) {
-				alert({ title: "Please wait", message: "Uploading your video & adding your post. Please wait." });
-
-				var taskInfo = this.service.uploadPostVideo(this.selectedVideo);// for video
-
-				if (taskInfo) {
-
-							console.log(taskInfo);
-					
-
-					var task = taskInfo.task;
-					
-					console.log(taskInfo.task);
-
-					var link = taskInfo.link;
-
-					console.log(taskInfo.link);
-
-					task.on("error", (err) => {
-						if (err) {
-							console.log(err);
-							alert({ title: "Error", message: err });
-						}
-					});
-
-					task.on("complete", (e) => {
-						if (e) {
-							console.log("got response");
-							console.log(e);
-							this.post.media = link;
-							this.uploadPost(this.post);
-						}
-					})
-				}
-
-			}else {
-				//this.uploadPost(this.post);
+			var today = new Date();
+			if(this.$store.state.datePosted){
+					var diffMs = (today - this.$store.state.datePosted); 
+					var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes*/
+					if(diffMins>=4){
+						this.checkedSpam();
+					}else{
+						alert({ title: "Spam detected", message: "Please wait before adding another post", okButtonText: "OK"  });
+					}
+			}else{
+				this.checkedSpam();
 			}
 		},
 		toggleCommunity (param) {
