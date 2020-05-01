@@ -50,7 +50,7 @@ export default {
                             this.$store.commit("setUser", { user: response.user });
 							this.$navigateTo(Home,  {
 								animated: false,
-								clearHistory: true
+								//clearHistory: true
 							});
                         }
 

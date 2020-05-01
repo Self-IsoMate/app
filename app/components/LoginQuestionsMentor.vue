@@ -56,7 +56,7 @@ export default {
 							isMentor: this.checkYes
 						}
 					},
-					clearHistory: true
+					//clearHistory: true
 				});
 			} else {
 				// register

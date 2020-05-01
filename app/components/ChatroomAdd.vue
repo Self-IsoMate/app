@@ -104,7 +104,7 @@
             chatTap() {
                 this.$navigateTo(Chat, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             }
         },

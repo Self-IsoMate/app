@@ -88,7 +88,7 @@ export default {
 					if (response.success)
 						this.$navigateTo(Home,  {
 							animated: false,
-							clearHistory: true
+							//clearHistory: true
 						});
 					else
 						console.log("you failed, you loser");

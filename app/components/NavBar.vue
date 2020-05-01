@@ -48,25 +48,25 @@ export default {
 		homeTap() {
 			this.$navigateTo(Home, {
 				animated: false,
-				clearHistory: true
+				//clearHistory: true
 			});
 		},
 		communityTap() {
 			this.$navigateTo(Community, {
 				animated: false,
-				clearHistory: true
+				//clearHistory: true
 			});
 		},
 		chatTap() {
 			this.$navigateTo(Chat, {
 				animated: false,
-				clearHistory: true
+				//clearHistory: true
 			});
 		},
 		competitionTap() {
 			this.$navigateTo(Competitions, {
 				animated: false,
-				clearHistory: true
+				//clearHistory: true
 			});
 		},
 		isSelected(tabName) {

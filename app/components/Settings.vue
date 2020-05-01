@@ -172,7 +172,7 @@
                                 alert({ title: "Deleted", message: "Your account has been successfully deleted" })
                                     .then((res) => {
                                         this.$navigateTo(LoginMain, {
-                                            clearHistory: true, 
+                                            //clearHistory: true, 
                                             animated: false
                                         });
                                     });

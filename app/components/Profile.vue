@@ -171,45 +171,45 @@
             homeTap() {
                 this.$navigateTo(Home, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             },
             communityTap() {},
             chatTap() {
                 this.$navigateTo(Chat, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             },
             competitionTap() {
                 this.$navigateTo(Competitions, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             },
             profileTap() {},
             notificationTap() {
                 this.$navigateTo(Notifications, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             },
             settingsTap() {
                 this.$navigateTo(Settings, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             },
             helpTap(){
                 this.$navigateTo(Help, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             },
             logOut(){
                 this.$navigateTo(LoginScreen, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             },
             showDetails() {},

@@ -109,55 +109,55 @@
             homeTap() {
                 this.$navigateTo(Home, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             },
             communityTap() {
                 this.$navigateTo(Community, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             },
             chatTap() {
                 this.$navigateTo(Chat, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             },
             competitionTap() {
                 this.$navigateTo(Competitions, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             },
             profileTap() {
                 this.$navigateTo(Profile, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             },
             notificationTap() {
                 this.$navigateTo(Notifications, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             },
             settingsTap() {
                 this.$navigateTo(Settings, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             },
             helpTap(){
                 this.$navigateTo(Help, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             },
             logOut(){
                 this.$navigateTo(LoginScreen, {
                     animated: false,
-                    clearHistory: true
+                    //clearHistory: true
                 });
             }, //put in here navigate to log-in screen
             showDetails() {}
