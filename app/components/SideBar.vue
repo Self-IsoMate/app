@@ -41,6 +41,7 @@ export default {
                 this.$navigateTo(Help);
             },
             logOut(){
+				this.$store.commit("clearUser");
                 this.$navigateTo(LoginScreen);
             }
 	}
