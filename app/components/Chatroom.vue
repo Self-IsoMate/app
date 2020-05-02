@@ -87,8 +87,7 @@ gi<template>
               spamFilterTimer: { time: 10000, autostart: true, repeat: true }
 
         },
-      created() {
-
+        created() {
             var service = new BackendService();
 
             var getUserFromMessage = async (message) => {
@@ -99,16 +98,17 @@ gi<template>
                             return { ...message, username: "🚫deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
                         }
                         return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };
-                    }).catch((err) => {
-                                if (err) console.log("err: "+err);
-                                         });
+                    })
+                    .catch((err) => {
+                        if (err) console.log("err: "+err);
+                    });
             }
 
             var mutateMessages = async (messages) => {
                 return Promise.all(messages.map((message) => getUserFromMessage(message)));//error
             }
 
-                     
+                        
             service.getMessagesfromID(this.$props.chatRoom._id)
                 .then((res) => {
                     if (res) {
@@ -121,15 +121,13 @@ gi<template>
                             }) 
                     }
                 });
-                    this.$timer.start('log');
-                    this.$timer.start('spamFilterTimer');
 
-
-               
+            this.$timer.start('log');
+            this.$timer.start('spamFilterTimer');       
         },
-          beforeDestroy () {
-    clearInterval(this.$options.interval)
-  }, 
+        beforeDestroy () {
+            clearInterval(this.$options.interval)
+        }, 
         data() {
             return {
                 back:"",
@@ -147,58 +145,54 @@ gi<template>
 
                 var getUserFromMessage = async (message) => {
                     return service.getUserfromId(message.userID)
-                    .then((res) => {
-                                var newFormat = moment(String(message.dateSent)).format('HH:mm');
-                                if (res && !res.user){
-                                    return { ...message, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
-                                }
-                                return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };
-                    }).catch((err) => {
-                                 if (err) console.log("err: "+err);
-                                });
-                    }
+                        .then((res) => {
+                            var newFormat = moment(String(message.dateSent)).format('HH:mm');
+                            if (res && !res.user){
+                                return { ...message, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
+                            }
+                            return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };
+                        })
+                        .catch((err) => {
+                            if (err) console.log("err: "+err);
+                        });
+                }
 
                 var mutateMessages = async (messages) => {
                      return Promise.all(messages.map((message) => getUserFromMessage(message)));//error
                 }
-
-                            
+        
                 service.getMessagesfromID(this.$props.chatRoom._id)
-                        .then((res) => {
-                            if (res) {
-                                var messages = res.messages.filter( e=> {
-                                
-                                    
-                                    var matchingConvs =  this.conversations.every(
-                                        conv => {
-                                            
-                                            return (conv._id != e._id);
-                                            } 
-                                        );
-                                    return  matchingConvs;
-
+                    .then((res) => {
+                        if (res) {
+                            var messages = res.messages.filter( e=> {
+                                var matchingConvs =  this.conversations.every(conv => {
+                                    return conv._id != e._id;
                                 });
-                                console.log("messages");
-                                console.log(messages);
-                                // check if id is not already in the list
-                                // if not mutate message
-                                //this.conversation. push (result)
-                                if(messages.length>0){
-                                mutateMessages(messages)
-                                    .then((result) => {//it does not run mutate Messages
-                                        if(result) {
-                                            console.log("result");
-                                            console.log(result);
-                                            this.conversations = this.conversations.concat(result);
-                                        }
-                                    }).catch((err) => {
-                                        if (err) console.log("err: " + err);
-                                                })
-                                } 
-                            }
-                        }).catch((err) => {
-                            if (err) console.log("err: " + err);
-                        });
+                                return matchingConvs;
+                            });
+                            console.log("messages");
+                            console.log(messages);
+                            // check if id is not already in the list
+                            // if not mutate message
+                            //this.conversation. push (result)
+                            if(messages.length > 0){
+                            mutateMessages(messages)
+                                .then((result) => {//it does not run mutate Messages
+                                    if(result) {
+                                        console.log("result");
+                                        console.log(result);
+                                        this.conversations = this.conversations.concat(result);
+                                    }
+                                })
+                                .catch((err) => {
+                                    if (err) console.log("err: " + err);
+                                })
+                            } 
+                        }
+                    })
+                    .catch((err) => {
+                        if (err) console.log("err: " + err);
+                    });
                 this.scrollDown();
             },
             onDrawerClosed() {
@@ -211,21 +205,19 @@ gi<template>
                 this.$refs.drawer.nativeView.toggleDrawerState();
             },
             sendTap(events){
-                if(this.$store.state.spamFilterCount<4){
-                    if(this.message.trim().length>=1){
-                    var service = new BackendService();
-                    service.saveMessage(this.$store.state.user._id,this.$props.chatRoom._id,this.message )
-                        .then((response) => {
-                            if (response) {
-                                this.$store.state.spamFilterCount+=1;
-                                this.message = "";
-                            } else {
-                                console.log("Error: No Response")
-                            }
-                        });
-                    this.scrollDown(); 
+                if(this.$store.state.spamFilterCount<4) {
+                    if (this.message.trim().length >= 1) {
+                        var service = new BackendService();
+                        service.saveMessage(this.$store.state.user._id,this.$props.chatRoom._id,this.message)
+                            .then((response) => {
+                                if (response) {
+                                    this.$store.state.spamFilterCount += 1;
+                                    this.message = "";
+                                }
+                            });
+                        this.scrollDown(); 
                     }
-                }else{
+                } else {
                     alert({ title: "Spam detected", message: "Please wait before sending another message", okButtonText: "OK"  });
                 }
             },

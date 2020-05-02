@@ -53,6 +53,10 @@ export default {
 
 					this.$store.commit("setUser", { user: response.user });
 
+					if (!response.user.isVerified) {
+						alert({ message: 'You have not verified your email 🤢 You won\'t be able to post or chat in the meantime' });
+					}
+
 				} else {
 					this.message = "Login failed";
 				}

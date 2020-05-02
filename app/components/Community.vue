@@ -187,7 +187,7 @@ export default {
                 .catch((err) => {
                     if (err) console.log("err: "+err);
                 });
-        };
+            };
 
             var mutatePosts = async (posts) => {
                 return Promise.all(posts.map((post) => getUserFromPosts(post)));//error
@@ -234,7 +234,11 @@ export default {
             this.$refs.drawer.nativeView.toggleDrawerState();
         },
         createNewPost() {
-            this.$navigateTo(NewPost);
+            if (this.$store.state.user.isVerified) {
+                this.$navigateTo(NewPost);
+            } else {
+                alert({ title: 'Please verify your email', message: 'Please verify your email before you try and post next time 🤢🤮🤮' });
+            }
         },
         showFilterModal() {
             if (this.$props.communities && this.$props.communities.length > 0) {
