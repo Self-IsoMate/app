@@ -34,10 +34,10 @@ export default {
 	},
 	methods: {
 		navigateRegister(event) {
-			this.$navigateTo(Register);
+			this.$navigateTo(Register, {clearHistory: true});
 		},
 		navigateForgot(event) {
-			this.$navigateTo(Forgot);
+			this.$navigateTo(Forgot, {clearHistory: true});
 		},
 		handleLogin(event) {
 			var service = new BackendService();
@@ -46,7 +46,7 @@ export default {
 				if (response && response.success) {
 					this.$navigateTo(Home,{
 							animated: false,
-							//clearHistory: true
+							clearHistory: true
 						});
 
 					console.log(response);
@@ -63,7 +63,7 @@ export default {
 			this.$navigateTo(Home,
 			{
 				animated: false,
-				//clearHistory: true
+				clearHistory: true
 			});
 		}
 	}
