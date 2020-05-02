@@ -34,10 +34,10 @@ export default {
 	},
 	methods: {
 		navigateRegister(event) {
-			this.$navigateTo(Register, {clearHistory: true});
+			this.$navigateTo(Register);
 		},
 		navigateForgot(event) {
-			this.$navigateTo(Forgot, {clearHistory: true});
+			this.$navigateTo(Forgot);
 		},
 		handleLogin(event) {
 			var service = new BackendService();
