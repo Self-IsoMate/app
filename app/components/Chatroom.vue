@@ -49,7 +49,7 @@ gi<template>
                         <StackLayout orientation="horizontal">
                             <StackLayout class="textItem">
                             <TextView v-model="message" placeholderColor="black" 
-                                editable="true" hint="Say Something" returnKeyType="send"
+                                :editable="isUserVerified" @tap="alertMessage" hint="Say Something" returnKeyType="send"
                                 ios:height="30" ios:marginTop="3" 
                                 android:paddingBottom="5" class="searchField font-awesome" textWrap="true"
                                 color="#000000" :text="message" />
@@ -205,24 +205,37 @@ gi<template>
                 this.$refs.drawer.nativeView.toggleDrawerState();
             },
             sendTap(events){
-                if(this.$store.state.spamFilterCount<4) {
-                    if (this.message.trim().length >= 1) {
-                        var service = new BackendService();
-                        service.saveMessage(this.$store.state.user._id,this.$props.chatRoom._id,this.message)
-                            .then((response) => {
-                                if (response) {
-                                    this.$store.state.spamFilterCount += 1;
-                                    this.message = "";
-                                }
-                            });
-                        this.scrollDown(); 
+                if (this.isUserVerified()) {
+                    if(this.$store.state.spamFilterCount<4) {
+                        if (this.message.trim().length >= 1) {
+                            var service = new BackendService();
+                            service.saveMessage(this.$store.state.user._id,this.$props.chatRoom._id,this.message)
+                                .then((response) => {
+                                    if (response) {
+                                        this.$store.state.spamFilterCount += 1;
+                                        this.message = "";
+                                    }
+                                });
+                            this.scrollDown(); 
+                        }
+                    } else {
+                        alert({ title: "Spam detected", message: "Please wait before sending another message", okButtonText: "OK"  });
                     }
                 } else {
-                    alert({ title: "Spam detected", message: "Please wait before sending another message", okButtonText: "OK"  });
+                    alert({ title: 'Please verify your email', message: 'Oh my GOD!! WHY won\'t you just TAKE A HINT 🙄 VERIFY YOUR EMAIL' })
                 }
             },
             scrollDown(){
                 this.$refs.listView.nativeView.scrollToIndex(this.conversations.length);
+            },
+            isUserVerified () {
+                return this.$store.state.user.isVerified;
+            },
+            alertMessage () {
+                // If user isn't verified and tries to click on the messagebox, then display a message
+                if (!this.isUserVerified()) {
+                    alert({ title: 'Please verify your email', message: 'Ewwww did you just try to chat without first verifying your email??? 🤮' })
+                }
             }
         }
     };
