@@ -582,4 +582,40 @@ export default class BackendService {
             })
     }
 
+    async ResendVerification(email) {
+        return axios.post(`${API}/verify`, { email: email })
+            .then((res) => {
+                if (res) {
+                    if (res.data.success) {
+                        return { success: true }
+                    } else {
+                        return { success: false, message: res.data.message }
+                    }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err.toString() };
+                }
+            })
+    }
+
+    async RefreshUser(userId) {
+        return axios.get(`${API}/users?_id=${userId}`)
+            .then((res) => {
+                if (res) {
+                    if (res.data.success) {
+                        return { success: true, user: res.data.users[0] }
+                    } else {
+                        return { success: false, message: res.data.message }
+                    }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err.toString() };
+                }
+            })
+    }
+
 }

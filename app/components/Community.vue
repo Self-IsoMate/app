@@ -100,6 +100,9 @@ export default {
     created() {
         var service = new BackendService();
 
+        // Refreshing user account for email verification
+        this.refreshUser();
+
         var getUserFromPosts = async (post) => {
             return service.getUserfromId(post.userId)
                 .then((res) => {
@@ -173,6 +176,9 @@ export default {
         log() {
             var service = new BackendService();
 
+            // Refreshing user account for email verification
+            this.refreshUser();
+
             var getUserFromPosts = async (post) => {
                 return service.getUserfromId(post.userId)
                    .then((res) => {
@@ -187,7 +193,7 @@ export default {
                 .catch((err) => {
                     if (err) console.log("err: "+err);
                 });
-        };
+            };
 
             var mutatePosts = async (posts) => {
                 return Promise.all(posts.map((post) => getUserFromPosts(post)));//error
@@ -234,7 +240,38 @@ export default {
             this.$refs.drawer.nativeView.toggleDrawerState();
         },
         createNewPost() {
-            this.$navigateTo(NewPost);
+            if (this.$store.state.user.isVerified) {
+                this.$navigateTo(NewPost);
+            } else {
+                confirm({ 
+							title: 'Please verify your email',
+							message: 'Make sure you check your spam folder.',
+							cancelButtonText: 'Cancel',
+							okButtonText: 'Resend Verification'
+                        })
+                        .then((result) => {
+							if (result) {
+								console.log("Resending");
+								service.ResendVerification(response.user.email)
+									.then((res) => {
+										if (res && res.success) {
+											alert({ title: 'Success', message: 'Successfully resent verification' })
+										}
+
+										if (res && !res.success) {
+											alert({ title: 'Error', message: 'Unsuccessful'})
+											console.log(res.message);
+										}
+									})
+									.catch((err) => {
+										if (err) {
+											console.log(err);
+											alert({ title: 'Error', message: 'Unsuccessful' })
+										}
+                                    })
+                            }
+                        })
+            }
         },
         showFilterModal() {
             if (this.$props.communities && this.$props.communities.length > 0) {
@@ -242,7 +279,28 @@ export default {
             } else {
                 this.$navigateTo(CommunityFilter, { props: { allCommunities: this.allCommunities } });
             }
-        }
+        },
+        refreshUser () {
+            var service = new BackendService();
+            if (this.$store.state.user) {
+                service.RefreshUser(this.$store.state.user._id)
+                    .then((res) => {
+                        if (res && res.success) {
+                            this.$store.commit("setUser", { user: res.user });
+                        }
+
+                        if (res && !res.success) {
+                            console.log("couldn't refresh user");
+                            console.log(res.message);
+                        }
+                    })
+                    .catch((err) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    })
+            }
+        },
     }
 }
 </script>
