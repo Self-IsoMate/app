@@ -66,8 +66,8 @@
             service.getCategories()
                 .then((res) => {
                     if (res) {
-                        console.log("this is the response");
-                        console.log(res.categories);
+                        /*console.log("this is the response");
+                        console.log(res.categories);*/
                         this.allCategories = res.categories;
                         this.categories = Array.from(this.allCategories);
                     }

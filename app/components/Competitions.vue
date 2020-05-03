@@ -163,6 +163,7 @@
                 });
             },
             logOut(){
+                this.$store.commit("clearUser");
                 this.$navigateTo(LoginScreen, {
                     animated: false,
                     //clearHistory: true
