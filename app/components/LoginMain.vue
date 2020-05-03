@@ -1,5 +1,5 @@
-<template lang="html">
-    <Page>
+fcommit<template lang="html">
+    <Page  @loaded="checkToken()">
 		<ActionBar title="Self-IsoMate" class="action-bar header"/>
 		<ScrollView>
 			<StackLayout margin="50 50 50 50">
@@ -33,6 +33,15 @@ export default {
         };
 	},
 	methods: {
+		checkToken() {
+		this.$store.commit("loadFromStorage");
+		if(this.$store.state.user) {
+			this.$navigateTo(Home,{
+							animated: false,
+							clearHistory: true
+						});
+		}
+		},
 		navigateRegister(event) {
 			this.$navigateTo(Register);
 		},
@@ -42,16 +51,18 @@ export default {
 		handleLogin(event) {
 			var service = new BackendService();
 			service.login(this.username, this.password).then((response) => {
-				console.log(response);
+				//console.log(response);
 				if (response && response.success) {
 					this.$navigateTo(Home,{
 							animated: false,
 							clearHistory: true
 						});
 
-					console.log(response);
+					/*console.log("response.user to store");
+					console.log(response.user);*/
 
 					this.$store.commit("setUser", { user: response.user });
+
 
 				} else {
 					this.message = "Login failed";
