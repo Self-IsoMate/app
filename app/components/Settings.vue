@@ -171,6 +171,7 @@
                             if (res.success) {
                                 alert({ title: "Deleted", message: "Your account has been successfully deleted" })
                                     .then((res) => {
+                                        this.$store.commit("setUser", { user: null });
                                         this.$navigateTo(LoginMain, {
                                             //clearHistory: true, 
                                             animated: false

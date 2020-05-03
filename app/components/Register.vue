@@ -48,6 +48,10 @@ export default {
 					.then((response) => {
 						if (response && response.success) {
                             this.$store.commit("setUser", { user: response.user });
+                            alert({
+                                title: 'Registered',
+                                message: 'Successfully registered. We\'ve sent you a confirmation email, so please verify your email so that you can participate in chats and post in communities.'
+                            })
 							this.$navigateTo(Home,  {
 								animated: false,
 								//clearHistory: true

@@ -90,23 +90,27 @@ gi<template>
         created() {
             var service = new BackendService();
 
-            // Refreshing user account for email verification
-            service.RefreshUser(this.$store.state.user._id)
-                .then((res) => {
-                    if (res && res.success) {
-                        this.$store.commit("setUser", { user: res.user });
-                    }
+            this.refreshUser();
 
-                    if (res && !res.success) {
-                        console.log("couldn't refresh user");
-                        console.log(res.message);
-                    }
-                })
-                .catch((err) => {
-                    if (err) {
-                        console.log(err);
-                    }
-                })
+            // Refreshing user account for email verification
+            if (this.$store.state.user) {
+                service.RefreshUser(this.$store.state.user._id)
+                    .then((res) => {
+                        if (res && res.success) {
+                            this.$store.commit("setUser", { user: res.user });
+                        }
+
+                        if (res && !res.success) {
+                            console.log("couldn't refresh user");
+                            console.log(res.message);
+                        }
+                    })
+                    .catch((err) => {
+                        if (err) {
+                            console.log(err);
+                        }
+                    })
+            }
 
             var getUserFromMessage = async (message) => {
                 return service.getUserfromId(message.userID)
@@ -158,26 +162,32 @@ gi<template>
             spamFilterTimer(){
                 this.$store.state.spamFilterCount=0;
             },
+            refreshUser () {
+                var service = new BackendService();
+                if (this.$store.state.user) {
+                    service.RefreshUser(this.$store.state.user._id)
+                        .then((res) => {
+                            if (res && res.success) {
+                                this.$store.commit("setUser", { user: res.user });
+                            }
+
+                            if (res && !res.success) {
+                                console.log("couldn't refresh user");
+                                console.log(res.message);
+                            }
+                        })
+                        .catch((err) => {
+                            if (err) {
+                                console.log(err);
+                            }
+                        })
+                }
+            },
             log () {
                 var service = new BackendService();
 
                 // Refreshing user account for email verification
-                service.RefreshUser(this.$store.state.user._id)
-                    .then((res) => {
-                        if (res && res.success) {
-                            this.$store.commit("setUser", { user: res.user });
-                        }
-
-                        if (res && !res.success) {
-                            console.log("couldn't refresh user");
-                            console.log(res.message);
-                        }
-                    })
-                    .catch((err) => {
-                        if (err) {
-                            console.log(err);
-                        }
-                    })
+                this.refreshUser();
 
                 var getUserFromMessage = async (message) => {
                     return service.getUserfromId(message.userID)
