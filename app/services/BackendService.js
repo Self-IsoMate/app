@@ -582,4 +582,22 @@ export default class BackendService {
             })
     }
 
+    async ResendVerification(email) {
+        return axios,post(`${API}/verify`, { email: email })
+            .then((res) => {
+                if (res) {
+                    if (res.data.sucess) {
+                        return { success: true }
+                    } else {
+                        return { success: false, message: res.data.message }
+                    }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err.toString() };
+                }
+            })
+    }
+
 }
