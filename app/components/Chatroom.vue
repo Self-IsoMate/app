@@ -255,10 +255,10 @@ gi<template>
                             this.scrollDown(); 
                         }
                     } else {
-                        alert({ title: "Spam detected", message: "Please wait before sending another message", okButtonText: "OK"  });
+                        this.confirmDialog();
                     }
                 } else {
-                    alert({ title: 'Please verify your email', message: 'Oh my GOD!! WHY won\'t you just TAKE A HINT 🙄 VERIFY YOUR EMAIL' })
+                    this.confirmDialog();
                 }
             },
             scrollDown(){
@@ -272,6 +272,36 @@ gi<template>
                 if (!this.isUserVerified()) {
                     alert({ title: 'Please verify your email', message: 'Ewwww did you just try to chat without first verifying your email??? 🤮' })
                 }
+            },
+            confirmDialog () {
+                confirm({ 
+							title: 'Please verify your email',
+							message: 'Make sure you check your spam folder.',
+							cancelButtonText: 'Cancel',
+							okButtonText: 'Resend Verification'
+                        })
+                        .then((result) => {
+							if (result) {
+								console.log("Resending");
+								service.ResendVerification(response.user.email)
+									.then((res) => {
+										if (res && res.success) {
+											alert({ title: 'Success', message: 'Successfully resent verification' })
+										}
+
+										if (res && !res.success) {
+											alert({ title: 'Error', message: 'Unsuccessful'})
+											console.log(res.message);
+										}
+									})
+									.catch((err) => {
+										if (err) {
+											console.log(err);
+											alert({ title: 'Error', message: 'Unsuccessful' })
+										}
+                                    })
+                            }
+                        })
             }
         }
     };

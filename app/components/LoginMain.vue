@@ -55,30 +55,30 @@ export default {
 
 					if (!response.user.isVerified) {
 						confirm({ 
-							title: 'Please verify your email',
-							message: 'Make sure you check your spam folder.',
-							cancelButtonText: 'Cancel',
-							okButtonText: 'Resend Verification'
-						}).then((result) => {
-							if (result) {
-								console.log("Resending");
-								service.ResendVerification(response.user.email)
-									.then((res) => {
-										if (res && res.success) {
-											alert({ title: 'Success', message: 'Successfully resent verification' })
-										}
+								title: 'Please verify your email',
+								message: 'Make sure you check your spam folder.',
+								cancelButtonText: 'Cancel',
+								okButtonText: 'Resend Verification'
+							}).then((result) => {
+								if (result) {
+									console.log("Resending");
+									service.ResendVerification(response.user.email)
+										.then((res) => {
+											if (res && res.success) {
+												alert({ title: 'Success', message: 'Successfully resent verification' })
+											}
 
-										if (res && !res.success) {
-											alert({ title: 'Error', message: 'Unsuccessful'})
-											console.log(res.message);
-										}
-									})
-									.catch((err) => {
-										if (err) {
-											console.log(err);
-											alert({ title: 'Error', message: 'Unsuccessful' })
-										}
-									})
+											if (res && !res.success) {
+												alert({ title: 'Error', message: 'Unsuccessful'})
+												console.log(res.message);
+											}
+										})
+										.catch((err) => {
+											if (err) {
+												console.log(err);
+												alert({ title: 'Error', message: 'Unsuccessful' })
+											}
+										})
 							} else {
 								console.log("cancelled");
 							}
