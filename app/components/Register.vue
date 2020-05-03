@@ -54,7 +54,7 @@ export default {
                             })
 							this.$navigateTo(Home,  {
 								animated: false,
-								//clearHistory: true
+								clearHistory: true
 							});
                         }
 
@@ -64,7 +64,9 @@ export default {
                         
                     })
                     .catch((err) => {
-                        alert({ title: "Error", message: err });
+                        if (err) {
+                            alert({ title: "Error", message: err });
+                        }
                     });
             } else {
                 this.invalidPasswords = true;
