@@ -77,6 +77,23 @@
                         console.log(err);
                     }
                 })
+
+            service.RefreshUser(this.$store.state.user._id)
+                .then((res) => {
+                    if (res && res.success) {
+                        this.$store.commit("setUser", { user: res.user });
+                    }
+
+                    if (res && !res.success) {
+                        console.log("couldn't refresh user");
+                        console.log(res.message);
+                    }
+                })
+                .catch((err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                })
         },
         methods: {
             onSearchBarLoaded: function(event) {

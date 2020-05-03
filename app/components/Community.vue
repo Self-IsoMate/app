@@ -100,6 +100,24 @@ export default {
     created() {
         var service = new BackendService();
 
+        // Refreshing user account for email verification
+        service.RefreshUser(this.$store.state.user._id)
+            .then((res) => {
+                if (res && res.success) {
+                    this.$store.commit("setUser", { user: res.user });
+                }
+
+                if (res && !res.success) {
+                    console.log("couldn't refresh user");
+                    console.log(res.message);
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    console.log(err);
+                }
+            })
+
         var getUserFromPosts = async (post) => {
             return service.getUserfromId(post.userId)
                 .then((res) => {
@@ -172,6 +190,24 @@ export default {
     methods: {
         log() {
             var service = new BackendService();
+
+            // Refreshing user account for email verification
+            service.RefreshUser(this.$store.state.user._id)
+                .then((res) => {
+                    if (res && res.success) {
+                        this.$store.commit("setUser", { user: res.user });
+                    }
+
+                    if (res && !res.success) {
+                        console.log("couldn't refresh user");
+                        console.log(res.message);
+                    }
+                })
+                .catch((err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                })
 
             var getUserFromPosts = async (post) => {
                 return service.getUserfromId(post.userId)
