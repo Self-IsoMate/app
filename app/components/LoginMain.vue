@@ -34,13 +34,13 @@ export default {
 	},
 	methods: {
 		checkToken() {
-		this.$store.commit("loadFromStorage");
-		if(this.$store.state.user.username) {
-			this.$navigateTo(Home,{
-							animated: false,
-							clearHistory: true
-						});
-		}
+			this.$store.commit("loadFromStorage");
+			if (this.$store.state.user.username) {
+				this.$navigateTo(Home, {
+								animated: false,
+								clearHistory: true
+							});
+			}
 		},
 		navigateRegister(event) {
 			this.$navigateTo(Register);
