@@ -4,11 +4,11 @@
         <ScrollView>
             <StackLayout margin="50 50 50 50">
 				<Label text="Register" class="" fontSize="20"/>
-                <TextField v-model="username" hint="Username" />
+                <TextField v-model="username" hint="Username" autocapitalizationType="none" autocorrect="false" />
                 <TextField secure="true" v-model="password" hint="Password"  />
                 <TextField secure="true" v-model="confirmpassword" hint="Confirm password" />
                 <Label v-if="invalidPasswords" text="Passwords need to match" class="error" />
-                <TextField v-model="email" hint="Email" />
+                <TextField v-model="email" hint="Email" autocapitalizationType="none" autocorrect="false" keyboardType="email" />
                 <Button text="Register" @tap="navigateQuestions" />
             </StackLayout>
         </ScrollView>
