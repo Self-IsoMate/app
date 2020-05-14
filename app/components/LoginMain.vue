@@ -35,11 +35,26 @@ export default {
 	methods: {
 		checkToken() {
 			this.$store.commit("loadFromStorage");
-			if (this.$store.state.user && this.$store.state.user.username) {
-				this.$navigateTo(Home, {
-								animated: false,
-								clearHistory: true
-							});
+			if (this.$store.state.user && this.$store.state.user._id) {
+				var service = new BackendService();
+				service.RefreshUser(this.$store.state.user._id)
+					.then((res) => {
+						if (res) {
+							if (res.success && res.user) {
+								this.$navigateTo(Home,{
+									animated: false,
+									clearHistory: true
+								});
+							} else {
+								alert({ title: 'Please log in', message: 'You\'ve been signed out, please re-enter your details.' })
+							}
+						}
+					})
+					.catch((err) => {
+						if (err) {
+							alert({ title: 'Error', message: 'Problem logging in, please enter your details.' })
+						}
+					});
 			}
 		},
 		navigateRegister(event) {
