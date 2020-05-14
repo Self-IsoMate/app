@@ -165,23 +165,33 @@
 
             },
             deleteAccount(event) {
-                this.service.deleteAccount((this.$store.state.user._id))
+                confirm(
+                    {
+                        title: 'Are you sure?',
+                        message: 'Are you sure you want to delete your account?',
+                        okButtonText: "Delete",
+                        cancelButtonText: "Go Back"
+                    })
                     .then((res) => {
                         if (res) {
-                            if (res.success) {
-                                alert({ title: "Deleted", message: "Your account has been successfully deleted" })
-                                    .then((res) => {
-                                        this.$store.commit("setUser", { user: null });
-                                        this.$navigateTo(LoginMain, {
-                                            //clearHistory: true, 
-                                            animated: false
-                                        });
-                                    });
-                            }
-
-                            if (!res.success) {
-                                alert({ title: "Unsuccessful", message: "Unfortunately, there was an error deleting your account. Please contact us at <our email>" });
-                            }
+                            this.service.deleteAccount((this.$store.state.user._id))
+                                .then((res) => {
+                                    if (res) {
+                                        if (res.success) {
+                                            alert({ title: "Deleted", message: "Your account has been successfully deleted" })
+                                                .then((res) => {
+                                                    this.$store.commit("setUser", { user: null });
+                                                    this.$navigateTo(LoginMain, {
+                                                        //clearHistory: true, 
+                                                        animated: false
+                                                    });
+                                                });
+                                        }
+                                        if (!res.success) {
+                                            alert({ title: "Unsuccessful", message: "Unfortunately, there was an error deleting your account. Please contact us at <our email>" });
+                                        }
+                                    }
+                                })
                         }
                     })
             },
