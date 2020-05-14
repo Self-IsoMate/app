@@ -1,5 +1,5 @@
 fcommit<template lang="html">
-    <Page  @loaded="checkToken()">
+    <Page @loaded="checkToken()">
 		<ActionBar title="Self-IsoMate" class="action-bar header"/>
 		<ScrollView>
 			<StackLayout margin="50 50 50 50">
@@ -35,7 +35,7 @@ export default {
 	methods: {
 		checkToken() {
 			this.$store.commit("loadFromStorage");
-			if (this.$store.state.user.username) {
+			if (this.$store.state.user && this.$store.state.user.username) {
 				this.$navigateTo(Home, {
 								animated: false,
 								clearHistory: true
