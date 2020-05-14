@@ -251,7 +251,7 @@ gi<template>
                 this.$refs.drawer.nativeView.toggleDrawerState();
             },
             sendTap(events){
-                if (this.isUserVerified()) {
+                if (this.isUserVerified) {
                     if(this.$store.state.spamFilterCount<4) {
                         if (this.message.trim().length >= 1) {
                             var service = new BackendService();
@@ -274,12 +274,9 @@ gi<template>
             scrollDown(){
                 this.$refs.listView.nativeView.scrollToIndex(this.conversations.length);
             },
-            isUserVerified () {
-                return this.$store.state.user.isVerified;
-            },
             alertMessage () {
                 // If user isn't verified and tries to click on the messagebox, then display a message
-                if (!this.isUserVerified()) {
+                if (!this.isUserVerified) {
                     alert({ title: 'Please verify your email', message: 'Ewwww did you just try to chat without first verifying your email??? 🤮' })
                 }
             },
@@ -312,6 +309,11 @@ gi<template>
                                     })
                             }
                         })
+            }
+        },
+        computed: {
+            isUserVerified: function () {
+                return this.$store.state.user.isVerified;
             }
         }
     };
