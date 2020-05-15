@@ -29,10 +29,8 @@
                     <!-- Actual page content goes here (in dock top) -->
 
 					<StackLayout dock="top" height="90%" margin="0 10" >
-
 						<StackLayout dock="top" height="90%" width="100%" style="">
-
-
+                            
                             <ListView for="item in chatRoomsList"
                                 height="100%" separatorColor="transparent" id="listView">
                                 <v-template>

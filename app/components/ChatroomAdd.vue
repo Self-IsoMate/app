@@ -31,8 +31,8 @@
 					<StackLayout dock="top" height="90%" margin="0 10" >
 
 						<StackLayout dock="top" width="100%" style="">
-
-                         <ListView for="chatroom in chatrooms"
+                        <Button text="MAKE A NEW CHATROOM" @tap="onButtonTap()"/>
+                        <ListView for="chatroom in chatrooms"
                             separatorColor="transparent" id="listView">
                             <v-template>
 
@@ -67,9 +67,9 @@
                         this.chatrooms = Array.from(this.allChatrooms);
                     } 
                 })
-            .catch((err) => {
-                if (err) console.log(err);
-            }) 
+                .catch((err) => {
+                    if (err) console.log(err);
+                }) 
             this.chatrooms = Array.from(this.allChatrooms);
         },
         components: {
@@ -100,6 +100,27 @@
             },
             toggleDrawer() {
                 this.$refs.drawer.nativeView.toggleDrawerState();
+            },
+            onButtonTap(){
+                var backend = new BackendService();
+                backend.requestNewChatroom()
+                	.then((res) => {
+						if (res && res.success) {
+							alert({ title: 'Success', message: 'Successfully resent verification' })
+						}
+
+						if (res && !res.success) {
+							alert({ title: 'Error', message: 'Unsuccessful'})
+							console.log(res.message);
+										}
+					})
+					.catch((err) => {
+						if (err) {
+							console.log(err);
+							alert({ title: 'Error', message: 'Unsuccessful' })
+						}
+                    })
+                
             },
             chatTap() {
                 this.$navigateTo(Chat, {

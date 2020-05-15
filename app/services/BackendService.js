@@ -618,4 +618,22 @@ export default class BackendService {
             })
     }
 
+    async requestNewChatroom() {
+        return axios.post(`${API}/chatrooms/request`)
+            .then((res) => {
+                if (res) {
+                    if (res.data.success) {
+                        return { success: true }
+                    } else {
+                        return { success: false, message: res.data.message }
+                    }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err.toString() };
+                }
+            })
+    }
+
 }
