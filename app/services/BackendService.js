@@ -618,8 +618,8 @@ export default class BackendService {
             })
     }
 
-    async requestNewChatroom() {
-        return axios.post(`${API}/chatrooms/request`)
+    async requestNewChatroom(chatroomRequest) {
+        return axios.post(`${API}/chatrooms/request`, chatroomRequest)
             .then((res) => {
                 if (res) {
                     if (res.data.success) {

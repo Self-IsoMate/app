@@ -108,13 +108,13 @@
                     okButtonText: "Send request",
                     cancelButtonText: "Cancel request",
                     }).then(result => {
-                    if (result){
+                    if (result && (result.text != "")){
                         var chatroomRequest = {
-                            chatroomName: `${result.text}`,
-                            user: this.user
+                            chatroomName: result.text,
+                            user_id: this.$store.state.user._id
                         }
                         var backend = new BackendService();
-                        backend.requestNewChatroom()
+                        backend.requestNewChatroom(chatroomRequest)
                             .then((res) => {
                                 if (res && res.success) {
                                     alert({ title: 'Request sent', message: 'Thank you for your submission' })
