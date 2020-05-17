@@ -102,25 +102,38 @@
                 this.$refs.drawer.nativeView.toggleDrawerState();
             },
             onButtonTap(){
-                var backend = new BackendService();
-                backend.requestNewChatroom()
-                	.then((res) => {
-						if (res && res.success) {
-							alert({ title: 'Success', message: 'Successfully resent verification' })
-						}
+                prompt({
+                    title: "Request New Chatroom",
+                    message: "Your application will be reviewed by our team. We will let you know if you have been successful with your request",
+                    okButtonText: "Send request",
+                    cancelButtonText: "Cancel request",
+                    }).then(result => {
+                    if (result){
+                        var chatroomRequest = {
+                            chatroomName: `${result.text}`,
+                            user: this.user
+                        }
+                        var backend = new BackendService();
+                        backend.requestNewChatroom()
+                            .then((res) => {
+                                if (res && res.success) {
+                                    alert({ title: 'Request sent', message: 'Thank you for your submission' })
+                                }
 
-						if (res && !res.success) {
-							alert({ title: 'Error', message: 'Unsuccessful'})
-							console.log(res.message);
-										}
-					})
-					.catch((err) => {
-						if (err) {
-							console.log(err);
-							alert({ title: 'Error', message: 'Unsuccessful' })
-						}
-                    })
-                
+                                if (res && !res.success) {
+                                    alert({ title: 'Error', message: 'Error processing your request. Please try again later.'})
+                                    console.log(res.message);
+                                                }
+                            })
+                            .catch((err) => {
+                                if (err) {
+                                    console.log(err);
+                                    alert({ title: 'Error', message: 'Unsuccessful' })
+                                }
+                            })
+                    }
+                });
+
             },
             chatTap() {
                 this.$navigateTo(Chat, {
