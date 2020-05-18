@@ -7,7 +7,7 @@ export default new Vuex.Store({
     state: {
 		user: {},
 		spamFilterCount: 0,
-		datePosted:null
+		lastPosted: null // last time this device created a post
     },
     mutations: {
 		setUser(state, data) {
