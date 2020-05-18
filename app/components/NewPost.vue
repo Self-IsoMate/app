@@ -133,7 +133,7 @@ export default {
 				return c._id
 			});
 			
-			this.service.validatePost(post)
+			this.service.addPost(post)
 				.then((res) => {
 					if (res && res.success) {
 						this.$store.state.lastPosted = Date.parse(res.post.datePosted);
@@ -230,17 +230,30 @@ export default {
 			}
 		},
 		validatePost (event) {
+			var valid = true;
+
+			// spam checking
 			var today = new Date();
 			if(this.$store.state.lastPosted) {
 				var diffMs = (today - this.$store.state.lastPosted); 
 				var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes*/
-				if (diffMins >= 4) {
-					this.addPost();
-				} else {
+				if (diffMins < 4) {
+					valid = false;
 					alert({ title: "Spam detected", message: "Please wait before adding another post", okButtonText: "OK"  });
 				}
-			} else {
+			}
+
+			// checking if communities valid
+			if (valid && this.post.communities.length < 1) {
+				valid = false;
+				alert({ title: 'Community required', message: 'Please select a community first', okButtonText: 'OK' });
+			}
+
+			// if all validation has passed, then proceed
+			if (valid) {
 				this.addPost();
+			} else {
+				return;
 			}
 		},
 		toggleCommunity (param) {
