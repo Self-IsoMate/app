@@ -154,80 +154,80 @@ export default {
 					}
 				})
 		},
-		checkedSpam(){
-		if (this.selectedImage) {
-							alert({ title: "Please wait", message: "Uploading your image & adding your post. Please wait." });
+		checkedSpam () {
+			if (this.selectedImage) {
+				alert({ title: "Please wait", message: "Uploading your image & adding your post. Please wait." });
 
-							var taskInfo = this.service.uploadPostImage(this.selectedImage);
+				var taskInfo = this.service.uploadPostImage(this.selectedImage);
 
-							if (taskInfo) {
+				if (taskInfo) {
 
-								console.log(taskInfo);
-								
+					console.log(taskInfo);
+					
 
-								var task = taskInfo.task;
-								
-								console.log(taskInfo.task);
+					var task = taskInfo.task;
+					
+					console.log(taskInfo.task);
 
-								var link = taskInfo.link;
+					var link = taskInfo.link;
 
-								console.log(taskInfo.link);
+					console.log(taskInfo.link);
 
-								task.on("error", (err) => {
-									if (err) {
-										console.log(err);
-										alert({ title: "Error", message: err });
-									}
-								});
+					task.on("error", (err) => {
+						if (err) {
+							console.log(err);
+							alert({ title: "Error", message: err });
+						}
+					});
 
-								task.on("complete", (e) => {
-									if (e) {
-										console.log("got response");
-										console.log(e);
-										this.post.media = link;
-										this.uploadPost(this.post);
-									}
-								})
-							}
-
-						} else if (this.selectedVideo) {
-							alert({ title: "Please wait", message: "Uploading your video & adding your post. Please wait." });
-
-							var taskInfo = this.service.uploadPostVideo(this.selectedVideo);// for video
-
-							if (taskInfo) {
-
-										console.log(taskInfo);
-								
-
-								var task = taskInfo.task;
-								
-								console.log(taskInfo.task);
-
-								var link = taskInfo.link;
-
-								console.log(taskInfo.link);
-
-								task.on("error", (err) => {
-									if (err) {
-										console.log(err);
-										alert({ title: "Error", message: err });
-									}
-								});
-
-								task.on("complete", (e) => {
-									if (e) {
-										console.log("got response");
-										console.log(e);
-										this.post.media = link;
-										this.uploadPost(this.post);
-									}
-								})
-							}
-
-						}else {
+					task.on("complete", (e) => {
+						if (e) {
+							console.log("got response");
+							console.log(e);
+							this.post.media = link;
 							this.uploadPost(this.post);
 						}
+					})
+				}
+
+			} else if (this.selectedVideo) {
+				alert({ title: "Please wait", message: "Uploading your video & adding your post. Please wait." });
+
+				var taskInfo = this.service.uploadPostVideo(this.selectedVideo);// for video
+
+				if (taskInfo) {
+
+							console.log(taskInfo);
+					
+
+					var task = taskInfo.task;
+					
+					console.log(taskInfo.task);
+
+					var link = taskInfo.link;
+
+					console.log(taskInfo.link);
+
+					task.on("error", (err) => {
+						if (err) {
+							console.log(err);
+							alert({ title: "Error", message: err });
+						}
+					});
+
+					task.on("complete", (e) => {
+						if (e) {
+							console.log("got response");
+							console.log(e);
+							this.post.media = link;
+							this.uploadPost(this.post);
+						}
+					})
+				}
+
+			} else {
+				this.uploadPost(this.post);
+			}
 		},
 		addPost (event) {
 			var today = new Date();
