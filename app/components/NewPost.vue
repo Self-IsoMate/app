@@ -50,7 +50,7 @@
 									:src='selectedVideo'/>
 							</GridLayout>
 							<GridLayout rows="auto" columns="*, *">
-								<Button col="1" text="Add Post" @tap="addPost" />
+								<Button col="1" text="Add Post" @tap="validatePost" />
 								<Button col="0" text="Discard" backgroundColor="red" color="white" @tap="$navigateBack"/>
 							</GridLayout>
 						</StackLayout>
@@ -133,12 +133,12 @@ export default {
 				return c._id
 			});
 			
-			this.service.addPost(post)
+			this.service.validatePost(post)
 				.then((res) => {
 					if (res && res.success) {
-						this.$store.state.datePosted=Date.parse(res.post.datePosted);
+						this.$store.state.lastPosted = Date.parse(res.post.datePosted);
 						console.log("salva la data")
-						console.log(this.$store.state.datePosted);
+						console.log(this.$store.state.lastPosted);
 						alert({ title: "Added post", message: "Successfully added post!" })
 							.then((res) => {
 								this.$navigateBack();
@@ -154,7 +154,7 @@ export default {
 					}
 				})
 		},
-		checkedSpam () {
+		addPost () {
 			if (this.selectedImage) {
 				alert({ title: "Please wait", message: "Uploading your image & adding your post. Please wait." });
 
@@ -197,7 +197,7 @@ export default {
 
 				if (taskInfo) {
 
-							console.log(taskInfo);
+					console.log(taskInfo);
 					
 
 					var task = taskInfo.task;
@@ -229,18 +229,18 @@ export default {
 				this.uploadPost(this.post);
 			}
 		},
-		addPost (event) {
+		validatePost (event) {
 			var today = new Date();
-			if(this.$store.state.datePosted){
-					var diffMs = (today - this.$store.state.datePosted); 
-					var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes*/
-					if(diffMins>=4){
-						this.checkedSpam();
-					}else{
-						alert({ title: "Spam detected", message: "Please wait before adding another post", okButtonText: "OK"  });
-					}
-			}else{
-				this.checkedSpam();
+			if(this.$store.state.lastPosted) {
+				var diffMs = (today - this.$store.state.lastPosted); 
+				var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes*/
+				if (diffMins >= 4) {
+					this.addPost();
+				} else {
+					alert({ title: "Spam detected", message: "Please wait before adding another post", okButtonText: "OK"  });
+				}
+			} else {
+				this.addPost();
 			}
 		},
 		toggleCommunity (param) {
