@@ -108,7 +108,7 @@
                     okButtonText: "Send request",
                     cancelButtonText: "Cancel request",
                     }).then(result => {
-                    if (result && (result.text != "")){
+                    if (result.result){ 
                         var chatroomRequest = {
                             chatroomName: result.text,
                             user_id: this.$store.state.user._id
