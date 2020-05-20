@@ -113,7 +113,10 @@
                             chatroomName: result.text,
                             user_id: this.$store.state.user._id
                         }
-                        var backend = new BackendService();
+                        if (result.text.length > 25) {
+                            alert({ title: 'Error', message: 'Max Character Limit Reached' })
+                        } else {
+                              var backend = new BackendService();
                         backend.requestNewChatroom(chatroomRequest)
                             .then((res) => {
                                 if (res && res.success) {
@@ -131,6 +134,7 @@
                                     alert({ title: 'Error', message: 'Unsuccessful' })
                                 }
                             })
+                        }
                     }
                 });
 
