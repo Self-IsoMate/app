@@ -215,6 +215,10 @@ The imported CSS rules must precede all other types of rules.
 .HMid{
 	width:70%;
 }
+.HMidEdited{
+	width:98%;
+
+}
 .HRight{
 	width:19%;
 }

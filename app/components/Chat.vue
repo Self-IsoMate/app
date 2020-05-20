@@ -47,7 +47,7 @@
                                         </StackLayout>
                                         <StackLayout marginLeft="10" paddingTop="3"
                                             width="50%">
-                                            <Label :text="item.chatroomName"
+                                            <Label  textWrap="true" :text="item.chatroomName"
                                                 class="chatroomNameTitle" />
                                         </StackLayout>
                                     </StackLayout>

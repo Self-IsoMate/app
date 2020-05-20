@@ -7,7 +7,7 @@
             stretch="aspectFill" class="conImg" />
         </StackLayout>
         <StackLayout marginLeft="10" paddingTop="3" width="50%">
-            <Label :text="chatroom.chatroomName" :class="'convFriendName '" />
+            <Label textWrap="true" :text="chatroom.chatroomName" :class="'convFriendName '" />
         </StackLayout>
         <StackLayout marginLeft="10" paddingTop="3" width="60%">
         <Button :text="userHasChatroom ? '-' : '+' " style="font-size:27;color:#fff;" @tap="onTap()" />
