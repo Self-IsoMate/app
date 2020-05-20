@@ -7,8 +7,8 @@ gi<template>
                     <Label :text="back" style="font-size:27;color:#fff;"
                         class="font-awesome" />
                 </StackLayout>
-                <StackLayout class="HMid" alignItems="left">
-                    <Label class = "action-bar-title" :text="chatRoom.chatroomName" paddingTop = "7.5%" color="white" id="searchField"></Label>
+                <StackLayout class="HMidEdited" alignItems="left">
+                    <Label textWrap="true" class = "action-bar-title" :text="chatRoom.chatroomName" paddingTop = "7.5%" color="white" id="searchField"></Label>
                 </StackLayout>
                 <StackLayout class="HRight">
 
