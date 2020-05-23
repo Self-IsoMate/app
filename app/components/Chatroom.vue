@@ -134,13 +134,19 @@ gi<template>
             service.getMessagesfromID(this.$props.chatRoom._id)
                 .then((res) => {
                     if (res) {
-                        var messages = res.messages;
-                        mutateMessages(messages)
-                            .then((result) => {//it does not run mutate Messages
-                                this.conversations = result;
-                            }).catch((err) => {
-                                if (err) console.log("err: "+err);
-                            }) 
+                        if (res.messages){
+                            var messages = res.messages;
+                            if (res.messages.length == 0){
+                                alert({ title: '👀', message: "Looks like you've stumbled onto an empty chat. How about you fix that?" })
+                            } else {
+                                mutateMessages(messages)
+                                .then((result) => {//it does not run mutate Messages
+                                    this.conversations = result;
+                                }).catch((err) => {
+                                    if (err) console.log("err: "+err);
+                                })
+                            }
+                        } 
                     }
                 });
 
