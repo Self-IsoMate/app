@@ -31,7 +31,7 @@
 					<StackLayout dock="top" height="90%" margin="0 10" >
 
 						<StackLayout dock="top" width="100%" style="">
-                        <Button text="MAKE A NEW CHATROOM" @tap="onButtonTap()"/>
+                        <Button text="REQUEST A NEW CHATROOM" @tap="onButtonTap()"/>
                         <ListView for="chatroom in chatrooms"
                             separatorColor="transparent" id="listView">
                             <v-template>
