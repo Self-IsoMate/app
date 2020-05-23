@@ -152,6 +152,9 @@ export default {
                 if (res) {
                     console.log(res);
                     this.allCommunities = [... res.communities];
+                    if (this.allCommunities.length == 0){
+                         alert({ title: '😢 Nothing to see here', message: "Subscribe to communities to fill up that feed" })
+                    }
                 }
             })
             .catch((err) => {
