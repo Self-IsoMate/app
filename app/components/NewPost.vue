@@ -15,46 +15,44 @@
         </ActionBar>
 
         <StackLayout ~mainContent>
-                <!-- Actual page content goes here (in dock top) -->
+			<!-- Actual page content goes here (in dock top) -->
 			<StackLayout width="100%">
 
- <StackLayout>
-
-
-        </StackLayout>
 			    <StackLayout margin="15">
 
-					<ScrollView>
+					<StackLayout>
+						<TextField v-model="post.title" hint="Title..." class="text-field" />
+
+						<TextView v-model="post.body" hint="Your post..." height="100" class="outline-field text-field" />
+
 						<StackLayout>
-							<TextField v-model="post.title" hint="Title..." class="text-field" />
+							<TextView v-model="searchCommunity" hint="Search communities..." @textChange="filterCommunities" />
+							<ScrollView height="150" >
+								<StackLayout>
+									<CommunityItemPost v-for="a in availableCommunities" :key="a._id"
+										:community="a" @tap="toggleCommunity" />
+								</StackLayout>
+							</ScrollView>
+								
+						</StackLayout>
 
-							<TextView v-model="post.body" hint="Your post..." height="100" class="outline-field text-field" />
-
-							<StackLayout>
-								<TextView v-model="searchCommunity" hint="Search communities..." @textChange="filterCommunities" />
-								<ScrollView height="150" >
-									<StackLayout>
-										<CommunityItemPost v-for="a in availableCommunities" :key="a._id"
-											:community="a" @tap="toggleCommunity" />
-									</StackLayout>
-								</ScrollView>
-								  
-							</StackLayout>
-
-							<GridLayout rows="auto, auto, auto, auto" columns="*">
-								<Button row="0" text="Upload image" @tap="selectImage" />
-								<Image row="1" :src='selectedImage' class="image" id="imageFile" v-if="showImage" />
-								<Button row="2" text="Upload video" @tap="selectVideo" />
-								<VideoPlayer row="3" ref="player" id="videoFile" v-if="showVideo"
-									controls="true" loop="true" autoplay="true" height="200"
+						<GridLayout rows="auto, auto" columns="*">
+							<GridLayout columns="*, *">
+								<Button col="0" text="Upload image" @tap="selectImage" />
+								<Button col="1" text="Upload video" @tap="selectVideo" />
+							</GridLayout>
+							<GridLayout row="200" col="*">
+								<Image row="0" col="0" :src='selectedImage' class="media" v-if="showImage" />
+								<VideoPlayer row="0" col="0" ref="player" v-if="showVideo" id="videoFile"
+									controls="true" loop="true" autoplay="true" class="media"
 									:src='selectedVideo'/>
 							</GridLayout>
-							<GridLayout rows="auto" columns="*, *">
-								<Button col="1" text="Add Post" @tap="validatePost" />
-								<Button col="0" text="Discard" backgroundColor="red" color="white" @tap="$navigateBack"/>
-							</GridLayout>
-						</StackLayout>
-					</ScrollView>
+						</GridLayout>
+						<GridLayout rows="auto" columns="*, *">
+							<Button col="1" text="Add Post" @tap="validatePost" />
+							<Button col="0" text="Discard" backgroundColor="red" color="white" @tap="$navigateBack"/>
+						</GridLayout>
+					</StackLayout>
 
 			    </StackLayout>
 
@@ -371,9 +369,7 @@ export default {
 	background-color: green;
 }
 
-.image {
-	border-color: #dedede;
-	border-width: 1;
+.media {
 	height: 100;
 	margin: 10;
 }
