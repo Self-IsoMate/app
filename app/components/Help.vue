@@ -22,9 +22,10 @@
                 <DockLayout>
                     <!-- Actual page content goes here (in dock top) -->
 
-					<StackLayout dock="top" height="90%" margin="0 10" >
+					<StackLayout dock="top" height="90%" margin="0 10">
 
-						<Label text="no help"/>
+						<Button :text="buttonToggle ? expandedContactUs:collapsedContactUs" style="font-size:27;color:#fff;" 
+                        @tap="toggleButton"/>
 
 					</StackLayout>
 
@@ -52,8 +53,11 @@
         data() {
             return {
                 drawerToggle: false,
+                buttonToggle: false,
                 drawer1: "", //the three dots vertically
                 drawer2: "", //the three dots horizontally
+                collapsedContactUs: "Contact Us  oop", //right chevron
+                expandedContactUs: "Contact Us  doop", //down chevron
                 mainColor: "#00ff92",
             };
         },
@@ -66,6 +70,9 @@
             },
             toggleDrawer() {
                 this.$refs.drawer.nativeView.toggleDrawerState();
+            },
+            toggleButton() {
+                this.buttonToggle = !this.buttonToggle;
             }
         }
     };
