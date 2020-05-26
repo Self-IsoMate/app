@@ -56,8 +56,12 @@
     import Chat from "./Chat";
     import ChatroomItem from "./ChatroomItem";
     import BackendService from "../services/BackendService";
+    import { timer } from 'vue-timers'
 
      export default {
+         timers: {
+            log: { time: 15000, autostart: true, repeat: true }
+        },
         created() {
             var backend = new BackendService();
             backend.getAllChatrooms()
@@ -65,12 +69,15 @@
                     if (res){
                         this.allChatrooms = res.chatrooms;
                         this.chatrooms = Array.from(this.allChatrooms);
+
                     } 
                 })
                 .catch((err) => {
                     if (err) console.log(err);
                 }) 
             this.chatrooms = Array.from(this.allChatrooms);
+                        this.$timer.start('log')
+
         },
         components: {
             ChatroomItem
@@ -87,6 +94,36 @@
             };
         },
          methods: {
+             log () {
+
+                 var backend = new BackendService();
+            backend.getAllChatrooms()
+                .then((res) => {
+                    if (res){
+                        this.allChatrooms = res.chatrooms;
+                        var chatroomsList = Array.from(this.allChatrooms);
+
+                      var chatsinlist  = chatroomsList.filter( e=> {
+                                var matchingChats =  this.chatrooms.every(chat => {
+                                    return chat._id != e._id;
+                                });
+                                return matchingChats;
+                            });
+                        } else {
+                                console.log("Error on gettin chat rooms");
+
+                            };
+                if(chatsinlist.length>0){
+                    this.chatrooms = this.chatrooms.concat(chatsinlist);
+                }
+
+                })
+                .catch((err) => {
+                    if (err) console.log(err);
+                }) ;
+           // this.chatrooms = Array.from(this.allChatrooms);
+
+             },
             filter() {
                 this.chatrooms = this.allChatrooms.filter((c)=>{
                    return c.chatroomName.toUpperCase().startsWith(this.searchPhrase.toUpperCase());

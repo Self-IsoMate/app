@@ -116,14 +116,6 @@
         },
         methods: {
             log () {
-/*
-
-service.getChatroomIds(this.$store.state.user._id).then(res=>{
-                if (res) {
-                    res.chatrooms.forEach(val => {
-                        service.getChatroomObj(val).then(response=>{
-
-*/
      service.getChatroomIds(this.$store.state.user._id).then(res=>{
                 if (res) {
                             var chatsinlist  = res.chatrooms.filter( e=> {
@@ -141,20 +133,20 @@ service.getChatroomIds(this.$store.state.user._id).then(res=>{
                             if(chatsinlist.length>0){
 
                                     chatsinlist.forEach(val => {
-                        service.getChatroomObj(val).then(response=>{
-                                this.chatRoomsList = this.chatRoomsList.concat(response.chatroom);    
-                        }).catch((err) => {
-                        if (err) console.log("err: " + err);
-                    });
+                                    service.getChatroomObj(val).then(response=>{
+                                    this.chatRoomsList = this.chatRoomsList.concat(response.chatroom);    
+                            }).catch((err) => {
+                            if (err) console.log("err: " + err);
                         });
-                            } else {
-                                console.log("no new chats, check every 10 seconds");
-                            }
-                        })
-                    .catch((err) => {
-                        if (err) console.log("err: " + err);
-                    });
-                            
+                            });
+                                } else {
+                                    console.log("no new chats, check every 10 seconds");
+                                }
+                            })
+                        .catch((err) => {
+                            if (err) console.log("err: " + err);
+                        });
+                                
                       
              },
             onDrawerClosed() {
