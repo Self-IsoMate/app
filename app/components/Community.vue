@@ -59,7 +59,20 @@
                                         <WrapLayout orientation="horizontal">
                                             <CommunityPill v-for="(c, index) in item.communities" :key="index" :communityId="c" />
                                         </WrapLayout>
-                                    </StackLayout>
+                                        <StackLayout v-if="item.userId == $store.state.user._id">
+                                <StackLayout v-if='item.media!==""'>
+                                    <GridLayout  rows="auto" columns="*, *">
+                                        <Button col="1" text="Remove Media" backgroundColor="red" color="white" @tap="alertino(item.userId)" />
+                                        <Button row="0" text="Remove Post" backgroundColor="red" color="white" @tap="alertino(item.userId)" />
+								    </GridLayout>
+                                </StackLayout> 
+                                  <StackLayout v-else>
+                                   <GridLayout  rows="auto" columns="*">
+                                        <Button row="0" text="Remove Post" backgroundColor="red" color="white" @tap="alertino(item.userId)" />
+								</GridLayout>
+                                </StackLayout>
+                                </StackLayout>                                   
+                            </StackLayout>
                                 </StackLayout>
 
                             </v-template>
@@ -176,6 +189,10 @@ export default {
         };
     },
     methods: {
+        alertino(userIdPost){
+            alert({ title: "Error", message: ""+userIdPost+"", okButtonText: "OK"  });
+            console.log(this.$store.state.user._id);
+        },
         log() {
             var service = new BackendService();
 

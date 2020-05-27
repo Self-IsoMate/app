@@ -40,15 +40,33 @@
 								</ScrollView>
 								  
 							</StackLayout>
+							<StackLayout>
+								<GridLayout v-if="!selectedImage" rows="auto" columns="*">
+									<Button row="0" text="Upload image" @tap="selectImage" />
+								</GridLayout>
+								<GridLayout v-else rows="auto" columns="*, *">
+									<Button col="1" text="Remove Image" backgroundColor="red" color="white" @tap="selectedImage= null"/>
+									<Button row="0" text="Change image" @tap="selectImage" />
+								</GridLayout>
+								<GridLayout rows="auto" columns="*">
+									<Image row="0" :src='selectedImage' class="image" id="imageFile" v-if="selectedImage" />
+								</GridLayout>
+							</StackLayout>
 
-							<GridLayout rows="auto, auto, auto, auto" columns="*">
-								<Button row="0" text="Upload image" @tap="selectImage" />
-								<Image row="1" :src='selectedImage' class="image" id="imageFile" v-if="showImage" />
-								<Button row="2" text="Upload video" @tap="selectVideo" />
-								<VideoPlayer row="3" ref="player" id="videoFile" v-if="showVideo"
+							<StackLayout>
+								<GridLayout v-if="!selectedVideo" rows="auto" columns="*">
+									<Button row="0" text="Upload video" @tap="selectVideo" />
+								</GridLayout>
+								<GridLayout v-else rows="auto" columns="*, *">
+									<Button col="1" text="Remove Video" backgroundColor="red" color="white" @tap="selectedVideo= null"/>
+									<Button row="0" text="Change Video" @tap="selectVideo" />
+								</GridLayout>
+								<GridLayout rows="auto" columns="*">
+										<VideoPlayer row="1" ref="player" id="videoFile" v-if="selectedVideo"
 									controls="true" loop="true" autoplay="true" height="200"
 									:src='selectedVideo'/>
-							</GridLayout>
+								</GridLayout>
+							</StackLayout>
 							<GridLayout rows="auto" columns="*, *">
 								<Button col="1" text="Add Post" @tap="validatePost" />
 								<Button col="0" text="Discard" backgroundColor="red" color="white" @tap="$navigateBack"/>
@@ -76,8 +94,8 @@ export default {
 	},
 	data() {
 		return {
-			showImage: false,
-			showVideo: false,
+			//showImage: false,
+			//showVideo: false,
 			post: {
 				title: '',
 				body: '',
@@ -290,8 +308,8 @@ export default {
                         image.options.width = 300;
 						image.options.height = 300;
 						this.selectedVideo = null;
-						this.showVideo =false;
-						this.showImage=true;
+						//this.showVideo =false;
+						//this.showImage=true;
 						this.selectedImage = image;
 						/*console.log("this.selectedImage");
 						console.log(this.selectedImage);*/
@@ -321,8 +339,8 @@ export default {
 						video.options.width = 300;
 						video.options.height = 300;
 						this.selectedImage = null;
-						this.showImage = false
-						this.showVideo = true;
+						//this.showImage = false
+						//this.showVideo = true;
 						this.selectedVideo = video._android ?? video._ios; //URI for video
 						if(this.selectedVideo.slice(-3)!='mp4'){
 						alert({ title: "Only MP4 format", message: "Only .mp4 videos supported" });
