@@ -24,8 +24,15 @@
 
 					<StackLayout dock="top" height="90%" margin="0 10">
 
-						<Button :text="buttonToggle ? expandedContactUs:collapsedContactUs" style="font-size:27;color:#fff;" 
-                        @tap="toggleButton"/>
+						<!-- <Button :text="buttonToggle ? expandedContactUs:collapsedContactUs" style="font-size:27;color:#fff;" 
+                        @tap="toggleButton"/> -->
+                        <StackLayout>
+                            <Label text = "Test" />
+                        </StackLayout>
+                        <StackLayout @tap="toggleButton()">
+                            <Label :text="buttonToggle ? expandedContactUs: collapsedContactUs" 
+                            style="font-size:27;color:#000000;" class="font-awesome" />
+                        </StackLayout>
 
 					</StackLayout>
 
@@ -56,8 +63,8 @@
                 buttonToggle: false,
                 drawer1: "", //the three dots vertically
                 drawer2: "", //the three dots horizontally
-                collapsedContactUs: "Contact Us  oop", //right chevron
-                expandedContactUs: "Contact Us  doop", //down chevron
+                collapsedContactUs: "Contact Us ", //right chevron
+                expandedContactUs: "Contact Us ", //down chevron
                 mainColor: "#00ff92",
             };
         },
