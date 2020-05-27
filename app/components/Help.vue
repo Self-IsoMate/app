@@ -26,14 +26,14 @@
 
 						<!-- <Button :text="buttonToggle ? expandedContactUs:collapsedContactUs" style="font-size:27;color:#fff;" 
                         @tap="toggleButton"/> -->
-                        <StackLayout>
-                            <Label text = "Test" />
-                        </StackLayout>
-                        <StackLayout @tap="toggleButton()">
-                            <Label :text="buttonToggle ? expandedContactUs: collapsedContactUs" 
+                        <StackLayout @tap="toggleContactUs()" class="option">
+                            <Label :text="contactToggle ? 'Contact Us ' + expanded: 'Contact Us ' + collapsed"
                             style="font-size:27;color:#000000;" class="font-awesome" />
                         </StackLayout>
-
+                        <StackLayout @tap="toggleFAQ()" class="option">
+                            <Label :text="faqToggle ? 'FAQ ' + expanded: 'FAQ ' + collapsed"
+                            style="font-size:27;color:#000000;" class="font-awesome" />
+                        </StackLayout>
 					</StackLayout>
 
                     <NavBar dock="bottom" height="10%" selectedtab="home" />
@@ -60,11 +60,12 @@
         data() {
             return {
                 drawerToggle: false,
-                buttonToggle: false,
+                contactToggle: false,
+                faqToggle: false,
                 drawer1: "", //the three dots vertically
                 drawer2: "", //the three dots horizontally
-                collapsedContactUs: "Contact Us ", //right chevron
-                expandedContactUs: "Contact Us ", //down chevron
+                collapsed: "", //right chevron
+                expanded: "", //down chevron
                 mainColor: "#00ff92",
             };
         },
@@ -78,15 +79,22 @@
             toggleDrawer() {
                 this.$refs.drawer.nativeView.toggleDrawerState();
             },
-            toggleButton() {
-                this.buttonToggle = !this.buttonToggle;
+            toggleContactUs() {
+                this.contactToggle = !this.contactToggle;
+            },
+            toggleFAQ() {
+                this.faqToggle = !this.faqToggle;
             }
         }
     };
 </script>
 
 <style scoped>
-
+.option{
+	background-color: #fff;
+	padding-top: 2;
+	border-top: 1px dashed rgb(122, 118, 118);
+}
 .category-header {
 	font-size: 20;
 	vertical-align: center;
