@@ -94,9 +94,7 @@ export default {
 	},
 	data() {
 		return {
-			//showImage: false,
-			//showVideo: false,
-			post: {
+				post: {
 				title: '',
 				body: '',
 				media: '',
@@ -293,6 +291,7 @@ export default {
 			return this.post.communities.find((c) => c._id == community._id) != null;
 		},
 		selectImage(event) {
+			this.selectedVideo = null;
             let context = imagepicker.create({ mode: "single", mediaType: 1 });
 
             context
@@ -307,9 +306,6 @@ export default {
                         let image = selection[0];
                         image.options.width = 300;
 						image.options.height = 300;
-						this.selectedVideo = null;
-						//this.showVideo =false;
-						//this.showImage=true;
 						this.selectedImage = image;
 						/*console.log("this.selectedImage");
 						console.log(this.selectedImage);*/
@@ -324,6 +320,8 @@ export default {
                 })
 		},
 		selectVideo(event) {
+			this.selectedImage = null;
+
             let context = imagepicker.create({ mode: "single", mediaType: 2 });
 
             context
@@ -338,7 +336,6 @@ export default {
                         let video = selection[0];
 						video.options.width = 300;
 						video.options.height = 300;
-						this.selectedImage = null;
 						//this.showImage = false
 						//this.showVideo = true;
 						this.selectedVideo = video._android ?? video._ios; //URI for video
