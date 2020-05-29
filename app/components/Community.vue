@@ -62,13 +62,13 @@
                                         <StackLayout v-if="item.userId == $store.state.user._id">
                                 <StackLayout v-if='item.media!==""'>
                                     <GridLayout  rows="auto" columns="*, *">
-                                        <Button col="1" text="Remove Media" backgroundColor="red" color="white" @tap="alertino(item.userId)" />
-                                        <Button row="0" text="Remove Post" backgroundColor="red" color="white" @tap="alertino(item.userId)" />
+                                        <Button col="1" text="Remove Media" backgroundColor="red" color="white" @tap="alertino(item._id)" />
+                                        <Button row="0" text="Remove Post" backgroundColor="red" color="white" @tap="deletePostino(item._id)" />
 								    </GridLayout>
                                 </StackLayout> 
                                   <StackLayout v-else>
                                    <GridLayout  rows="auto" columns="*">
-                                        <Button row="0" text="Remove Post" backgroundColor="red" color="white" @tap="alertino(item.userId)" />
+                                        <Button row="0" text="Remove Post" backgroundColor="red" color="white" @tap="deletePostino(item._id)" />
 								</GridLayout>
                                 </StackLayout>
                                 </StackLayout>                                   
@@ -191,7 +191,26 @@ export default {
     methods: {
         alertino(userIdPost){
             alert({ title: "Error", message: ""+userIdPost+"", okButtonText: "OK"  });
-            console.log(this.$store.state.user._id);
+            console.log(userIdPost);
+        },
+        deletePostino(userIdPost){
+            var service = new BackendService();
+            service.deletePost(userIdPost)
+                        .then((res) => {
+                            if (res) {
+                                if(res.success==true){
+                                alert({ title: "Success", message: "post successfully deleted", okButtonText: "OK"  });
+                                    this.posts= [];
+                                    log();
+                                }else{
+                                    alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+
+                                }
+                                console.log(res);
+                            }
+                        }).catch((err) => {
+                            if (err) console.log("err: "+err);
+                        });;
         },
         log() {
             var service = new BackendService();
