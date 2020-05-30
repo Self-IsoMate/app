@@ -23,12 +23,14 @@
                     <!-- Actual page content goes here (in dock top) -->
 
 					<StackLayout dock="top" height="90%" margin="0 10">
-
-						<!-- <Button :text="buttonToggle ? expandedContactUs:collapsedContactUs" style="font-size:27;color:#fff;" 
-                        @tap="toggleButton"/> -->
                         <StackLayout @tap="toggleContactUs()" class="option">
                             <Label :text="contactToggle ? 'Contact Us ' + expanded: 'Contact Us ' + collapsed"
                             style="font-size:27;color:#000000;" class="font-awesome" />
+                        </StackLayout>
+                        <StackLayout v-show="contactToggle">
+                            <Label/>
+                            <Label text="Get in touch via email:" style="font-size:20;" />
+                            <Label text="info@self-isomate.online" @tap="openLink()" class="link" style="font-size:20;"/>
                         </StackLayout>
                         <StackLayout @tap="toggleFAQ()" class="option">
                             <Label :text="faqToggle ? 'FAQ ' + expanded: 'FAQ ' + collapsed"
@@ -67,6 +69,7 @@
                 collapsed: "", //right chevron
                 expanded: "", //down chevron
                 mainColor: "#00ff92",
+                emailUs: "mailto:info@self-isomate.online"
             };
         },
         methods: {
@@ -84,22 +87,35 @@
             },
             toggleFAQ() {
                 this.faqToggle = !this.faqToggle;
-            }
+            },
+            openEmail(){
+                alert({ title: 'Send Email', message: 'Implement to open email app' })
+            },
+            openLink() {
+                const utilsModule = require("tns-core-modules/utils/utils");
+                utilsModule.openUrl(this.emailUs);
+		    }
         }
     };
 </script>
 
 <style scoped>
 .option{
-	background-color: #fff;
-	padding-top: 2;
-	border-top: 1px dashed rgb(122, 118, 118);
+	background-color: #c2c2bf;
+    padding-top: 20;
+    padding-bottom: 20;
+    padding-left: 5;
+	margin-top: 20;
 }
 .category-header {
 	font-size: 20;
 	vertical-align: center;
 	color: white;
 	margin: 5 0 0 0
+}
+.link{
+	text-decoration: underline;
+    color: cornflowerblue;
 }
 
 </style>
