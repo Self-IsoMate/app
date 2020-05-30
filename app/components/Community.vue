@@ -62,7 +62,7 @@
                                         <StackLayout v-if="item.userId == $store.state.user._id">
                                 <StackLayout v-if='item.media!==""'>
                                     <GridLayout  rows="auto" columns="*, *">
-                                        <Button col="1" text="Remove Media" backgroundColor="red" color="white" @tap="alertino(item._id)" />
+                                        <Button col="1" text="Remove Media" backgroundColor="red" color="white" @tap="removeMedia(item._id)" />
                                         <Button row="0" text="Remove Post" backgroundColor="red" color="white" @tap="deletePostino(item._id)" />
 								    </GridLayout>
                                 </StackLayout> 
@@ -189,8 +189,8 @@ export default {
         };
     },
     methods: {
-        alertino(userIdPost){
-            alert({ title: "Error", message: ""+userIdPost+"", okButtonText: "OK"  });
+        removeMedia(userIdPost){
+            alert({ title: "Coming soon", message: "Feature not yet implemented", okButtonText: "OK"  });
             console.log(userIdPost);
         },
         deletePostino(userIdPost){
