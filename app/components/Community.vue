@@ -190,27 +190,53 @@ export default {
     },
     methods: {
         removeMedia(userIdPost){
-            alert({ title: "Coming soon", message: "Feature not yet implemented", okButtonText: "OK"  });
-            console.log(userIdPost);
+            confirm(
+                    {
+                        title: 'Are you sure?',
+                        message: 'Are you sure you want to remove your image/video from your Post?',
+                        okButtonText: "Delete",
+                        cancelButtonText: "Go Back"
+                    })
+                    .then((res) => {
+                        if (res) {
+                            alert({ title: "Coming soon", message: "Feature not yet implemented", okButtonText: "OK"  });
+                            console.log(userIdPost);
+                        }
+                    }).catch((err) => {
+                        if (err) console.log("err: "+err);
+                     });
         },
         deletePostino(userIdPost){
-            var service = new BackendService();
-            service.deletePost(userIdPost)
-                        .then((res) => {
-                            if (res) {
-                                if(res.success==true){
-                                alert({ title: "Success", message: "post successfully deleted", okButtonText: "OK"  });
-                                    this.posts= [];
-                                    log();
-                                }else{
-                                    alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+            confirm(
+                    {
+                        title: 'Are you sure?',
+                        message: 'Are you sure you want to delete your Post?',
+                        okButtonText: "Delete",
+                        cancelButtonText: "Go Back"
+                    })
+                    .then((res) => {
+                        if (res) {
+                            var service = new BackendService();
+                            service.deletePost(userIdPost)
+                                        .then((res) => {
+                                            if (res) {
+                                                if(res.success==true){
+                                                alert({ title: "Success", message: "post successfully deleted", okButtonText: "OK"  });
+                                                    this.posts= [];
+                                                    log();
+                                                }else{
+                                                    alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
 
-                                }
-                                console.log(res);
-                            }
-                        }).catch((err) => {
-                            if (err) console.log("err: "+err);
-                        });;
+                                                }
+                                                console.log(res);
+                                            }
+                                        }).catch((err) => {
+                                            if (err) console.log("err: "+err);
+                                        });
+                                        }
+                    }).catch((err) => {
+                        if (err) console.log("err: "+err);
+                    });
         },
         log() {
             var service = new BackendService();
