@@ -59,7 +59,20 @@
                                         <WrapLayout orientation="horizontal">
                                             <CommunityPill v-for="(c, index) in item.communities" :key="index" :communityId="c" />
                                         </WrapLayout>
-                                    </StackLayout>
+                                        <StackLayout v-if="item.userId == $store.state.user._id">
+                                <StackLayout v-if='item.media!==""'>
+                                    <GridLayout  rows="auto" columns="*, *">
+                                        <Button col="1" text="Remove Media" backgroundColor="red" color="white" @tap="removeMedia(item)" />
+                                        <Button row="0" text="Remove Post" backgroundColor="red" color="white" @tap="deletePostino(item)" />
+								    </GridLayout>
+                                </StackLayout> 
+                                  <StackLayout v-else>
+                                   <GridLayout  rows="auto" columns="*">
+                                        <Button row="0" text="Remove Post" backgroundColor="red" color="white" @tap="deletePostino(item)" />
+								</GridLayout>
+                                </StackLayout>
+                                </StackLayout>                                   
+                            </StackLayout>
                                 </StackLayout>
 
                             </v-template>
@@ -176,6 +189,74 @@ export default {
         };
     },
     methods: {
+        removeMedia(post){
+            confirm(
+                    {
+                        title: 'Are you sure?',
+                        message: 'Are you sure you want to remove your image/video from your Post?',
+                        okButtonText: "Delete",
+                        cancelButtonText: "Go Back"
+                    })
+                    .then((res) => {
+                        if (res) {
+                            var mediaData = post.media.split("/");
+                              var service = new BackendService();
+                            service.removeMediaFromPost(post._id)
+                                        .then((res) => {
+                                            if (res) {
+                                                if(res.success==true){
+                                                alert({ title: "Image removed", message: "Success! Image "+mediaData[mediaData.length - 1]+" successfully removed", okButtonText: "OK"  });
+                                                console.log(mediaData[mediaData.length - 1]);
+                                                    this.posts= [];
+                                                    this.log();
+                                                }else{
+                                                    alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+
+                                                }
+                                                console.log(res);
+                                            }
+                                        }).catch((err) => {
+                                            if (err) console.log("err: "+err);
+                                        });
+                           
+
+                        }
+                    }).catch((err) => {
+                        if (err) console.log("err: "+err);
+                     });
+        },
+        deletePostino(post){
+            confirm(
+                    {
+                        title: 'Are you sure?',
+                        message: 'Are you sure you want to delete your Post?',
+                        okButtonText: "Delete",
+                        cancelButtonText: "Go Back"
+                    })
+                    .then((res) => {
+                        if (res) {
+                            var service = new BackendService();
+                            service.deletePost(post._id)
+                                        .then((res) => {
+                                            if (res) {
+                                                if(res.success==true){
+                                                alert({ title: "Success", message: "post successfully deleted", okButtonText: "OK"  });
+                                                    this.posts= [];
+                                                    this.log();
+                                                }else{
+                                                    alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+
+                                                }
+                                                console.log(res);
+                                            }
+                                        }).catch((err) => {
+                                            if (err) console.log("err: "+err);
+                                        });
+                                        }
+                    }).catch((err) => {
+                        if (err) console.log("err: "+err);
+                    });
+        },
         log() {
             var service = new BackendService();
 

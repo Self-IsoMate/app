@@ -439,6 +439,32 @@ export default class BackendService {
             })
     }
 
+async removeMediaFromPost(postId) {
+    return await axios.put(API+`posts/${postId}`, {'media':''})
+        .then((res) => {
+            if (res) {
+                return { success: res.data.success };
+            }
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+}
+
+    async deletePost(postId) { 
+        return axios.delete(API + `posts/${postId}`)
+            .then((res) => {
+                if (res) {
+                    return { success: res.data.success };
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err };
+                }
+            })
+    }
+
     uploadPostImage (image) {
         // checking if image uses android or apple file system uri
         var imageUri = null;
