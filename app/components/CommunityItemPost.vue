@@ -35,6 +35,7 @@ export default {
 
 .button {
 	font-size: 12;
-	padding: 1;
+	padding: 5 10;
+	height: 40;
 }
 </style>
