@@ -199,27 +199,45 @@ export default {
                     })
                     .then((res) => {
                         if (res) {
+                            var postBucketName;
+                            var postFilename;
                             var mediaData = post.media.split("/");
                               var service = new BackendService();
-                            service.removeMediaFromPost(post._id)
+                              if(mediaData[mediaData.length - 1].slice(-3)=='mp4'){
+                                        postBucketName  = "self-isomate-videos";
+                                        postFilename = "post-videos/"+mediaData[mediaData.length - 1];
+                              }else{   
+                                        postBucketName  = "self-isomate-images";
+                                        postFilename = "post-images/"+mediaData[mediaData.length - 1];
+                              }
+                           service.removeMediaFromCloud(postBucketName, postFilename )
                                         .then((res) => {
                                             if (res) {
                                                 if(res.success==true){
-                                                alert({ title: "Image removed", message: "Success! Image "+mediaData[mediaData.length - 1]+" successfully removed", okButtonText: "OK"  });
-                                                console.log(mediaData[mediaData.length - 1]);
-                                                    this.posts= [];
-                                                    this.log();
+
+                                                        service.removeMediaFromPost(post._id)
+                                                            .then((res) => {
+                                                                if (res) {
+                                                                    if(res.success==true){
+                                                                        this.posts= [];
+                                                                        this.log();
+                                                                    }else{
+                                                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+
+                                                                    }
+                                                                }
+                                                            }).catch((err) => {
+                                                                if (err) console.log("err: "+err);
+                                                            });
+
                                                 }else{
                                                     alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
 
                                                 }
-                                                console.log(res);
                                             }
                                         }).catch((err) => {
                                             if (err) console.log("err: "+err);
                                         });
-                           
-
                         }
                     }).catch((err) => {
                         if (err) console.log("err: "+err);
