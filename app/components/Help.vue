@@ -81,7 +81,7 @@
                     this.questions = Array.from(this.allQuestions);
                     console.log(this.questions);
                 } else {
-                    console.log("error on faqs");
+                    console.log("error on getting faqs");
                 }
             });
         },
