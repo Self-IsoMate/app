@@ -636,4 +636,15 @@ export default class BackendService {
             })
     }
 
+    async getFAQs() {
+        return axios.get(`${API}faq`)
+        .then((res) => {
+            return { faqs: res.data.questions }; // return { chatroom: res.data };
+
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+
 }
