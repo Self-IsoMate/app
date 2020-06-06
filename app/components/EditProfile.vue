@@ -116,6 +116,13 @@ export default {
                         this.$store.commit("setUser", {user: res.user});
 
                         if (this.editedUser.profilePicture != this.currentUser.profilePicture) {
+                      ;
+                            var propicData = this.$store.state.user.profilePicture.split("/");
+                            if(propicData[5] && propicData[5]!="default"){
+                               console.log("profilepic old ");
+                            console.log(this.$store.state.user.profilePicture)
+                            }
+                         
                             this.uploadImage()
                                 .then((res => {
                                     if (res) {
@@ -130,7 +137,7 @@ export default {
                                 }))
                                 .catch((errr) => {
                                     console.log(errr);
-                                });
+                                })
                         }
                     }
                 })
