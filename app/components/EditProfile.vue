@@ -119,8 +119,27 @@ export default {
                       ;
                             var propicData = this.$store.state.user.profilePicture.split("/");
                             if(propicData[5] && propicData[5]!="default"){
-                               console.log("profilepic old ");
-                            console.log(this.$store.state.user.profilePicture)
+                            console.log("profilepic old ");
+                            console.log(this.$store.state.user.profilePicture);
+                            /*
+
+                                postBucketName  = "self-isomate-images";
+                                postFilename = "profile-pictures/"+propicData[6];
+                           service.removeMediaFromCloud(postBucketName, postFilename )
+                                        .then((res) => {
+                                            if (res) {
+                                                if(res.success==true){
+
+                                                }else{
+                                                    alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+
+                                                }
+                                            }
+                                        }).catch((err) => {
+                                            if (err) console.log("err: "+err);
+                                        });
+
+                            */
                             }
                          
                             this.uploadImage()
@@ -137,7 +156,7 @@ export default {
                                 }))
                                 .catch((errr) => {
                                     console.log(errr);
-                                })
+                                });
                         }
                     }
                 })
