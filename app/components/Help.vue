@@ -68,6 +68,7 @@
 <script>
     import * as utils from "~/shared/utils";
     import SelectedPageService from "../shared/selected-page-service";
+    import BackendService from "../services/BackendService";
 
     export default {
         mounted() {
@@ -80,7 +81,7 @@
                     this.questions = Array.from(this.allQuestions);
                     console.log(this.questions);
                 } else {
-                    console.log("error on getting Chatroom Ids");
+                    console.log("error on faqs");
                 }
             });
         },
