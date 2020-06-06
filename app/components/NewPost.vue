@@ -3,7 +3,7 @@
 		<ActionBar title="" class="action-bar header">
 			<GridLayout columns="auto, *, auto" height="38" 
                 class="actionBarContainer">
-                <StackLayout col="0" @tap="$navigateBack" style="vertical-alignment:center;" >
+                <StackLayout col="0" @tap="confirmDiscard" style="vertical-alignment:center;" >
                     <Label :text="back" class="font-awesome" style="font-size:27;color:#fff;" verticalAlignment="center"/>
                 </StackLayout>
                 <StackLayout col="1" orientation="horizontal" alignItems="center">
@@ -12,8 +12,6 @@
 				<StackLayout col="2" orientation="horizontal" alignItems="right" marginRight="10">
 					<Label text="" class="header-text font-awesome" style="font-size:27;color:#fff;margin:5 15;" 
 						verticalAlignment="center" @tap="validatePost" />
-					<Label text="" class="header-text font-awesome" style="font-size:27;color:#fff;margin:5;" 
-						verticalAlignment="center" @tap="$navigateBack" />
                 </StackLayout>
             </GridLayout>
         </ActionBar>
@@ -351,6 +349,19 @@ export default {
                 .catch((err) => {
                     console.table(err); //table <- for errors
                 })
+		},
+		confirmDiscard () {
+			confirm({
+				title: 'Are you sure?',
+				message: 'Are you sure you want to discard your post?',
+				okButtonText: 'Discard',
+				cancelButtonText: 'Cancel'
+			})
+			.then(res => {
+				if (res) {
+					this.$navigateBack();
+				}
+			})
 		}
 	},
 	computed: {
