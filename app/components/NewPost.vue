@@ -1,27 +1,24 @@
 <template>
 	<Page xmlns:VideoPlayer="nativescript-videoplayer">
 		<ActionBar title="" class="action-bar header">
-            <StackLayout orientation="horizontal" height="38" alignItems="left"
+			<GridLayout columns="auto, *, auto" height="38" 
                 class="actionBarContainer">
-                <StackLayout class="HLeft" style="vertical-align:center;" @tap="$navigateBack">
-                    <Label :text="back" class="font-awesome" style="font-size:27;color:#fff;"/>
+                <StackLayout col="0" @tap="confirmDiscard" style="vertical-alignment:center;" >
+                    <Label :text="back" class="font-awesome" style="font-size:27;color:#fff;" verticalAlignment="center"/>
                 </StackLayout>
-                <StackLayout class="HMid" alignItems="left">
-                    <Label text="New Post" class="header-text" />
+                <StackLayout col="1" orientation="horizontal" alignItems="center">
+                    <Label text="New Post" class="header-text" verticalAlignment="center" style="margin: 0 15;" />
                 </StackLayout>
-                <StackLayout class="HRight">
+				<StackLayout col="2" orientation="horizontal" alignItems="right" marginRight="10">
+					<Label text="" class="header-text font-awesome" style="font-size:27;color:#fff;margin:5 15;" 
+						verticalAlignment="center" @tap="validatePost" />
                 </StackLayout>
-            </StackLayout>
+            </GridLayout>
         </ActionBar>
 
         <StackLayout ~mainContent>
                 <!-- Actual page content goes here (in dock top) -->
 			<StackLayout width="100%">
-
- <StackLayout>
-
-
-        </StackLayout>
 			    <StackLayout margin="15">
 
 					<ScrollView>
@@ -30,16 +27,6 @@
 
 							<TextView v-model="post.body" hint="Your post..." height="100" class="outline-field text-field" />
 
-							<StackLayout>
-								<TextView v-model="searchCommunity" hint="Search communities..." @textChange="filterCommunities" />
-								<ScrollView height="150" >
-									<StackLayout>
-										<CommunityItemPost v-for="a in availableCommunities" :key="a._id"
-											:community="a" @tap="toggleCommunity" />
-									</StackLayout>
-								</ScrollView>
-								  
-							</StackLayout>
 							<StackLayout>
 								<GridLayout v-if="!selectedImage" rows="auto" columns="*">
 									<Button row="0" text="Upload image" @tap="selectImage" />
@@ -67,11 +54,18 @@
 									:src='selectedVideo'/>
 								</GridLayout>
 							</StackLayout>
-							<GridLayout rows="auto" columns="*, *">
-								<Button col="1" text="Add Post" @tap="validatePost" />
-								<Button col="0" text="Discard" backgroundColor="red" color="white" @tap="$navigateBack"/>
-							</GridLayout>
+
+							<StackLayout>
+								<TextView v-model="searchCommunity" hint="Search communities..." @textChange="filterCommunities" />
+								<WrapLayout orientation="horizontal">
+									<CommunityItemPost v-for="a in availableCommunities" :key="a._id"
+										:community="a" @tap="toggleCommunity" />
+								</WrapLayout>
+									
+							</StackLayout>
+
 						</StackLayout>
+
 					</ScrollView>
 
 			    </StackLayout>
@@ -355,6 +349,19 @@ export default {
                 .catch((err) => {
                     console.table(err); //table <- for errors
                 })
+		},
+		confirmDiscard () {
+			confirm({
+				title: 'Are you sure?',
+				message: 'Are you sure you want to discard your post?',
+				okButtonText: 'Discard',
+				cancelButtonText: 'Cancel'
+			})
+			.then(res => {
+				if (res) {
+					this.$navigateBack();
+				}
+			})
 		}
 	},
 	computed: {
