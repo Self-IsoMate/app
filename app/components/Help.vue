@@ -36,6 +36,25 @@
                             <Label :text="faqToggle ? 'FAQ ' + expanded: 'FAQ ' + collapsed"
                             style="font-size:27;color:#000000;" class="font-awesome" />
                         </StackLayout>
+                        <StackLayout v-show="faqToggle">
+                            <Label/>
+                            <ListView for="item in questions" key="index" height="100%"
+                            backgroundColor="#E8E8E8" separatorColor="transparent"
+                            id="listView">
+                            <StackLayout>
+                            <v-template>
+
+                                <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
+                                    <StackLayout class="item">
+                                        <Label :text="item.question"/>
+                                        <Label :text="item.answer"/>
+                                    </StackLayout>
+                                </StackLayout>
+
+                            </v-template>
+                            </StackLayout>
+                        </ListView>
+                        </StackLayout>
 					</StackLayout>
 
                     <NavBar dock="bottom" height="10%" selectedtab="home" />
@@ -53,6 +72,17 @@
     export default {
         mounted() {
             SelectedPageService.getInstance().updateSelectedPage("Notifications");
+            var backend = new BackendService();
+
+            backend.getFAQs().then(res=>{
+                if (res) {
+                    this.allQuestions = res;
+                    this.questions = Array.from(this.allQuestions);
+                    console.log(this.questions);
+                } else {
+                    console.log("error on getting Chatroom Ids");
+                }
+            });
         },
         computed: {
             message() {
@@ -69,7 +99,9 @@
                 collapsed: "", //right chevron
                 expanded: "", //down chevron
                 mainColor: "#00ff92",
-                emailUs: "mailto:info@self-isomate.online"
+                emailUs: "mailto:info@self-isomate.online",
+                questions: [],
+                allQuestions: []
             };
         },
         methods: {
