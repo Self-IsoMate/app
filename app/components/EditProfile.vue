@@ -93,10 +93,10 @@ export default {
             // run when you click save
             //console.log("uploading image");
             return this.service.changeProfilePicture(this.editedUser)
-                .then((newLocation) => {
-                    console.log("IMAGEEEE");
-                    console.log(newLocation);
-                    if (newLocation) {
+                .then((res) => {
+                    console.log("res");
+                    console.log(res);
+                    if (res) {
                         /*console.log("RESPONSE");
                         console.log(res);*/
                     }
@@ -144,16 +144,16 @@ export default {
                          
                            this.uploadImage()
                                 .then((res => {
-                                    /*console.log("FRAAAA");
-                                    console.log(res);*/
+                                    console.log("FRAAAA");
+                                    console.log(res);
                                     if (res) {
-                                        /*console.log("current user before");
+                                        console.log("current user before");
                                         console.log(this.currentUser.profilePicture);
                                         console.log("response");
-                                        console.log(res);*/
+                                        console.log(res);
                                         this.$store.commit("setUserProfilePicture", { profilePicture: res });
-                                        /*console.log("current user after");
-                                        console.log(this.currentUser.profilePicture);*/
+                                        console.log("current user after");
+                                        console.log(this.currentUser.profilePicture);
                                         	this.$navigateTo(Home,{
                                                 animated: false,
                                                 clearHistory: true

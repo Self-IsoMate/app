@@ -116,8 +116,8 @@ export default class BackendService {
                     /*alert({ title: ""+res.newLocation+"", message: ""+res.newLocation+"", okButtonText: "OK"  });
                     console.log(res.newLocation);*/
                         if (res) {
-                            /*console.log("inner return");
-                            console.log(res);*/
+                            console.log("inner return");
+                            console.log(res);
                             return { newLocation: res.newLocation };
                         }
                     });
