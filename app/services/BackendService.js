@@ -695,4 +695,15 @@ return await axios.put(API+`posts/${postId}`, {'media':''})
             })
     }
 
+    async getFAQs() {
+        return axios.get(`${API}faq`)
+        .then((res) => {
+            return { faqs: res.data.questions }; // return { chatroom: res.data };
+
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+
 }
