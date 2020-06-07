@@ -28,16 +28,16 @@
                             style="font-size:27;color:#000000;" class="font-awesome" />
                         </StackLayout>
                         <StackLayout v-show="contactToggle">
-                            <Label/>
-                            <Label text="Get in touch via email:" style="font-size:20;" />
-                            <Label text="info@self-isomate.online" @tap="openLink()" class="link" style="font-size:20;"/>
+                            <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
+                                <Label text="Get in touch via email:" style="font-size:20;" />
+                                <Label text="info@self-isomate.online" @tap="openLink()" class="link" style="font-size:20;"/>
+                            </StackLayout>
                         </StackLayout>
                         <StackLayout @tap="toggleFAQ()" class="option">
                             <Label :text="faqToggle ? 'FAQ ' + expanded: 'FAQ ' + collapsed"
                             style="font-size:27;color:#000000;" class="font-awesome" />
                         </StackLayout>
                         <StackLayout v-show="faqToggle">
-                            <Label/>
                             <ListView for="item in questions" key="index" height="100%"
                             backgroundColor="#E8E8E8" separatorColor="transparent"
                             id="listView">
@@ -46,8 +46,8 @@
 
                                 <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
                                     <StackLayout class="item">
-                                        <Label :text="item.question"/>
-                                        <Label :text="item.answer"/>
+                                        <Label textWrap="true" :text="item.question" style="font-size: 20;font-weight: bold;"/>
+                                        <Label textWrap="true" :text="item.answer"/>
                                     </StackLayout>
                                 </StackLayout>
 
@@ -77,7 +77,7 @@
 
             backend.getFAQs().then(res=>{
                 if (res) {
-                    this.allQuestions = res;
+                    this.allQuestions = res.faqs;
                     this.questions = Array.from(this.allQuestions);
                     console.log(this.questions);
                 } else {
