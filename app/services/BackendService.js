@@ -113,9 +113,11 @@ export default class BackendService {
             if (e) {
                 this.updateUserProfilePicture(user, link)
                     .then((res) => {
+                    /*alert({ title: ""+res.newLocation+"", message: ""+res.newLocation+"", okButtonText: "OK"  });
+                    console.log(res.newLocation);*/
                         if (res) {
-                            console.log("inner return");
-                            console.log(res);
+                            /*console.log("inner return");
+                            console.log(res);*/
                             return { newLocation: res.newLocation };
                         }
                     });
@@ -125,7 +127,7 @@ export default class BackendService {
     }
 
     async updateUserProfilePicture (user, imageLink) {
-        console.log("updateUserProfilePicture");
+        //console.log("updateUserProfilePicture");
         user.profilePicture = imageLink;
 
         return await axios.put(API+`users/${user._id}`, user)

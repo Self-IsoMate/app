@@ -36,7 +36,7 @@
                     </FlexboxLayout>
 
                     <!-- Edit communities -->
-                    <Label text="Edit communities" class="field-header" />
+                    <!--Label text="Edit communities" class="field-header" /-->
 
                     <WrapLayout>
                         <Label v-for="(com, index) in editedUser.communities" :text="com.name" :key="index" />
@@ -77,7 +77,7 @@ export default {
                         image.options.width = 300;
                         image.options.height = 300;
                         this.editedUser.profilePicture = image;
-                        console.log(this.editedUser.profilePicture);
+                        //console.log(this.editedUser.profilePicture);
                         return;
                     } else {
                         console.log("no image selected");
@@ -91,12 +91,14 @@ export default {
             
         async uploadImage () {
             // run when you click save
-            console.log("uploading image");
+            //console.log("uploading image");
             return this.service.changeProfilePicture(this.editedUser)
-                .then((res) => {
-                    if (res) {
-                        console.log("RESPONSE");
-                        console.log(res);
+                .then((newLocation) => {
+                    console.log("IMAGEEEE");
+                    console.log(newLocation);
+                    if (newLocation) {
+                        /*console.log("RESPONSE");
+                        console.log(res);*/
                     }
                 });
         },
@@ -116,20 +118,20 @@ export default {
                         this.$store.commit("setUser", {user: res.user});
 
                         if (this.editedUser.profilePicture != this.currentUser.profilePicture) {
-                      ;
+                      
                             var propicData = this.$store.state.user.profilePicture.split("/");
+                            //console.log(propicData);
                             if(propicData[5] && propicData[5]!="default"){
-                            console.log("profilepic old ");
-                            console.log(this.$store.state.user.profilePicture);
-                            /*
-
-                                postBucketName  = "self-isomate-images";
-                                postFilename = "profile-pictures/"+propicData[6];
-                           service.removeMediaFromCloud(postBucketName, postFilename )
+                            /*console.log("profilepic old ");
+                            console.log(this.$store.state.user.profilePicture);*/
+                                var postBucketName  = "self-isomate-images";
+                                var postFilename = "profile-pictures/"+propicData[5];
+                           this.service.removeMediaFromCloud(postBucketName, postFilename )
                                         .then((res) => {
                                             if (res) {
+                                                //console.log(res);
                                                 if(res.success==true){
-
+                                                    alert({ title: "Loading your profile pic", message: "Loading please wait", okButtonText: "OK"  });
                                                 }else{
                                                     alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
 
@@ -138,20 +140,24 @@ export default {
                                         }).catch((err) => {
                                             if (err) console.log("err: "+err);
                                         });
-
-                            */
                             }
                          
-                            this.uploadImage()
+                           this.uploadImage()
                                 .then((res => {
+                                    /*console.log("FRAAAA");
+                                    console.log(res);*/
                                     if (res) {
-                                        console.log("current user before");
+                                        /*console.log("current user before");
                                         console.log(this.currentUser.profilePicture);
                                         console.log("response");
-                                        console.log(res);
+                                        console.log(res);*/
                                         this.$store.commit("setUserProfilePicture", { profilePicture: res });
-                                        console.log("current user after");
-                                        console.log(this.currentUser.profilePicture);
+                                        /*console.log("current user after");
+                                        console.log(this.currentUser.profilePicture);*/
+                                        	this.$navigateTo(Home,{
+                                                animated: false,
+                                                clearHistory: true
+                                            });
                                     }
                                 }))
                                 .catch((errr) => {

@@ -28,7 +28,7 @@
                             <!-- Profile Settings -->
                             <Label text="Profile" class="setting-header" />
 
-                            <Label text="Edit your profile" class="setting-text emphasis" @tap="navigateEditProfile" />
+                            <Label text="Click here to edit your profile" class="setting-text emphasis" @tap="navigateEditProfile" />
 
                             <StackLayout class="hr m-10 divider"/>
 
