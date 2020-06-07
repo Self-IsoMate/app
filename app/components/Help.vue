@@ -28,7 +28,7 @@
                             style="font-size:27;color:#000000;" class="font-awesome" />
                         </StackLayout>
                         <StackLayout v-show="contactToggle">
-                            <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
+                            <StackLayout paddingTop="5">
                                 <Label text="Get in touch via email:" style="font-size:20;" />
                                 <Label text="info@self-isomate.online" @tap="openLink()" class="link" style="font-size:20;"/>
                             </StackLayout>
