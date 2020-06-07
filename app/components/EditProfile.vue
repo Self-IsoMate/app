@@ -92,13 +92,17 @@ export default {
         async uploadImage () {
             // run when you click save
             //console.log("uploading image");
-            return this.service.changeProfilePicture(this.editedUser)
+             this.service.changeProfilePicture(this.editedUser)
                 .then((res) => {
-                    console.log("res");
-                    console.log(res);
                     if (res) {
-                        /*console.log("RESPONSE");
-                        console.log(res);*/
+                        console.log("qua taske");
+                        var task = this.service.updateUserProfilePicture(this.editedUser, res.link);
+                            	if (task) {
+                                    console.log("inner return");
+                                    console.log(task);
+                                    return { newLocation: task.newLocation };
+                                }
+                          
                     }
                 });
         },
