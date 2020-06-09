@@ -101,10 +101,7 @@ export default class BackendService {
             }
         };
 
-        return { task: session.uploadFile(imageUri, request), link: link };
-
-       
-
+        return { task: session.uploadFile(imageUri, request), data: { link: link, user: user } };
     }
 
     async updateUserProfilePicture (user, imageLink) {
