@@ -207,6 +207,8 @@ export default {
         }
     },
     created () {
+            console.log("EditProfile.vue");
+
         this.resetProfile();
         console.log(this.editedUser);
     }

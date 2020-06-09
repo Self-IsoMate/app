@@ -136,6 +136,8 @@
     export default {
         created() {
             var service = new BackendService();
+            console.log("profile.vue");
+
 
             if (this.$store.state.user) {
                 service.getProfilePosts(this.$store.state.user)
