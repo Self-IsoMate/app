@@ -74,7 +74,7 @@
     import Home from "./Home"
     import Community from "./Community";
     import Chat from "./Chat";
-    import Profile from "./Profile";
+    import Profile from "./EditProfile";
     import Notifications from "./Notifications";
     import Settings from "./Settings";
     import Help from "./Help";

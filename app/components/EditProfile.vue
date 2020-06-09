@@ -157,7 +157,7 @@ export default {
                             //console.log(propicData);
                             if (propicData[5] && propicData[5]!="default") {
                                 /*console.log("profilepic old ");
-                                console.log(this.$store.state.user.profilePicture);*/
+                                console.log(propicData);*/
                                 var postBucketName  = "self-isomate-images";
                                 var postFilename = "profile-pictures/"+propicData[5];
                                 this.service.removeMediaFromCloud(postBucketName, postFilename )
