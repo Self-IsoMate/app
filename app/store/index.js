@@ -15,9 +15,7 @@ export default new Vuex.Store({
 			ApplicationSettings.setString("user", JSON.stringify(data.user));
 		},
 		setUserProfilePicture(state, data) {
-			console.log("we're setting it up!!!");
 			this.state.user.profilePicture = data.profilePicture;
-			ApplicationSettings.setString("user", JSON.stringify(data.user));
 		},
 		clearUser(state) {
 			this.state.user = false;

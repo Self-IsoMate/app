@@ -59,6 +59,7 @@ import * as imagepicker from "nativescript-imagepicker";
 import { ItemEventData } from "tns-core-modules/ui/list-view";
 import { Observable } from "tns-core-modules/data/observable";
 import _ from "underscore";
+import Home from './Home';
 
 export default {
 	methods: {
@@ -119,7 +120,7 @@ export default {
                                                     console.log(this.currentUser.profilePicture);
                                                     console.log("response");
                                                     console.log(res);
-                                                    this.$store.commit("setUserProfilePicture", { profilePicture: res });
+                                                    this.$store.commit("setUserProfilePicture", { profilePicture: res.newLocation });
                                                     console.log("current user after");
                                                     console.log(this.currentUser.profilePicture);
                                                     this.$navigateTo(Home,{
@@ -160,17 +161,17 @@ export default {
                                 var postBucketName  = "self-isomate-images";
                                 var postFilename = "profile-pictures/"+propicData[5];
                                 this.service.removeMediaFromCloud(postBucketName, postFilename )
-                                    .then((res) => {
-                                        if (res) {
+                                    .then((removeRes) => {
+                                        if (removeRes) {
                                             //console.log(res);
-                                            if(res.success==true){
+                                            if (removeRes.success) {
                                                 alert({ title: "Loading your profile pic", message: "Loading please wait", okButtonText: "OK"  });
-                                            }else{
+                                            } else {
                                                 alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
-
                                             }
                                         }
-                                    }).catch((err) => {
+                                    })
+                                    .catch((err) => {
                                         if (err) console.log("err: "+err);
                                     });
                             }
