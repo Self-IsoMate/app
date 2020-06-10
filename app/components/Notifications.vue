@@ -104,7 +104,7 @@
     import Community from "./Community";
     import Chat from "./Chat";
     import Competitions from "./Competitions"
-    import Profile from "./Profile";
+    import Profile from "./EditProfile";
     import Home from "./Home";
     import Settings from "./Settings";
     import Help from "./Help";

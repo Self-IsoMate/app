@@ -101,37 +101,18 @@ export default class BackendService {
             }
         };
 
-        var task = session.uploadFile(imageUri, request);
-
-        task.on("error", (err) => {
-            if (err) {
-                console.log(err);
-            }
-        });
-
-        task.on("complete", (e) => {
-            if (e) {
-                this.updateUserProfilePicture(user, link)
-                    .then((res) => {
-                        if (res) {
-                            console.log("inner return");
-                            console.log(res);
-                            return { newLocation: res.newLocation };
-                        }
-                    });
-                }
-        });
-
+        return { task: session.uploadFile(imageUri, request), data: { link: link, user: user } };
     }
 
     async updateUserProfilePicture (user, imageLink) {
-        console.log("updateUserProfilePicture");
+        //console.log("updateUserProfilePicture");
         user.profilePicture = imageLink;
 
         return await axios.put(API+`users/${user._id}`, user)
             .then((res) => {
-                if (res) {
-                    return { newLocation: imageLink };
+                if (res.data.success == true) {
+                    console.log(user.profilePicture);   
+                    return { newLocation: user.profilePicture };
                 }
             })
             .catch((err) => {

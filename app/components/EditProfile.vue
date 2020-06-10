@@ -36,7 +36,7 @@
                     </FlexboxLayout>
 
                     <!-- Edit communities -->
-                    <Label text="Edit communities" class="field-header" />
+                    <!--Label text="Edit communities" class="field-header" /-->
 
                     <WrapLayout>
                         <Label v-for="(com, index) in editedUser.communities" :text="com.name" :key="index" />
@@ -59,6 +59,7 @@ import * as imagepicker from "nativescript-imagepicker";
 import { ItemEventData } from "tns-core-modules/ui/list-view";
 import { Observable } from "tns-core-modules/data/observable";
 import _ from "underscore";
+import Home from './Home';
 
 export default {
 	methods: {
@@ -77,7 +78,7 @@ export default {
                         image.options.width = 300;
                         image.options.height = 300;
                         this.editedUser.profilePicture = image;
-                        console.log(this.editedUser.profilePicture);
+                        //console.log(this.editedUser.profilePicture);
                         return;
                     } else {
                         console.log("no image selected");
@@ -92,13 +93,48 @@ export default {
         async uploadImage () {
             // run when you click save
             console.log("uploading image");
-            return this.service.changeProfilePicture(this.editedUser)
+            this.service.changeProfilePicture(this.editedUser)
                 .then((res) => {
                     if (res) {
-                        console.log("RESPONSE");
-                        console.log(res);
+                        var taskInfo = res
+                        if (taskInfo) {
+                            //console.log('LINE 99')
+                            var task = taskInfo.task;
+                            console.log(taskInfo);
+                            if (task) {
+                                console.log(task)
+                                console.log(taskInfo)
+                                task.on("error", (err) => {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                });
+                                task.on("complete", (e) => {
+                                    if (e) {
+                                        //console.log ('LINE 111')
+                                        this.service.updateUserProfilePicture(taskInfo.data.user, taskInfo.data.link)
+                                            .then((res) => {
+                                                if (res) {
+                                                    //console.log('LINE 112');
+                                                    console.log("current user before");
+                                                    console.log(this.currentUser.profilePicture);
+                                                    console.log("response");
+                                                    console.log(res);
+                                                    this.$store.commit("setUserProfilePicture", { profilePicture: res.newLocation });
+                                                    console.log("current user after");
+                                                    console.log(this.currentUser.profilePicture);
+                                                    this.$navigateTo(Home,{
+                                                        animated: false,
+                                                        clearHistory: true
+                                                    });
+                                                }
+                                            });
+                                    }
+                                });
+                            }
+                        }
                     }
-                });
+                })
         },
         
         confirmChanges () {
@@ -116,21 +152,31 @@ export default {
                         this.$store.commit("setUser", {user: res.user});
 
                         if (this.editedUser.profilePicture != this.currentUser.profilePicture) {
-                            this.uploadImage()
-                                .then((res => {
-                                    if (res) {
-                                        console.log("current user before");
-                                        console.log(this.currentUser.profilePicture);
-                                        console.log("response");
-                                        console.log(res);
-                                        this.$store.commit("setUserProfilePicture", { profilePicture: res });
-                                        console.log("current user after");
-                                        console.log(this.currentUser.profilePicture);
-                                    }
-                                }))
-                                .catch((errr) => {
-                                    console.log(errr);
-                                });
+                      
+                            var propicData = this.$store.state.user.profilePicture.split("/");
+                            //console.log(propicData);
+                            if (propicData[5] && propicData[5]!="default") {
+                                /*console.log("profilepic old ");
+                                console.log(propicData);*/
+                                var postBucketName  = "self-isomate-images";
+                                var postFilename = "profile-pictures/"+propicData[5];
+                                this.service.removeMediaFromCloud(postBucketName, postFilename )
+                                    .then((removeRes) => {
+                                        if (removeRes) {
+                                            //console.log(res);
+                                            if (removeRes.success) {
+                                                alert({ title: "Loading your profile pic", message: "Loading please wait", okButtonText: "OK"  });
+                                            } else {
+                                                alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                            }
+                                        }
+                                    })
+                                    .catch((err) => {
+                                        if (err) console.log("err: "+err);
+                                    });
+                            }
+                         
+                           this.uploadImage();
                         }
                     }
                 })
