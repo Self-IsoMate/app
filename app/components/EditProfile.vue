@@ -98,7 +98,7 @@ export default {
                     if (res) {
                         var taskInfo = res
                         if (taskInfo) {
-                            console.log('LINE 99')
+                            //console.log('LINE 99')
                             var task = taskInfo.task;
                             console.log(taskInfo);
                             if (task) {
@@ -111,11 +111,11 @@ export default {
                                 });
                                 task.on("complete", (e) => {
                                     if (e) {
-                                        console.log ('LINE 111')
+                                        //console.log ('LINE 111')
                                         this.service.updateUserProfilePicture(taskInfo.data.user, taskInfo.data.link)
                                             .then((res) => {
                                                 if (res) {
-                                                    console.log('LINE 112');
+                                                    //console.log('LINE 112');
                                                     console.log("current user before");
                                                     console.log(this.currentUser.profilePicture);
                                                     console.log("response");
@@ -217,8 +217,6 @@ export default {
         }
     },
     created () {
-            console.log("EditProfile.vue");
-
         this.resetProfile();
         console.log(this.editedUser);
     }
