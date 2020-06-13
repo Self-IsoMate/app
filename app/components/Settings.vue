@@ -174,7 +174,26 @@
                     })
                     .then((res) => {
                         if (res) {
-                            this.service.deleteAccount((this.$store.state.user._id))
+                            
+                                            /*
+                                                1) Need to delete posts and remove media from gcloud related to posts
+                                                3) Need to delete all user data (emails, tokens?, anything with personal info)
+                                                4) Delete profile pictures from gcloud
+                                            */
+
+
+                                this.service.getProfilePosts((this.$store.state.user._id))
+                                    .then((res) => {
+                                        if (res) {
+                                            console.log(res);
+                                            //                           service.removeMediaFromCloud(postBucketName, postFilename )
+
+                                            //service.removeMediaFromPost(post._id)
+                                            //                                       
+                                        }
+                                    })
+                                                
+                           /* this.service.deleteAccount((this.$store.state.user._id))
                                 .then((res) => {
                                     if (res) {
                                         if (res.success) {
@@ -191,7 +210,7 @@
                                             alert({ title: "Unsuccessful", message: "Unfortunately, there was an error deleting your account. Please contact us at <our email>" });
                                         }
                                     }
-                                })
+                                })*/
                         }
                     })
             },

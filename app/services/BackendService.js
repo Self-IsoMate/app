@@ -132,15 +132,6 @@ export default class BackendService {
             })
     }
 
-    async getProfilePosts(user) {
-        return axios.get(API+`posts?user.username=${user.username}`)
-            .then((res) => {
-                return { posts: res.data };
-            })
-            .catch((err) => {
-                if (err) console.log(err);
-            })
-    }
 
     async getCategories() {
         return axios.get(API+'categories?isChild=false')
@@ -365,8 +356,8 @@ export default class BackendService {
         })
     }
 	
-	async getProfilePosts(user) {
-        return axios.get(API+`posts?user.username=${user.username}`)
+	async getProfilePosts(id) { 
+        return axios.get(API+`posts?userId=${id}`)
             .then((res) => {
                 return { posts: res.data };
             })
