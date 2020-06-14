@@ -32,7 +32,17 @@
 
                                 <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
                                     <StackLayout class="item"  @tap="showDetails(item)">
-                                        <Image :src="item.image" marginTop="10" />
+                                        <GridLayout rows="*" backgroundColor="White">
+                                           <GridLayout rows="*" columns="*" margin="0">
+                                                <Image :src="item.image" stretch="aspectFill" />
+                                                <GridLayout verticalAlignment="bottom">
+                                                    <StackLayout paddingTop="8" paddingBottom="8" paddingLeft="16" paddingRight="16">
+                                                        <Label :text="item.title" style="font-size:24;color:#ffffff;" class="font-awesome"/>
+                                                        <Label :text="item.deadline" style="font-size:20;color:#ffffff;" class="font-awesome" />
+                                                    </StackLayout>
+                                                </GridLayout>
+                                            </GridLayout>
+                                        </GridLayout>
                                     </StackLayout>
                                 </StackLayout>
 
@@ -63,7 +73,6 @@
                         this.allChallenges = res.challenges;
                         this.challenges = Array.from(this.allChallenges);
                         console.log(this.challenges);
-
                     }
                 })
                 .catch((err) => {
