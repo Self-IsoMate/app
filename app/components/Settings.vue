@@ -29,7 +29,6 @@
                             <Label text="Profile" class="setting-header" />
 
                             <Label text="Click here to edit your profile" class="setting-text emphasis" @tap="navigateEditProfile" />
-
                             <StackLayout class="hr m-10 divider"/>
 
                             <!-- Security & Privacy Settings -->
@@ -67,8 +66,12 @@
     import EditProfile from "./EditProfile";
     import BackendService from '../services/BackendService';
     import LoginMain from "./LoginMain";
+    import { CheckBox } from '@nstudio/nativescript-checkbox';
+    import { topmost } from 'tns-core-modules/ui/frame'
+    import ModalComponent from "./ModalComponent";
 
-    export default {
+
+    export default { 
         mounted() {
             SelectedPageService.getInstance().updateSelectedPage("Notifications");
         },
@@ -86,12 +89,17 @@
                     newPassword: '',
                     confirmNewPassword: '',
                     newEmail: '',
-                    confirmNewEmail: ''
+                    confirmNewEmail: '',
+                    deleteprofileResponses:[false,false,false]
                 },
                 service: new BackendService()
             }
         },
         methods: {
+            getCheckProp() {
+            const checkBox = topmost().getViewById('yourCheckBoxId');
+            console.log('checked prop value = ' + checkBox.checked);
+            },
             onDrawerClosed() {
                 this.drawerToggle = false;
             },
@@ -165,6 +173,12 @@
 
             },
             deleteAccount(event) {
+                this.$showModal(ModalComponent)
+                  .then((modalRes) => {
+                           
+                           this.deleteprofileResponses = modalRes;
+                           console.log("  base  "+this.deleteprofileResponses+ "  res  "+modalRes +"  saved  "+this.deleteprofileResponses);
+
                 confirm(
                     {
                         title: 'Are you sure?',
@@ -212,7 +226,8 @@
                                     }
                                 })*/
                         }
-                    })
+                    });
+                     });
             },
             clearDetails () {
                 this.settingsValues = {
