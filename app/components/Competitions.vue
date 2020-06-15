@@ -38,7 +38,7 @@
                                                 <GridLayout verticalAlignment="bottom">
                                                     <StackLayout paddingTop="8" paddingBottom="8" paddingLeft="16" paddingRight="16">
                                                         <Label :text="item.title" style="font-size:24;color:#ffffff;" class="font-awesome"/>
-                                                        <Label :text="item.deadline" style="font-size:20;color:#ffffff;" class="font-awesome" />
+                                                        <Label :text="formatDeadline(item.deadline)" style="font-size:20;color:#ffffff;" class="font-awesome" />
                                                     </StackLayout>
                                                 </GridLayout>
                                             </GridLayout>
@@ -118,6 +118,10 @@
                 this.challenges = Array.from(this.allChallenges).filter((challenge) => {
                     return challenge.communities.some((c) => filteredCommunities.some((c1) => c1._id == c))
                 });
+            },
+            formatDeadline(deadline){
+                var newFormat = moment(String(deadline)).format('L');
+                return "Deadline: " + newFormat;
             },
             onDrawerClosed() {
                 this.drawerToggle = false;
