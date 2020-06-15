@@ -1,9 +1,10 @@
 <template>
         <StackLayout>
                 <Label text="What do you want to Remove?" class="setting-text emphasis" />
-                <check-box text="Remove PROFILE" :checked="isCheckedProfile" fillColor="red" @checkedChange="(isCheckedProfile)?isCheckedProfile=false:isCheckedProfile=true" />
-                <check-box text="Remove All POSTS" :checked="isCheckedPosts" fillColor="red" @checkedChange="(isCheckedPosts)?isCheckedPosts=false:isCheckedPosts=true" />
-                <check-box text="Remove All CHAT MESSAGES" :checked="isCheckedMessages" fillColor="red" @checkedChange="(isCheckedMessages)?isCheckedMessages=false:isCheckedMessages=true" />
+                <check-box text="Remove PROFILE" :checked="isCheckedAll" fillColor="red" @checkedChange="(isCheckedProfile)?(isCheckedProfile=false):isCheckedProfile=true" />
+                <check-box text="Remove All POSTS" :checked="isCheckedAll" fillColor="red" @checkedChange="(isCheckedPosts)?(isCheckedPosts=false):isCheckedPosts=true" />
+                <check-box text="Remove All CHAT MESSAGES" :checked="isCheckedAll" fillColor="red" @checkedChange="(isCheckedMessages)?(isCheckedMessages=false):isCheckedMessages=true" />
+                <check-box text="Remove PROFILE, All CHAT MESSAGES and POSTS" :checked="(isCheckedProfile&&isCheckedPosts&&isCheckedMessages)" fillColor="red" @checkedChange="isCheckedAll==true?(isCheckedAll=false):(isCheckedAll=true)" />
                 <Button text="Delete your account" backgroundColor="red" @tap="$modal.close([isCheckedProfile,isCheckedPosts,isCheckedMessages])" />
 
         </StackLayout>
@@ -20,7 +21,9 @@ export default {
         return {
             isCheckedProfile:false,
             isCheckedPosts:false,
-            isCheckedMessages:false
+            isCheckedMessages:false,
+            isCheckedAll:false
+
 
         };
     }

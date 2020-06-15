@@ -175,14 +175,14 @@
             deleteAccount(event) {
                 this.$showModal(ModalComponent)
                   .then((modalRes) => {
-                           
+                           if(modalRes){
                            this.deleteprofileResponses = modalRes;
-                           console.log("  base  "+this.deleteprofileResponses+ "  res  "+modalRes +"  saved  "+this.deleteprofileResponses);
+                           console.log(this.deleteprofileResponses);
 
                 confirm(
                     {
                         title: 'Are you sure?',
-                        message: 'Are you sure you want to delete your account?',
+                        message: 'Are you sure you want to delete your account?', // message depending on what inside the array
                         okButtonText: "Delete",
                         cancelButtonText: "Go Back"
                     })
@@ -227,7 +227,9 @@
                                 })*/
                         }
                     });
+                           }
                      });
+                     
             },
             clearDetails () {
                 this.settingsValues = {
