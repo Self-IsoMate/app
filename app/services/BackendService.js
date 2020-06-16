@@ -6,7 +6,9 @@ const BUCKET_PROFILE_PICTURES = "https://storage.googleapis.com/self-isomate-ima
 const BUCKET_POST_IMAGES = "https://storage.googleapis.com/self-isomate-images/post-images/";
 const BUCKET_POST_VIDEOS = "https://storage.googleapis.com/self-isomate-videos/post-videos/";
 var bghttp = require("nativescript-background-http");
+var _ = require('lodash');
 import store from "../store/index";
+
 /**
  * TO DO: 
  * something to show that a user is uploading something (will use the store for this);
@@ -304,11 +306,14 @@ export default class BackendService {
         })
     }
 	
-	async getChallenges() {
+	async getChallenges() { //move the conversion to API eventually
         return axios.get(API + 'challenges')
         .then((res) => {
             if (res) {
-                return {challenges: res.data};
+               //return {challenges: res.data};
+                const unsortedChallenges = res.data;
+                const sortedChallenges = _.orderBy(unsortedChallenges, ['deadline'], ['asc']);
+                return {challenges: sortedChallenges}
             }
         })
         .catch((err) => {

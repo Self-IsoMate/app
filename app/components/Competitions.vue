@@ -120,7 +120,7 @@
                 });
             },
             formatDeadline(deadline){
-                var newFormat = moment(String(deadline)).format('L');
+                var newFormat = moment(String(deadline)).format('MMMM Do YYYY');
                 return "Deadline: " + newFormat;
             },
             onDrawerClosed() {
