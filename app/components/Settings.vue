@@ -175,56 +175,82 @@
             deleteAccount(event) {
                 this.$showModal(ModalComponent)
                   .then((modalRes) => {
-                           if(modalRes){
+                           if(modalRes[0]!=false || modalRes[1]!=false || modalRes[2]!=false){
                            this.deleteprofileResponses = modalRes;
-                           console.log(this.deleteprofileResponses);
-
+                           var deleteMessage="Are you sure you want to delete your data? "+'\n'+'\n';
+                           if(this.deleteprofileResponses[0]==true) deleteMessage=deleteMessage.concat("Removing your PROFILE: You will not be able to log in again ",'\n','\n');
+                           if(this.deleteprofileResponses[1]==true) deleteMessage=deleteMessage.concat("Removing your POSTS: All your posts will be deleted ",'\n','\n');
+                           if(this.deleteprofileResponses[2]==true) deleteMessage=deleteMessage.concat("Removing your MESSAGES: All the chat messages you sent will be deleted ",'\n','\n');
                 confirm(
                     {
                         title: 'Are you sure?',
-                        message: 'Are you sure you want to delete your account?', // message depending on what inside the array
-                        okButtonText: "Delete",
-                        cancelButtonText: "Go Back"
+                        message: deleteMessage, // message depending on what inside the array
+                        okButtonText: "I am sure, please Delete",
+                        cancelButtonText: "No, Go Back"
                     })
                     .then((res) => {
                         if (res) {
-                            
-                                            /*
-                                                1) Need to delete posts and remove media from gcloud related to posts
-                                                3) Need to delete all user data (emails, tokens?, anything with personal info)
-                                                4) Delete profile pictures from gcloud
-                                            */
 
+                               console.log(this.deleteprofileResponses);
 
-                                this.service.getProfilePosts((this.$store.state.user._id))
-                                    .then((res) => {
-                                        if (res) {
-                                            console.log(res);
-                                            //                           service.removeMediaFromCloud(postBucketName, postFilename )
+                                if(this.deleteprofileResponses[1]==true){
+//                                                1) Need to delete posts and remove media from gcloud related to posts
 
-                                            //service.removeMediaFromPost(post._id)
-                                            //                                       
-                                        }
-                                    })
-                                                
-                           /* this.service.deleteAccount((this.$store.state.user._id))
-                                .then((res) => {
-                                    if (res) {
-                                        if (res.success) {
-                                            alert({ title: "Deleted", message: "Your account has been successfully deleted" })
-                                                .then((res) => {
-                                                    this.$store.commit("setUser", { user: null });
-                                                    this.$navigateTo(LoginMain, {
-                                                        //clearHistory: true, 
-                                                        animated: false
-                                                    });
-                                                });
-                                        }
-                                        if (!res.success) {
-                                            alert({ title: "Unsuccessful", message: "Unfortunately, there was an error deleting your account. Please contact us at <our email>" });
-                                        }
-                                    }
-                                })*/
+                                    alert({ title: 'Removing your POSTS', message: 'Please wait, it might take some minutes' });
+
+                                        this.service.getProfilePosts((this.$store.state.user._id))
+                                            .then((res) => {
+                                                if (res) {
+                                                    console.log(res);
+                                                    //service.removeMediaFromCloud(postBucketName, postFilename )
+
+                                                    //service.removeMediaFromPost(post._id)
+                                                    //                                       
+                                                }
+                                            })
+                                     }      
+
+                                              if(this.deleteprofileResponses[2]==true){
+                                                  
+                                                alert({ title: 'Removing your CHAT MESSAGES', message: 'Please wait, it might take some minutes' });
+
+                                        this.service.getProfilePosts((this.$store.state.user._id))
+                                            .then((res) => {
+                                                if (res) {
+                                                    console.log(res);
+                                                    //service.removeMediaFromCloud(postBucketName, postFilename )
+
+                                                    //service.removeMediaFromPost(post._id)
+                                                    //                                       
+                                                }
+                                            })
+                                     }  
+
+                                if(this.deleteprofileResponses[0]==true){
+//                                                3) Need to delete all user data (emails, tokens?, anything with personal info)
+//                                                4) Delete profile pictures from gcloud
+
+                                    alert({ title: 'Removing your ACCOUNT', message: 'Please wait, it might take some minutes' });
+
+                            /*        this.service.deleteAccount((this.$store.state.user._id))
+                                            .then((res) => {
+                                                if (res) {
+                                                    if (res.success) {
+                                                        alert({ title: "Deleted", message: "Your account has been successfully deleted" })
+                                                            .then((res) => {
+                                                                this.$store.commit("setUser", { user: null });
+                                                                this.$navigateTo(LoginMain, {
+                                                                    //clearHistory: true, 
+                                                                    animated: false
+                                                                });
+                                                            });
+                                                    }
+                                                    if (!res.success) {
+                                                        alert({ title: "Unsuccessful", message: "Unfortunately, there was an error deleting your account. Please contact us at <our email>" });
+                                                    }
+                                                }
+                                            })*/
+                                }
                         }
                     });
                            }
