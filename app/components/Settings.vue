@@ -191,21 +191,69 @@
                     .then((res) => {
                         if (res) {
 
-                               console.log(this.deleteprofileResponses);
+                                console.log(this.deleteprofileResponses);
+                                var service = new BackendService();
 
                                 if(this.deleteprofileResponses[1]==true){
-//                                                1) Need to delete posts and remove media from gcloud related to posts
-
-                                    alert({ title: 'Removing your POSTS', message: 'Please wait, it might take some minutes' });
-
                                         this.service.getProfilePosts((this.$store.state.user._id))
                                             .then((res) => {
                                                 if (res) {
-                                                    console.log(res);
-                                                    //service.removeMediaFromCloud(postBucketName, postFilename )
+                                                    var postsArray = res.posts;
 
-                                                    //service.removeMediaFromPost(post._id)
-                                                    //                                       
+                                                    postsArray.forEach(post => {
+                                                        var mediaData = post.media.split("/");
+                                                        if(mediaData!=''){
+                                                            console.log(mediaData);
+                                                            var postBucketName;
+                                                            var postFilename;
+                                                            if(mediaData[mediaData.length - 1].slice(-3)=='mp4'){
+                                                                        postBucketName  = "self-isomate-videos";
+                                                                        postFilename = "post-videos/"+mediaData[mediaData.length - 1];
+                                                            }else{   
+                                                                        postBucketName  = "self-isomate-images";
+                                                                        postFilename = "post-images/"+mediaData[mediaData.length - 1];
+                                                            }             
+                                                            console.log(postBucketName+"  "+postFilename);
+                                                                service.removeMediaFromCloud(postBucketName, postFilename )
+                                                                    .then((res) => {
+                                                                        if (res) {
+                                                                            if(res.success==true){
+                                                                                console.log(res);
+                                                                                    service.removeMediaFromPost(post._id)
+                                                                                    .then((res) => {
+                                                                                        if (res) {
+                                                                                console.log(res);
+                                                                                            if(res.success!=true){
+                                                                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                                                                    }
+                                                                                }
+                                                                            }).catch((err) => {
+                                                                                if (err) console.log("err: "+err);
+                                                                            });
+
+                                                                            }else{
+                                                                                alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+
+                                                                            }
+                                                                        }
+                                                                    }).catch((err) => {
+                                                                        if (err) console.log("err: "+err);
+                                                                    });
+                                                            }
+                                                                        service.deletePost(post._id)
+                                                                            .then((res) => {
+                                                                                if (res) {
+                                                                                    if(res.success!=true){
+                                                                                    alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                                                                    }else{
+                                                                                    alert({ title: "POSTS REMOVED SUCCESSFULLY", message: "POSTS DELETED", okButtonText: "OK"  });
+                                                                                    }
+                                                                                    console.log(res);
+                                                                                }
+                                                                            }).catch((err) => {
+                                                                                if (err) console.log("err: "+err);
+                                                                            })
+                                                        });                                     
                                                 }
                                             })
                                      }      
