@@ -260,18 +260,28 @@
 
                                               if(this.deleteprofileResponses[2]==true){
                                                   
-                                                alert({ title: 'Removing your CHAT MESSAGES', message: 'Please wait, it might take some minutes' });
 
-                                        this.service.getProfilePosts((this.$store.state.user._id))
+                                        this.service.getMessagesfromUser((this.$store.state.user._id))
                                             .then((res) => {
                                                 if (res) {
-                                                    console.log(res);
-                                                    //service.removeMediaFromCloud(postBucketName, postFilename )
+                                                    var chatsArray = res.chatMessages;
 
-                                                    //service.removeMediaFromPost(post._id)
-                                                    //                                       
+                                                    chatsArray.forEach(message => {
+
+                                                        this.service.deleteMessage((message._id))
+                                                            .then((res) => {
+                                                                alert({ title: "CHAT MESSAGES REMOVED SUCCESSFULLY", message: "MESSAGES DELETED", okButtonText: "OK"  });    
+                                                        }
+                                                        
+                                                        );
+
+
+                                                    });
                                                 }
-                                            })
+                                                    
+                                                    
+                                        });
+
                                      }  
 
                                 if(this.deleteprofileResponses[0]==true){

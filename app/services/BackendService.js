@@ -355,7 +355,31 @@ export default class BackendService {
             if (err) console.log(err);
         })
     }
-	
+    
+    async deleteMessage(messageId) {
+      
+        return axios.delete(`${API}messages/${messageId}`)
+        .then((res) => {
+            return { success: res.data };
+
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+    
+    async getMessagesfromUser(userID) {
+      
+        return axios.get(API+`messages?userID=`+userID)
+        .then((res) => {
+            return { chatMessages: res.data };
+
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+
 	async getProfilePosts(id) { 
         return axios.get(API+`posts?userId=${id}`)
             .then((res) => {
