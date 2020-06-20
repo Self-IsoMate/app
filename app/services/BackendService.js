@@ -367,6 +367,19 @@ export default class BackendService {
             if (err) console.log(err);
         })
     }
+
+    async deleteToken(email) {
+      
+        return axios.delete(`${API}tokens/${email}`)
+        .then((res) => {
+            return { success: res.data};
+
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+
     
     async getMessagesfromUser(userID) {
       

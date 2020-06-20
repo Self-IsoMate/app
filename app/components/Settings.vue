@@ -288,7 +288,25 @@
 //                                                3) Need to delete all user data (emails, tokens?, anything with personal info)
 //                                                4) Delete profile pictures from gcloud
 
-                                    alert({ title: 'Removing your ACCOUNT', message: 'Please wait, it might take some minutes' });
+                                        this.service.deleteToken((this.$store.state.user.email))
+                                            .then((res) => {
+                                                if (res) {
+                                                    console.log(res);
+                                                    /*if (res.success) {
+                                                        alert({ title: "Deleted", message: "Your account has been successfully deleted" })
+                                                            .then((res) => {
+                                                                this.$store.commit("setUser", { user: null });
+                                                                this.$navigateTo(LoginMain, {
+                                                                    //clearHistory: true, 
+                                                                    animated: false
+                                                                });
+                                                            });
+                                                    }
+                                                    if (!res.success) {
+                                                        alert({ title: "Unsuccessful", message: "Unfortunately, there was an error deleting your account. Please contact us at <our email>" });
+                                                    }*/
+                                                }
+                                            })
 
                             /*        this.service.deleteAccount((this.$store.state.user._id))
                                             .then((res) => {
