@@ -191,7 +191,6 @@
                     .then((res) => {
                         if (res) {
 
-                                console.log(this.deleteprofileResponses);
                                 var service = new BackendService();
 
                                 if(this.deleteprofileResponses[1]==true){
@@ -203,7 +202,6 @@
                                                     postsArray.forEach(post => {
                                                         var mediaData = post.media.split("/");
                                                         if(mediaData!=''){
-                                                            console.log(mediaData);
                                                             var postBucketName;
                                                             var postFilename;
                                                             if(mediaData[mediaData.length - 1].slice(-3)=='mp4'){
@@ -218,11 +216,9 @@
                                                                     .then((res) => {
                                                                         if (res) {
                                                                             if(res.success==true){
-                                                                                console.log(res);
                                                                                     service.removeMediaFromPost(post._id)
                                                                                     .then((res) => {
                                                                                         if (res) {
-                                                                                console.log(res);
                                                                                             if(res.success!=true){
                                                                                         alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
                                                                                     }
@@ -248,7 +244,6 @@
                                                                                     }else{
                                                                                     alert({ title: "POSTS REMOVED SUCCESSFULLY", message: "POSTS DELETED", okButtonText: "OK"  });
                                                                                     }
-                                                                                    console.log(res);
                                                                                 }
                                                                             }).catch((err) => {
                                                                                 if (err) console.log("err: "+err);
@@ -288,32 +283,29 @@
 //                                                3) Need to delete all user data (emails, tokens?, anything with personal info)
 //                                                4) Delete profile pictures from gcloud
 
-                                        this.service.deleteToken((this.$store.state.user.email))
-                                            .then((res) => {
-                                                if (res) {
-                                                    console.log(res);
-                                                    /*if (res.success) {
-                                                        alert({ title: "Deleted", message: "Your account has been successfully deleted" })
-                                                            .then((res) => {
-                                                                this.$store.commit("setUser", { user: null });
-                                                                this.$navigateTo(LoginMain, {
-                                                                    //clearHistory: true, 
-                                                                    animated: false
-                                                                });
-                                                            });
-                                                    }
-                                                    if (!res.success) {
-                                                        alert({ title: "Unsuccessful", message: "Unfortunately, there was an error deleting your account. Please contact us at <our email>" });
-                                                    }*/
-                                                }
-                                            })
-
-                            /*        this.service.deleteAccount((this.$store.state.user._id))
+                                        this.service.deleteToken((this.$store.state.user.email))    .then((removeRes) => {
+                                                })
+                                                .catch((err) => {
+                                                    if (err) console.log("err: "+err);
+                                                });
+                                    var propicData = this.$store.state.user.profilePicture.split("/");
+                                        if (propicData[5] && propicData[5]!="default") {
+                                            var postBucketName  = "self-isomate-images";
+                                            var postFilename = "profile-pictures/"+propicData[5];
+                                            this.service.removeMediaFromCloud(postBucketName, postFilename )
+                                                .then((removeRes) => {
+                                                })
+                                                .catch((err) => {
+                                                    if (err) console.log("err: "+err);
+                                                });
+                                        }                                   
+                                    this.service.deleteAccount((this.$store.state.user._id))
                                             .then((res) => {
                                                 if (res) {
                                                     if (res.success) {
                                                         alert({ title: "Deleted", message: "Your account has been successfully deleted" })
                                                             .then((res) => {
+                                                          alert({ title: "PROFILE REMOVED SUCCESSFULLY", message: "ACCOUNT DELETED", okButtonText: "OK"  });    
                                                                 this.$store.commit("setUser", { user: null });
                                                                 this.$navigateTo(LoginMain, {
                                                                     //clearHistory: true, 
@@ -325,7 +317,7 @@
                                                         alert({ title: "Unsuccessful", message: "Unfortunately, there was an error deleting your account. Please contact us at <our email>" });
                                                     }
                                                 }
-                                            })*/
+                                            })
                                 }
                         }
                     });
