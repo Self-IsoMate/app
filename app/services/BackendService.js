@@ -6,11 +6,6 @@ const BUCKET_PROFILE_PICTURES = "https://storage.googleapis.com/self-isomate-ima
 const BUCKET_POST_IMAGES = "https://storage.googleapis.com/self-isomate-images/post-images/";
 const BUCKET_POST_VIDEOS = "https://storage.googleapis.com/self-isomate-videos/post-videos/";
 var bghttp = require("nativescript-background-http");
-import store from "../store/index";
-/**
- * TO DO: 
- * something to show that a user is uploading something (will use the store for this);
- */
 
 
 export default class BackendService {
@@ -21,34 +16,25 @@ export default class BackendService {
 
     login(username, password) {
 
-        console.log(`username: ${username} password: ${password}`);
-
         return axios.post(API+"login", { username: username, password: password })
             .then((res) => {
 
                 if (res) {
-
-                    var loginSuccessful = res.data.loginSuccess;
-
-                    if (loginSuccessful) {
-                        console.log("login successful");
+                    if (res.data.success) {
                         this.loggedIn = true;
                         return { success : true, user: res.data.user };
                     } 
                     else 
                     {
-                        console.log("login failed");
                         return { success : false };
                     }
                 }
             })
             .catch((err) => {
                 if (err) {
-                    console.log(err);
-                    return { success: false, message: err };
+                    return { success: false, message: err.message };
                 }
             });
-
     }
 
     logout() {
@@ -67,7 +53,7 @@ export default class BackendService {
             })
             .catch((err) => {
                 if (err) {
-                    return { success: false, message: err } 
+                    return { success: false, message: err.message } 
                 }
             });
     }
@@ -79,8 +65,7 @@ export default class BackendService {
         imageUri = user.profilePicture._android ?? user.profilePicture._ios;
 
         if (!imageUri) {
-            console.log("No image found");
-            return;
+            return { success: false, message: 'Image not found' } 
         }
 
         var imgArr = imageUri.split('/');
@@ -110,13 +95,13 @@ export default class BackendService {
 
         return await axios.put(API+`users/${user._id}`, user)
             .then((res) => {
-                if (res.data.success == true) {
-                    console.log(user.profilePicture);   
-                    return { newLocation: user.profilePicture };
+                if (res.data.success) {
+                    return { success: true, newLocation: user.profilePicture };
                 }
             })
             .catch((err) => {
-                if (err) console.log(err);
+                if (err)
+                    return { success: false, message: err.message } 
             })
     }
 
@@ -128,7 +113,9 @@ export default class BackendService {
                 }
             })
             .catch((err) => {
-                if (err) console.log(err);
+                if (err) {
+                    return { success: false, message: err.message } 
+                }
             })
     }
 
@@ -138,7 +125,9 @@ export default class BackendService {
                 return { posts: res.data };
             })
             .catch((err) => {
-                if (err) console.log(err);
+                if (err) {
+                    return { success: false, message: err.message } 
+                }
             })
     }
 
@@ -151,7 +140,7 @@ export default class BackendService {
             })
             .catch((err) => {
                 if (err)
-                    return { success: false, message: err }
+                    return { success: false, message: err.message }
             })
     }
 
@@ -164,7 +153,7 @@ export default class BackendService {
             })
             .catch((err) => {
                 if (err) {
-                    return { success: false, message: err }
+                    return { success: false, message: err.message }
                 }
             })
     }
@@ -183,7 +172,7 @@ export default class BackendService {
             })
             .catch((err) => {
                 if (err) {
-                    return { success : false, message: err }
+                    return { success : false, message: err.message }
                 }
             })
     }
@@ -197,7 +186,7 @@ export default class BackendService {
             })
             .catch((err) => {
                 if (err) {
-                    return { success: false, message: err };
+                    return { success: false, message: err.message };
                 }
             })
     }
@@ -215,7 +204,7 @@ export default class BackendService {
             })
             .catch((err) => {
                 if (err) {
-                    return { success: false, message: err }
+                    return { success: false, message: err.message }
                 }
             })
     }
@@ -228,13 +217,12 @@ export default class BackendService {
                 }
 
                 if (res && !res.data.success) {
-                    console.log(res);
                     return { success: false, message: res.data.message };
                 }
             })
             .catch((err) => {
                 if (err) {
-                    return { success: false, message: err }
+                    return { success: false, message: err.message }
                 }
             })
     }
@@ -248,7 +236,7 @@ export default class BackendService {
             })
             .catch((err) => {
                 if (err) {
-                    return { success: false, message: err };
+                    return { success: false, message: err.message };
                 }
             })
     }
@@ -260,7 +248,9 @@ export default class BackendService {
             return { messages: res.data };
         })
         .catch((err) => {
-            if (err) console.log(err);
+            if (err) {
+                return { success: false, message: err.message } 
+            }
         })
     }
 	
@@ -277,7 +267,9 @@ export default class BackendService {
                 return {success : true, message: res};  
         
             }).catch((err) => {
-                if (err) console.log(err);
+                if (err) {
+                    return { success: false, message: err.message } 
+                }
             })
     }
 
@@ -288,7 +280,9 @@ export default class BackendService {
             return { chatroom: res.data };
         })
         .catch((err) => {
-            if (err) console.log(err);
+            if (err) {
+                return { success: false, message: err.message } 
+            }
         })
     }
 	
@@ -300,7 +294,9 @@ export default class BackendService {
             }
         })
         .catch((err) => {
-            if (err) console.log(err);
+            if (err) {
+                return { success: false, message: err.message } 
+            }
         })
     }
 	
@@ -312,7 +308,9 @@ export default class BackendService {
             }
         })
         .catch((err) => {
-            if (err) console.log(err);
+            if (err) {
+                return { success: false, message: err.message } 
+            }
         })
     }
 	
@@ -324,7 +322,9 @@ export default class BackendService {
             } 
         })
         .catch((err) => {
-            if (err) console.log(err);
+            if (err) {
+                return { success: false, message: err.message } 
+            }
         }) 
     }
 
@@ -336,7 +336,9 @@ export default class BackendService {
             } 
         })
         .catch((err) => {
-            if (err) console.log(err);
+            if (err) {
+                return { success: false, message: err.message } 
+            }
         }) 
     }
 
@@ -344,12 +346,12 @@ export default class BackendService {
       
         return axios.get(API+`users?_id=`+userID)
         .then((res) => {
-            //console.log("userfromBackend");
-            //console.log(res.data.users[0]);
             return { user: res.data.users[0] };
         })
         .catch((err) => {
-            if (err) console.log(err);
+            if (err) {
+                return { success: false, message: err.message } 
+            }
         })
     }
 
@@ -361,7 +363,9 @@ export default class BackendService {
 
         })
         .catch((err) => {
-            if (err) console.log(err);
+            if (err) {
+                return { success: false, message: err.message } 
+            }
         })
     }
 	
@@ -371,7 +375,9 @@ export default class BackendService {
                 return { posts: res.data };
             })
             .catch((err) => {
-                if (err) console.log(err);
+                if (err) {
+                    return { success: false, message: err.message } 
+                }
             })
     }
 
@@ -383,7 +389,9 @@ export default class BackendService {
             } 
         })
         .catch((err) => {
-            if (err) console.log(err);
+            if (err) {
+                return { success: false, message: err.message } 
+            }
         }) 
     }
 
@@ -395,7 +403,9 @@ export default class BackendService {
             } 
         })
         .catch((err) => {
-            if (err) console.log(err);
+            if (err) {
+                return { success: false, message: err.message } 
+            }
         }) 
     }
 
@@ -415,54 +425,42 @@ export default class BackendService {
             })
             .catch((err) => {
                 if (err) {
-                    return { success: false, message: err };
+                    return { success: false, message: err.message };
                 }
             })
     }
 
-async removeMediaFromCloud( postBucketName, postFilename ) {
-    return axios.post(`${API}/gcloud/posts`, {
-        bucketName : postBucketName,
-        filename : postFilename
-        })
-    .then((res) => {
-        if (res) {
-            return { success: true, message: res.data };
-
-            /*if (res.data.success) {
-                
-                return { success: res.data.success };
-
-            } else {
-                return { success: false, message: res.data.message }
-            }*/
-        }
-    })
-    .catch((err) => {
-        if (err) {
-            return { success: false, message: err.toString() };
-        }
-    })
+    async removeMediaFromCloud( postBucketName, postFilename ) {
+        return axios.post(`${API}/gcloud/posts`, { bucketName : postBucketName, filename : postFilename })
+            .then((res) => {
+                if (res) {
+                    return { success: true, message: res.data };
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err.message };
+                }
+            })
+    }
 
 
-   
-}
+    async removeMediaFromPost(postId) {
 
-
-async removeMediaFromPost(postId) {
-
-return await axios.put(API+`posts/${postId}`, {'media':''})
-                .then((res) => {
-                    if (res) {
-                        return { success: res.data.success };
-                    } else {
-                        return { success: false, message: res.data.message }
-                    }
-                })
-                .catch((err) => {
-                    if (err) console.log(err);
-                })
-}
+        return await axios.put(API+`posts/${postId}`, {'media':''})
+            .then((res) => {
+                if (res) {
+                    return { success: res.data.success };
+                } else {
+                    return { success: false, message: res.data.message }
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    return { success: false, message: err.message } 
+                }
+            })
+    }
 
 
     async deletePost(postId) { 
@@ -474,7 +472,7 @@ return await axios.put(API+`posts/${postId}`, {'media':''})
             })
             .catch((err) => {
                 if (err) {
-                    return { success: false, message: err };
+                    return { success: false, message: err.message };
                 }
             })
     }
@@ -598,8 +596,7 @@ return await axios.put(API+`posts/${postId}`, {'media':''})
             })
             .catch((err) => {
                 if (err) {
-                    console.log(err);
-                    return { success: false, message: err };
+                    return { success: false, message: err.message };
                 }
             })
     }
@@ -617,7 +614,7 @@ return await axios.put(API+`posts/${postId}`, {'media':''})
             })
             .catch((err) => {
                 if (err) {
-                    return { success: false, message: err.toString() };
+                    return { success: false, message: err.message };
                 }
             })
     }
@@ -635,7 +632,7 @@ return await axios.put(API+`posts/${postId}`, {'media':''})
             })
             .catch((err) => {
                 if (err) {
-                    return { success: false, message: err.toString() };
+                    return { success: false, message: err.message };
                 }
             })
     }
@@ -653,7 +650,7 @@ return await axios.put(API+`posts/${postId}`, {'media':''})
             })
             .catch((err) => {
                 if (err) {
-                    return { success: false, message: err.toString() };
+                    return { success: false, message: err.message };
                 }
             })
     }
@@ -671,7 +668,7 @@ return await axios.put(API+`posts/${postId}`, {'media':''})
             })
             .catch((err) => {
                 if (err) {
-                    return { success: false, message: err.toString() };
+                    return { success: false, message: err.message };
                 }
             })
     }
@@ -683,7 +680,9 @@ return await axios.put(API+`posts/${postId}`, {'media':''})
 
         })
         .catch((err) => {
-            if (err) console.log(err);
+            if (err) {
+                return { success: false, message: err.message };
+            }
         })
     }
 
