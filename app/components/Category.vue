@@ -81,7 +81,6 @@ export default {
         selectCategory(event) {
             console.log(`selected category ${event.category.name}`);
             if (event.category.isLeaf) {
-                console.log("OPEN UP IT'S THE POLICE");
                 this.$navigateTo(LeafCategory, {
                     props: {
                         category: event.category

@@ -117,12 +117,14 @@ export default {
 			});
 		},
 		handleGuest(event) {
-			this.$store.commit("setUser", { user: null });
+        alert({ title: "GUEST OPTION NOT AVAILABLE", message: "GUEST OPTION NOT AVAILABLE", okButtonText: "OK"  });
+			//this.$store.commit("setUser", { user: null }); it creashes better use the clearUser 
+            /*this.$store.commit("clearUser");    
 			this.$navigateTo(Home,
 			{
 				animated: false,
 				clearHistory: true
-			});
+			});*/
 		}
 	}
 }

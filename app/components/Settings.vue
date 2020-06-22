@@ -29,7 +29,6 @@
                             <Label text="Profile" class="setting-header" />
 
                             <Label text="Click here to edit your profile" class="setting-text emphasis" @tap="navigateEditProfile" />
-
                             <StackLayout class="hr m-10 divider"/>
 
                             <!-- Security & Privacy Settings -->
@@ -67,8 +66,12 @@
     import EditProfile from "./EditProfile";
     import BackendService from '../services/BackendService';
     import LoginMain from "./LoginMain";
+    import { CheckBox } from '@nstudio/nativescript-checkbox';
+    import { topmost } from 'tns-core-modules/ui/frame'
+    import ModalComponent from "./ModalComponent";
 
-    export default {
+
+    export default { 
         mounted() {
             SelectedPageService.getInstance().updateSelectedPage("Notifications");
         },
@@ -86,12 +89,17 @@
                     newPassword: '',
                     confirmNewPassword: '',
                     newEmail: '',
-                    confirmNewEmail: ''
+                    confirmNewEmail: '',
+                    deleteprofileResponses:[false,false,false]
                 },
                 service: new BackendService()
             }
         },
         methods: {
+            getCheckProp() {
+            const checkBox = topmost().getViewById('yourCheckBoxId');
+            console.log('checked prop value = ' + checkBox.checked);
+            },
             onDrawerClosed() {
                 this.drawerToggle = false;
             },
@@ -165,35 +173,155 @@
 
             },
             deleteAccount(event) {
+                this.$showModal(ModalComponent)
+                  .then((modalRes) => {
+                           if(modalRes[0]!=false || modalRes[1]!=false || modalRes[2]!=false){
+                           this.deleteprofileResponses = modalRes;
+                           var deleteMessage="Are you sure you want to delete your data? "+'\n'+'\n';
+                           if(this.deleteprofileResponses[0]==true) deleteMessage=deleteMessage.concat("Removing your PROFILE: You will not be able to log in again ",'\n','\n');
+                           if(this.deleteprofileResponses[1]==true) deleteMessage=deleteMessage.concat("Removing your POSTS: All your posts will be deleted ",'\n','\n');
+                           if(this.deleteprofileResponses[2]==true) deleteMessage=deleteMessage.concat("Removing your MESSAGES: All the chat messages you sent will be deleted ",'\n','\n');
                 confirm(
                     {
                         title: 'Are you sure?',
-                        message: 'Are you sure you want to delete your account?',
-                        okButtonText: "Delete",
-                        cancelButtonText: "Go Back"
+                        message: deleteMessage, // message depending on what inside the array
+                        okButtonText: "I am sure, please Delete",
+                        cancelButtonText: "No, Go Back"
                     })
                     .then((res) => {
                         if (res) {
-                            this.service.deleteAccount((this.$store.state.user._id))
-                                .then((res) => {
-                                    if (res) {
-                                        if (res.success) {
-                                            alert({ title: "Deleted", message: "Your account has been successfully deleted" })
-                                                .then((res) => {
-                                                    this.$store.commit("setUser", { user: null });
-                                                    this.$navigateTo(LoginMain, {
-                                                        //clearHistory: true, 
-                                                        animated: false
+
+                                var service = new BackendService();
+
+                                if(this.deleteprofileResponses[1]==true){
+                                        this.service.getProfilePosts((this.$store.state.user._id))
+                                            .then((res) => {
+                                                if (res) {
+                                                    var postsArray = res.posts;
+
+                                                    postsArray.forEach(post => {
+                                                        var mediaData = post.media.split("/");
+                                                        if(mediaData!=''){
+                                                            var postBucketName;
+                                                            var postFilename;
+                                                            if(mediaData[mediaData.length - 1].slice(-3)=='mp4'){
+                                                                        postBucketName  = "self-isomate-videos";
+                                                                        postFilename = "post-videos/"+mediaData[mediaData.length - 1];
+                                                            }else{   
+                                                                        postBucketName  = "self-isomate-images";
+                                                                        postFilename = "post-images/"+mediaData[mediaData.length - 1];
+                                                            }             
+                                                            console.log(postBucketName+"  "+postFilename);
+                                                                service.removeMediaFromCloud(postBucketName, postFilename )
+                                                                    .then((res) => {
+                                                                        if (res) {
+                                                                            if(res.success==true){
+                                                                                    service.removeMediaFromPost(post._id)
+                                                                                    .then((res) => {
+                                                                                        if (res) {
+                                                                                            if(res.success!=true){
+                                                                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                                                                    }
+                                                                                }
+                                                                            }).catch((err) => {
+                                                                                if (err) console.log("err: "+err);
+                                                                            });
+
+                                                                            }else{
+                                                                                alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+
+                                                                            }
+                                                                        }
+                                                                    }).catch((err) => {
+                                                                        if (err) console.log("err: "+err);
+                                                                    });
+                                                            }
+                                                                        service.deletePost(post._id)
+                                                                            .then((res) => {
+                                                                                if (res) {
+                                                                                    if(res.success!=true){
+                                                                                    alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                                                                    }else{
+                                                                                    alert({ title: "POSTS REMOVED SUCCESSFULLY", message: "POSTS DELETED", okButtonText: "OK"  });
+                                                                                    }
+                                                                                }
+                                                                            }).catch((err) => {
+                                                                                if (err) console.log("err: "+err);
+                                                                            })
+                                                        });                                     
+                                                }
+                                            })
+                                     }      
+
+                                              if(this.deleteprofileResponses[2]==true){
+                                                  
+
+                                        this.service.getMessagesfromUser((this.$store.state.user._id))
+                                            .then((res) => {
+                                                if (res) {
+                                                    var chatsArray = res.chatMessages;
+
+                                                    chatsArray.forEach(message => {
+
+                                                        this.service.deleteMessage((message._id))
+                                                            .then((res) => {
+                                                                alert({ title: "CHAT MESSAGES REMOVED SUCCESSFULLY", message: "MESSAGES DELETED", okButtonText: "OK"  });    
+                                                        }
+                                                        
+                                                        );
+
+
                                                     });
+                                                }
+                                                    
+                                                    
+                                        });
+
+                                     }  
+
+                                if(this.deleteprofileResponses[0]==true){
+//                                                3) Need to delete all user data (emails, tokens?, anything with personal info)
+//                                                4) Delete profile pictures from gcloud
+
+                                        this.service.deleteToken((this.$store.state.user.email))    .then((removeRes) => {
+                                                })
+                                                .catch((err) => {
+                                                    if (err) console.log("err: "+err);
                                                 });
-                                        }
-                                        if (!res.success) {
-                                            alert({ title: "Unsuccessful", message: "Unfortunately, there was an error deleting your account. Please contact us at <our email>" });
-                                        }
-                                    }
-                                })
+                                    var propicData = this.$store.state.user.profilePicture.split("/");
+                                        if (propicData[5] && propicData[5]!="default") {
+                                            var postBucketName  = "self-isomate-images";
+                                            var postFilename = "profile-pictures/"+propicData[5];
+                                            this.service.removeMediaFromCloud(postBucketName, postFilename )
+                                                .then((removeRes) => {
+                                                })
+                                                .catch((err) => {
+                                                    if (err) console.log("err: "+err);
+                                                });
+                                        }                                   
+                                    this.service.deleteAccount((this.$store.state.user._id))
+                                            .then((res) => {
+                                                if (res) {
+                                                    if (res.success) {
+                                                          alert({ title: "PROFILE REMOVED SUCCESSFULLY", message: "ACCOUNT DELETED", okButtonText: "OK"  });
+                                                      			//this.$store.commit("setUser", { user: null }); it creashes better use the clearUser 
+                                                                this.$store.commit("clearUser");    
+                                                                this.$navigateTo(LoginMain, {
+                                                                    //clearHistory: true, 
+                                                                    animated: false
+                                                                });
+                                                    }
+                                                    if (!res.success) {
+                                                        alert({ title: "Unsuccessful", message: "Unfortunately, there was an error deleting your account. Please contact us at <our email>" });
+                                                    }
+                                                }
+                                            })
+                                }
                         }
-                    })
+                    });
+                           }
+                     });
+                     
             },
             clearDetails () {
                 this.settingsValues = {

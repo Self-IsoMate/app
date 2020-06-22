@@ -134,15 +134,6 @@ export default class BackendService {
             })
     }
 
-    async getProfilePosts(user) {
-        return axios.get(API+`posts?user.username=${user.username}`)
-            .then((res) => {
-                return { posts: res.data };
-            })
-            .catch((err) => {
-                if (err) console.log(err);
-            })
-    }
 
     async getCategories() {
         return axios.get(API+'categories?isChild=false')
@@ -369,9 +360,46 @@ export default class BackendService {
             if (err) console.log(err);
         })
     }
-	
-	async getProfilePosts(user) {
-        return axios.get(API+`posts?user.username=${user.username}`)
+    
+    async deleteMessage(messageId) {
+      
+        return axios.delete(`${API}messages/${messageId}`)
+        .then((res) => {
+            return { success: res.data };
+
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+
+    async deleteToken(email) {
+      
+        return axios.delete(`${API}tokens/${email}`)
+        .then((res) => {
+            return { success: res.data};
+
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+
+    
+    async getMessagesfromUser(userID) {
+      
+        return axios.get(API+`messages?userID=`+userID)
+        .then((res) => {
+            return { chatMessages: res.data };
+
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+
+	async getProfilePosts(id) { 
+        return axios.get(API+`posts?userId=${id}`)
             .then((res) => {
                 return { posts: res.data };
             })
