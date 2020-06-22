@@ -303,15 +303,13 @@
                                             .then((res) => {
                                                 if (res) {
                                                     if (res.success) {
-                                                        alert({ title: "Deleted", message: "Your account has been successfully deleted" })
-                                                            .then((res) => {
-                                                          alert({ title: "PROFILE REMOVED SUCCESSFULLY", message: "ACCOUNT DELETED", okButtonText: "OK"  });    
-                                                                this.$store.commit("setUser", { user: null });
+                                                          alert({ title: "PROFILE REMOVED SUCCESSFULLY", message: "ACCOUNT DELETED", okButtonText: "OK"  });
+                                                      			//this.$store.commit("setUser", { user: null }); it creashes better use the clearUser 
+                                                                this.$store.commit("clearUser");    
                                                                 this.$navigateTo(LoginMain, {
                                                                     //clearHistory: true, 
                                                                     animated: false
                                                                 });
-                                                            });
                                                     }
                                                     if (!res.success) {
                                                         alert({ title: "Unsuccessful", message: "Unfortunately, there was an error deleting your account. Please contact us at <our email>" });
