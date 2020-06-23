@@ -79,6 +79,10 @@
                         this.$timer.start('log')
 
         },
+        beforeDestroy () {
+            console.log("DESTROY PAGE");
+            alert({ title: 'DESTROY PAGE', message: 'DESTROY PAGE' });
+        }, 
         components: {
             ChatroomItem
         },
