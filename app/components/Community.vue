@@ -107,6 +107,15 @@ export default {
     props: {
         communities: Array
     },
+            watch: { 
+      	$route (to, from){
+            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            alert({ title: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', message: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' });    }
+        },
+             beforeRouteUpdate (to, from, next) {
+   console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            alert({ title: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', message: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' });    
+  },
     components: {
         CommunityPill
     },
@@ -175,10 +184,14 @@ export default {
             })
     },
     beforeDestroy () {
-        console.log("DESTROY PAGE");
-        alert({ title: 'DESTROY PAGE', message: 'DESTROY PAGE' });
+        console.log(this.timers.log.time);
+        alert({ title: 'DESTROY PAGE', message: 'DESTROY COMMUNITY PAGE' });
         clearInterval(this.$options.interval)
     },
+         beforeRouteUpdate (to, from, next) {
+   console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            alert({ title: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', message: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' });    
+  },
     data() {
         return {
             drawerToggle: false,

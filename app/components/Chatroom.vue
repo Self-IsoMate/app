@@ -82,6 +82,15 @@ gi<template>
 
     export default {
         props: ['chatRoom'],
+        watch: { 
+      	$route (to, from){
+            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            alert({ title: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', message: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' });    }
+        },
+             beforeRouteUpdate (to, from, next) {
+   console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            alert({ title: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', message: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' });    
+  },
         timers: {
               log: { time: 4000, autostart: true, repeat: true },
               spamFilterTimer: { time: 10000, autostart: true, repeat: true }
@@ -154,10 +163,14 @@ gi<template>
             this.$timer.start('spamFilterTimer');       
         },
         beforeDestroy () {
-            console.log("DESTROY PAGE");
-            alert({ title: 'DESTROY PAGE', message: 'DESTROY PAGE' });
+            console.log(this.timers.log.time);
+            alert({ title: 'DESTROY PAGE', message: 'DESTROY CHATROOM PAGE' });
             clearInterval(this.$options.interval)
-        }, 
+        },
+             beforeRouteUpdate (to, from, next) {
+   console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            alert({ title: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', message: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' });    
+  }, 
         data() {
             return {
                 back:"",

@@ -102,8 +102,8 @@
 
         },
         beforeDestroy () {
-            console.log("DESTROY PAGE");
-            alert({ title: 'DESTROY PAGE', message: 'DESTROY PAGE' });
+        console.log(this.timers.log.time);
+            alert({ title: 'DESTROY PAGE', message: 'DESTROY CHAT PAGE' });
             clearInterval(this.$options.interval)
         }, 
         data() {
