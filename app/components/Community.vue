@@ -1,5 +1,5 @@
 <template>
-    <Page class="page">
+    <Page @navigatedFrom="greet" class="page">
 
         <ActionBar title="" class="action-bar header">
             <GridLayout columns="auto, *, auto" height="38" 
@@ -107,15 +107,6 @@ export default {
     props: {
         communities: Array
     },
-            watch: { 
-      	$route (to, from){
-            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            alert({ title: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', message: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' });    }
-        },
-             beforeRouteUpdate (to, from, next) {
-   console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            alert({ title: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', message: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' });    
-  },
     components: {
         CommunityPill
     },
@@ -158,7 +149,7 @@ export default {
                                 this.posts = result;
                             } else {
                                 // filter posts by communities
-                                console.log(this.$props.communities);
+                                //console.log(this.$props.communities);
                                 this.posts = result.filter(post => post.communities.some(c => this.$props.communities.some(pc => pc._id == c)));
                             }
                         })
@@ -172,7 +163,7 @@ export default {
         service.getCommunities(this.$store.state.user.communities)
             .then((res) => {
                 if (res) {
-                    console.log(res);
+                    //console.log(res);
                     this.allCommunities = [... res.communities];
                     if (this.allCommunities.length == 0){
                          alert({ title: '😢 Nothing to see here', message: "Subscribe to communities to fill up that feed" })
@@ -184,14 +175,10 @@ export default {
             })
     },
     beforeDestroy () {
-        console.log(this.timers.log.time);
-        alert({ title: 'DESTROY PAGE', message: 'DESTROY COMMUNITY PAGE' });
+        /*console.log(this.timers.log.time);
+        alert({ title: 'DESTROY PAGE', message: 'DESTROY COMMUNITY PAGE' });*/
         clearInterval(this.$options.interval)
     },
-         beforeRouteUpdate (to, from, next) {
-   console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            alert({ title: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', message: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' });    
-  },
     data() {
         return {
             drawerToggle: false,
@@ -204,6 +191,11 @@ export default {
         };
     },
     methods: {
+        greet() {
+            alert('Hello!').then(() => {
+                console.log('Hello')
+            })
+        },
         deletePostinoMedia(post){
             confirm(
                     {

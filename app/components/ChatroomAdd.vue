@@ -1,5 +1,5 @@
 <template>
-    <Page>
+    <Page @navigatedFrom="greet">
 		<ActionBar title="" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
@@ -80,8 +80,8 @@
 
         },
         beforeDestroy () {
-            console.log(this.timers.log.time);
-            alert({ title: 'DESTROY PAGE', message: 'DESTROY CHATROOMADD PAGE' });
+            /*console.log(this.timers.log.time);
+            alert({ title: 'DESTROY PAGE', message: 'DESTROY CHATROOMADD PAGE' });*/
         }, 
         components: {
             ChatroomItem
@@ -98,6 +98,11 @@
             };
         },
          methods: {
+            greet() {
+                alert('Hello!').then(() => {
+                    console.log('Hello')
+                })
+            },
              log () {
 
                  var backend = new BackendService();

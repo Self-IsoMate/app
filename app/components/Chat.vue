@@ -1,5 +1,5 @@
 <template>
-    <Page class="page">
+    <Page @navigatedFrom="greet" class="page">
 		<ActionBar title="" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
@@ -102,8 +102,8 @@
 
         },
         beforeDestroy () {
-        console.log(this.timers.log.time);
-            alert({ title: 'DESTROY PAGE', message: 'DESTROY CHAT PAGE' });
+        /*console.log(this.timers.log.time);
+            alert({ title: 'DESTROY PAGE', message: 'DESTROY CHAT PAGE' });*/
             clearInterval(this.$options.interval)
         }, 
         data() {
@@ -117,6 +117,11 @@
             };
         },
         methods: {
+            greet() {
+                alert('Hello!').then(() => {
+                    console.log('Hello')
+                })
+            },
             log () {
      service.getChatroomIds(this.$store.state.user._id).then(res=>{
                 if (res) {

@@ -1,5 +1,5 @@
 gi<template>
-    <Page class="page">
+    <Page @navigatedFrom="greet" class="page">
         <ActionBar title="HHHH" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
@@ -82,15 +82,6 @@ gi<template>
 
     export default {
         props: ['chatRoom'],
-        watch: { 
-      	$route (to, from){
-            console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            alert({ title: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', message: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' });    }
-        },
-             beforeRouteUpdate (to, from, next) {
-   console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            alert({ title: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', message: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' });    
-  },
         timers: {
               log: { time: 4000, autostart: true, repeat: true },
               spamFilterTimer: { time: 10000, autostart: true, repeat: true }
@@ -163,14 +154,10 @@ gi<template>
             this.$timer.start('spamFilterTimer');       
         },
         beforeDestroy () {
-            console.log(this.timers.log.time);
-            alert({ title: 'DESTROY PAGE', message: 'DESTROY CHATROOM PAGE' });
+            /*console.log(this.timers.log.time);
+            alert({ title: 'DESTROY PAGE', message: 'DESTROY CHATROOM PAGE' });*/
             clearInterval(this.$options.interval)
         },
-             beforeRouteUpdate (to, from, next) {
-   console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            alert({ title: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', message: 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' });    
-  }, 
         data() {
             return {
                 back:"",
@@ -180,6 +167,11 @@ gi<template>
             };
         },
         methods: {
+            greet() {
+                alert('Hello!').then(() => {
+                    console.log('Hello')
+                })
+            },
             spamFilterTimer(){
                 this.$store.state.spamFilterCount=0;
             },
