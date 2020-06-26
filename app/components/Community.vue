@@ -1,5 +1,5 @@
 <template>
-    <Page @navigatedFrom="greet" class="page">
+    <Page @navigatedFrom="stopTimer" class="page">
 
         <ActionBar title="" class="action-bar header">
             <GridLayout columns="auto, *, auto" height="38" 
@@ -175,9 +175,8 @@ export default {
             })
     },
     beforeDestroy () {
-        /*console.log(this.timers.log.time);
-        alert({ title: 'DESTROY PAGE', message: 'DESTROY COMMUNITY PAGE' });*/
-        clearInterval(this.$options.interval)
+    this.timers.log.isSwitchTab=true;
+    this.$timer.stop('log');
     },
     data() {
         return {
@@ -191,10 +190,10 @@ export default {
         };
     },
     methods: {
-        greet() {
-            alert('Hello!').then(() => {
-                console.log('Hello')
-            })
+        stopTimer() {
+            console.log("stopTimer community");
+            this.timers.log.isSwitchTab=true;
+            this.$timer.stop('log');
         },
         deletePostinoMedia(post){
             confirm(
@@ -352,6 +351,9 @@ export default {
                     });
         },
         log() {
+            
+            console.log("log community");
+
             var service = new BackendService();
 
             // Refreshing user account for email verification

@@ -23,7 +23,7 @@ export default class BackendService {
 
     login(username, password) {
 
-        console.log(`username: ${username} password: ${password}`);
+        //console.log(`username: ${username} password: ${password}`);
 
         return axios.post(API+"login", { username: username, password: password })
             .then((res) => {

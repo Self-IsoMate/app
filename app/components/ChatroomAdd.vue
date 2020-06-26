@@ -1,5 +1,5 @@
 <template>
-    <Page @navigatedFrom="greet">
+    <Page @navigatedFrom="stopTimer">
 		<ActionBar title="" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
@@ -80,8 +80,8 @@
 
         },
         beforeDestroy () {
-            /*console.log(this.timers.log.time);
-            alert({ title: 'DESTROY PAGE', message: 'DESTROY CHATROOMADD PAGE' });*/
+            this.timers.log.isSwitchTab=true;
+            this.$timer.stop('log');
         }, 
         components: {
             ChatroomItem
@@ -98,10 +98,10 @@
             };
         },
          methods: {
-            greet() {
-                alert('Hello!').then(() => {
-                    console.log('Hello')
-                })
+            stopTimer() {
+                console.log("stopTimer chatroomadd");
+                this.timers.log.isSwitchTab=true;
+                this.$timer.stop('log');
             },
              log () {
 

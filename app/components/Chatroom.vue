@@ -1,5 +1,5 @@
 gi<template>
-    <Page @navigatedFrom="greet" class="page">
+    <Page @navigatedFrom="stopTimer" class="page">
         <ActionBar title="HHHH" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
@@ -154,9 +154,10 @@ gi<template>
             this.$timer.start('spamFilterTimer');       
         },
         beforeDestroy () {
-            /*console.log(this.timers.log.time);
-            alert({ title: 'DESTROY PAGE', message: 'DESTROY CHATROOM PAGE' });*/
-            clearInterval(this.$options.interval)
+            this.timers.log.isSwitchTab=true;
+            this.timers.spamFilterTimer.isSwitchTab=true;
+            this.$timer.stop('log');
+            this.$timer.stop('spamFilterTimer');
         },
         data() {
             return {
@@ -167,10 +168,11 @@ gi<template>
             };
         },
         methods: {
-            greet() {
-                alert('Hello!').then(() => {
-                    console.log('Hello')
-                })
+            stopTimer() {
+                console.log("stopTimer chatroom");
+                this.timers.log.isSwitchTab=true;
+                this.$timer.stop('log');
+                this.$timer.stop('spamFilterTimer');
             },
             spamFilterTimer(){
                 this.$store.state.spamFilterCount=0;
@@ -197,6 +199,8 @@ gi<template>
                 }
             },
             log () {
+                            console.log("log chatroom");
+
                 var service = new BackendService();
 
                 // Refreshing user account for email verification

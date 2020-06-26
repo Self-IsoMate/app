@@ -1,5 +1,5 @@
 <template>
-    <Page @navigatedFrom="greet" class="page">
+    <Page @navigatedFrom="stopTimer" class="page">
 		<ActionBar title="" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
@@ -102,9 +102,8 @@
 
         },
         beforeDestroy () {
-        /*console.log(this.timers.log.time);
-            alert({ title: 'DESTROY PAGE', message: 'DESTROY CHAT PAGE' });*/
-            clearInterval(this.$options.interval)
+        this.timers.log.isSwitchTab=true;
+        this.$timer.stop('log');
         }, 
         data() {
             return {
@@ -117,10 +116,10 @@
             };
         },
         methods: {
-            greet() {
-                alert('Hello!').then(() => {
-                    console.log('Hello')
-                })
+            stopTimer() {
+                console.log("stopTimer chat");
+                this.timers.log.isSwitchTab=true;
+                this.$timer.stop('log');
             },
             log () {
      service.getChatroomIds(this.$store.state.user._id).then(res=>{
