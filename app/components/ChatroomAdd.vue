@@ -82,6 +82,7 @@
         beforeDestroy () {
             this.timers.log.isSwitchTab=true;
             this.$timer.stop('log');
+            //console.log(this.timers.log.isRunning);
         }, 
         components: {
             ChatroomItem
@@ -99,9 +100,10 @@
         },
          methods: {
             stopTimer() {
-                console.log("stopTimer chatroomadd");
                 this.timers.log.isSwitchTab=true;
                 this.$timer.stop('log');
+                //console.log(this.timers.log.isRunning);
+
             },
              log () {
 

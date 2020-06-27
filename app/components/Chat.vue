@@ -104,6 +104,7 @@
         beforeDestroy () {
         this.timers.log.isSwitchTab=true;
         this.$timer.stop('log');
+        //console.log(this.timers.log.isRunning);
         }, 
         data() {
             return {
@@ -117,9 +118,9 @@
         },
         methods: {
             stopTimer() {
-                console.log("stopTimer chat");
                 this.timers.log.isSwitchTab=true;
                 this.$timer.stop('log');
+                //console.log(this.timers.log.isRunning);
             },
             log () {
      service.getChatroomIds(this.$store.state.user._id).then(res=>{

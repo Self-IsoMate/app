@@ -177,6 +177,7 @@ export default {
     beforeDestroy () {
     this.timers.log.isSwitchTab=true;
     this.$timer.stop('log');
+    //console.log(this.timers.log.isRunning);
     },
     data() {
         return {
@@ -191,9 +192,9 @@ export default {
     },
     methods: {
         stopTimer() {
-            console.log("stopTimer community");
             this.timers.log.isSwitchTab=true;
             this.$timer.stop('log');
+            //console.log(this.timers.log.isRunning);
         },
         deletePostinoMedia(post){
             confirm(
@@ -352,7 +353,7 @@ export default {
         },
         log() {
             
-            console.log("log community");
+            //console.log("log community");
 
             var service = new BackendService();
 
@@ -363,8 +364,8 @@ export default {
                 return service.getUserfromId(post.userId)
                    .then((res) => {
                     var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
-                    console.log("res2");
-                    console.log(res);
+                    /*console.log("res2");
+                    console.log(res);*/
                         if (res && !res.user){
                             return { ...post, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat};
                         }

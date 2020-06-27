@@ -158,6 +158,8 @@ gi<template>
             this.timers.spamFilterTimer.isSwitchTab=true;
             this.$timer.stop('log');
             this.$timer.stop('spamFilterTimer');
+            /*console.log(this.timers.log.isRunning);
+            console.log(this.timers.spamFilterTimer.isRunning);*/
         },
         data() {
             return {
@@ -169,10 +171,12 @@ gi<template>
         },
         methods: {
             stopTimer() {
-                console.log("stopTimer chatroom");
                 this.timers.log.isSwitchTab=true;
                 this.$timer.stop('log');
                 this.$timer.stop('spamFilterTimer');
+                /*console.log(this.timers.log.isRunning);
+                console.log(this.timers.spamFilterTimer.isRunning);*/
+
             },
             spamFilterTimer(){
                 this.$store.state.spamFilterCount=0;
