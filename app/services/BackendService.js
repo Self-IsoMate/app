@@ -26,7 +26,7 @@ export default class BackendService {
                     } 
                     else 
                     {
-                        return { success : false };
+                        return { success : false, message: res.data.message };
                     }
                 }
             })
@@ -98,6 +98,10 @@ export default class BackendService {
                 if (res.data.success) {
                     return { success: true, newLocation: user.profilePicture };
                 }
+
+                if (!res.data.success) {
+                    return { success: false, message: res.data.message };
+                }
             })
             .catch((err) => {
                 if (err)
@@ -109,7 +113,13 @@ export default class BackendService {
         return await axios.put(API+`users/${userId}`, newUser)
             .then((res) => {
                 if (res) {
-                    return { user: res.data.update };
+                    if (res.data.success) {
+                        return { user: res.data.update };
+                    }
+
+                    if (!res.data.success) {
+                        return { success: false, message: res.data.message }; 
+                    }
                 }
             })
             .catch((err) => {
@@ -122,7 +132,13 @@ export default class BackendService {
     async getProfilePosts(user) {
         return axios.get(API+`posts?user.username=${user.username}`)
             .then((res) => {
-                return { posts: res.data };
+                if (res && res.data.success) {
+                    return { posts: res.data };
+                }
+
+                if (res && !res.data.success) {
+                    return { success: false, message: res.data.message }; 
+                }
             })
             .catch((err) => {
                 if (err) {
@@ -135,7 +151,13 @@ export default class BackendService {
         return axios.get(API+'categories?isChild=false')
             .then((res) => {
                 if (res) {
-                    return { categories: res.data }
+                    if (res.data.success) {
+                        return { categories: res.data }
+                    }
+
+                    if (!res.data.success) {
+                        return { success: false, message: res.data.message }; 
+                    }
                 }
             })
             .catch((err) => {
@@ -148,7 +170,13 @@ export default class BackendService {
         return axios.get( API + `categories?parentId=${parent._id}` )
             .then((res) => {
                 if (res) {
-                    return { subcategories: res.data }
+                    if (res.data.success) {
+                        return { subcategories: res.data }
+                    }
+
+                    if (!res.data.success) {
+                        return { success: false, message: res.data.message }; 
+                    }
                 }
             })
             .catch((err) => {
@@ -166,8 +194,14 @@ export default class BackendService {
         return Promise.all(promises)
             .then((res) => {
                 if (res) {
-                    var commies = res.map((r) => r.data[0]);
-                    return { success: true, communities: commies }
+                    if (res.data.success) {
+                        var coms = res.map((r) => r.data[0]);
+                        return { success: true, communities: coms }
+                    }
+
+                    if (!res.data.success) {
+                        return { success: false, message: res.data.message }; 
+                    }
                 }
             })
             .catch((err) => {
@@ -182,6 +216,10 @@ export default class BackendService {
             .then((res) => {
                 if (res && res.data.success) {
                     return { success: res.data.success, resources: res.data.resources };
+                }
+
+                if (res && !res.data.success) {
+                    return { success: false, message: res.data.message }; 
                 }
             })
             .catch((err) => {
@@ -231,7 +269,13 @@ export default class BackendService {
         return axios.delete(API + `users/${userId}`)
             .then((res) => {
                 if (res) {
-                    return { success: res.data.success };
+                    if (res.data.success) {
+                        return { success: res.data.success };
+                    }
+
+                    if (!res.data.success) {
+                        return { success: false, message: res.data.message }; 
+                    }
                 }
             })
             .catch((err) => {
@@ -245,7 +289,17 @@ export default class BackendService {
       
         return axios.get(API+`messages?chatroomID=`+chatroomId)
         .then((res) => {
-            return { messages: res.data };
+            if (res) {
+                if (res) {
+                    if (res.data.success) {
+                        return { messages: res.data };
+                    }
+
+                    if (!res.data.success) {
+                        return { success: false, message: res.data.message }; 
+                    }
+                }
+            }
         })
         .catch((err) => {
             if (err) {
@@ -263,8 +317,13 @@ export default class BackendService {
         })
         .then((res, err) => {
 
-     
-                return {success : true, message: res};  
+                if (res) {
+                    if (res.data.success) {
+                        return { success : true, message: res }; 
+                    } else {
+                        return { success: false, message: res.data.message }
+                    }
+                }
         
             }).catch((err) => {
                 if (err) {
@@ -277,7 +336,13 @@ export default class BackendService {
       
         return axios.get(API+`chatrooms/`+chatroomId)
         .then((res) => {
-            return { chatroom: res.data };
+            if (res) {
+                if (res.data.success) {
+                    return { success: true, chatroom: res.data.chatroom };
+                } else {
+                    return { success: false, message: res.data.message }
+                }
+            }
         })
         .catch((err) => {
             if (err) {
@@ -290,7 +355,11 @@ export default class BackendService {
         return axios.get(API + 'communities')
         .then((res) => {
             if (res) {
-                return {communities: res.data};
+                if (res.data.success) {
+                    return { success: true, communities: res.data.communities };
+                } else {
+                    return { success: false, message: res.data.message }
+                }
             }
         })
         .catch((err) => {
@@ -304,7 +373,11 @@ export default class BackendService {
         return axios.get(API + 'challenges')
         .then((res) => {
             if (res) {
-                return {challenges: res.data};
+                if (res.data.success) {
+                    return { success: true, challenges: res.data };
+                } else {
+                    return { success: false, message: res.data.message }
+                }
             }
         })
         .catch((err) => {
@@ -318,7 +391,11 @@ export default class BackendService {
         return axios.post(API + 'users/' + userID + "/chatrooms", {"chatroomId": [chatroomID]})
         .then((res) => {
             if (res){
-                return {user: res.data.user};
+                if (res.data.success) {
+                    return { success: true, user: res.data.user };
+                } else {
+                    return { success: false, message: res.data.message }
+                }
             } 
         })
         .catch((err) => {
@@ -332,7 +409,11 @@ export default class BackendService {
         return axios.delete(`${API}users/${userID}/chatrooms/${chatroomID}`)
         .then((res) => {
             if (res){
-                return {user: res.data.user};
+                if (res.data.success) {
+                    return { success: true, user: res.data.user };
+                } else {
+                    return { success: false, message: res.data.message }
+                }
             } 
         })
         .catch((err) => {
@@ -346,7 +427,13 @@ export default class BackendService {
       
         return axios.get(API+`users?_id=`+userID)
         .then((res) => {
-            return { user: res.data.users[0] };
+            if (res) {
+                if (res.data.success) {
+                    return { success: true, user: res.data.users[0] };
+                } else {
+                    return { success: false, message: res.data.message }
+                }
+            }
         })
         .catch((err) => {
             if (err) {
@@ -359,8 +446,13 @@ export default class BackendService {
       
         return axios.get(`${API}users/${userId}/chatrooms`)
         .then((res) => {
-            return { chatrooms: res.data.chatrooms }; // return { chatroom: res.data };
-
+            if (res) {
+                if (res.data.success) {
+                    return { success: true, chatrooms: res.data.chatrooms }; // return { chatroom: res.data };
+                } else {
+                    return { success: false, message: res.data.message }
+                }
+            }
         })
         .catch((err) => {
             if (err) {
@@ -372,7 +464,13 @@ export default class BackendService {
 	async getProfilePosts(user) {
         return axios.get(API+`posts?user.username=${user.username}`)
             .then((res) => {
-                return { posts: res.data };
+                if (res) {
+                    if (res.data.success) {
+                        return { success: true, posts: res.data };
+                    } else {
+                        return { success: false, message: res.data.message }
+                    }
+                }
             })
             .catch((err) => {
                 if (err) {
@@ -385,7 +483,11 @@ export default class BackendService {
         return axios.get(API + 'chatrooms')
         .then((res) => {
             if (res){
-                return {chatrooms: res.data};
+                if (res.data.success) {
+                    return { success: true, chatrooms: res.data.chatrooms };
+                } else {
+                    return { success: false, message: res.data.message };
+                }
             } 
         })
         .catch((err) => {
@@ -399,7 +501,11 @@ export default class BackendService {
         return axios.get(API + 'posts')
         .then((res) => {
             if (res){
-                return {posts: res.data};
+                if (res.data.success) {
+                    return { success: true, posts: res.data.posts };
+                } else {
+                    return { success: false, message: res.data.message };
+                }
             } 
         })
         .catch((err) => {
@@ -414,11 +520,8 @@ export default class BackendService {
             .then((res) => {
                 if (res) {
                     if (res.data.success) {
-                        console.log("successfully posted");
                         return { success: true, post: res.data.post };
-                    }
-
-                    if (!res.data.success) {
+                    } else {
                         return { success: false, message: res.data.message };
                     }
                 }
@@ -450,9 +553,11 @@ export default class BackendService {
         return await axios.put(API+`posts/${postId}`, {'media':''})
             .then((res) => {
                 if (res) {
-                    return { success: res.data.success };
-                } else {
-                    return { success: false, message: res.data.message }
+                    if (res.data.success) {
+                        return { success: res.data.success };
+                    } else {
+                        return { success: false, message: res.data.message }
+                    }
                 }
             })
             .catch((err) => {
@@ -467,7 +572,11 @@ export default class BackendService {
         return axios.delete(API + `posts/${postId}`)
             .then((res) => {
                 if (res) {
-                    return { success: res.data.success };
+                    if (res.data.success) {
+                        return { success: res.data.success };
+                    } else {
+                        return { success: false, message: res.data.message }
+                    }
                 }
             })
             .catch((err) => {
@@ -577,21 +686,15 @@ export default class BackendService {
         return { task: session.uploadFile(video, request), link: link };
     }
 
-    async giveImageLink(e, image) {
-        console.log("returning image?")
-        return { success: true, image: image }
-    }
-
     async getFeed(userId) {
         return axios.get(`${API}/feed/${userId}`)
             .then((res) => {
-                if (res && res.data.success) {
-                    return { success: true, posts: res.data.feed };
-                }
-
-                if (res && !res.data.success) {
-                    console.log(res);
-                    return { success: false, message: res.data.message }
+                if (res) {
+                    if (res.data.success) {
+                        return { success: true, posts: res.data.feed };
+                    } else {
+                        return { success: false, message: res.data.message }
+                    }
                 }
             })
             .catch((err) => {
@@ -676,8 +779,13 @@ export default class BackendService {
     async getFAQs() {
         return axios.get(`${API}faq`)
         .then((res) => {
-            return { faqs: res.data.questions }; // return { chatroom: res.data };
-
+            if (res) {
+                if (res.data.success) {
+                    return { success: true, faqs: res.data.questions }; // return { chatroom: res.data };
+                } else {
+                    return { success: false, message: res.data.message }
+                }
+            }
         })
         .catch((err) => {
             if (err) {
