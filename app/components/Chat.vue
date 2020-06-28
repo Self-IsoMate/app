@@ -1,5 +1,5 @@
 <template>
-    <Page class="page">
+    <Page @navigatedFrom="stopTimer" class="page">
 		<ActionBar title="" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
@@ -102,8 +102,10 @@
 
         },
         beforeDestroy () {
-            clearInterval(this.$options.interval)
-        },
+        this.timers.log.isSwitchTab=true;
+        this.$timer.stop('log');
+        //console.log(this.timers.log.isRunning);
+        }, 
         data() {
             return {
                 drawerToggle: false,
@@ -115,6 +117,11 @@
             };
         },
         methods: {
+            stopTimer() {
+                this.timers.log.isSwitchTab=true;
+                this.$timer.stop('log');
+                //console.log(this.timers.log.isRunning);
+            },
             log () {
      service.getChatroomIds(this.$store.state.user._id).then(res=>{
                 if (res) {

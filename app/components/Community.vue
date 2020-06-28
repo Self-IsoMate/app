@@ -1,5 +1,5 @@
 <template>
-    <Page class="page">
+    <Page @navigatedFrom="stopTimer" class="page">
 
         <ActionBar title="" class="action-bar header">
             <GridLayout columns="auto, *, auto" height="38" 
@@ -149,7 +149,7 @@ export default {
                                 this.posts = result;
                             } else {
                                 // filter posts by communities
-                                console.log(this.$props.communities);
+                                //console.log(this.$props.communities);
                                 this.posts = result.filter(post => post.communities.some(c => this.$props.communities.some(pc => pc._id == c)));
                             }
                         })
@@ -163,7 +163,7 @@ export default {
         service.getCommunities(this.$store.state.user.communities)
             .then((res) => {
                 if (res) {
-                    console.log(res);
+                    //console.log(res);
                     this.allCommunities = [... res.communities];
                     if (this.allCommunities.length == 0){
                          alert({ title: '😢 Nothing to see here', message: "Subscribe to communities to fill up that feed" })
@@ -175,7 +175,9 @@ export default {
             })
     },
     beforeDestroy () {
-        clearInterval(this.$options.interval)
+    this.timers.log.isSwitchTab=true;
+    this.$timer.stop('log');
+    //console.log(this.timers.log.isRunning);
     },
     data() {
         return {
@@ -189,6 +191,11 @@ export default {
         };
     },
     methods: {
+        stopTimer() {
+            this.timers.log.isSwitchTab=true;
+            this.$timer.stop('log');
+            //console.log(this.timers.log.isRunning);
+        },
         deletePostinoMedia(post){
             confirm(
                     {
@@ -345,6 +352,9 @@ export default {
                     });
         },
         log() {
+            
+            //console.log("log community");
+
             var service = new BackendService();
 
             // Refreshing user account for email verification
@@ -354,8 +364,8 @@ export default {
                 return service.getUserfromId(post.userId)
                    .then((res) => {
                     var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
-                    console.log("res2");
-                    console.log(res);
+                    /*console.log("res2");
+                    console.log(res);*/
                         if (res && !res.user){
                             return { ...post, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat};
                         }

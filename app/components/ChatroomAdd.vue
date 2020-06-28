@@ -1,5 +1,5 @@
 <template>
-    <Page>
+    <Page @navigatedFrom="stopTimer">
 		<ActionBar title="" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
@@ -79,6 +79,11 @@
                         this.$timer.start('log')
 
         },
+        beforeDestroy () {
+            this.timers.log.isSwitchTab=true;
+            this.$timer.stop('log');
+            //console.log(this.timers.log.isRunning);
+        }, 
         components: {
             ChatroomItem
         },
@@ -94,6 +99,12 @@
             };
         },
          methods: {
+            stopTimer() {
+                this.timers.log.isSwitchTab=true;
+                this.$timer.stop('log');
+                //console.log(this.timers.log.isRunning);
+
+            },
              log () {
 
                  var backend = new BackendService();
