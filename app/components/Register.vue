@@ -95,10 +95,15 @@ export default {
 					.then((response) => {
 						if (response && response.success) {
                             this.$store.commit("setUser", { user: response.user });
-                            alert({
+                                feedback.show({
+                                title: "Successfully registered",
+                                message: "We\'ve sent you a confirmation email, so please verify your email so that you can participate in chats and post in communities.",
+                                type: FeedbackType.Success
+                            });
+                            /*alert({
                                 title: 'Registered',
                                 message: 'Successfully registered. We\'ve sent you a confirmation email, so please verify your email so that you can participate in chats and post in communities.'
-                            })
+                            });*/
 							this.$navigateTo(Home,  {
 								animated: false,
 								clearHistory: true
@@ -128,6 +133,11 @@ export default {
                         }
                     });
             } else {
+                     feedback.show({
+                        title: "Passwords need to match",
+                        message: "Please confirm your password correctly!",
+                        type:FeedbackType.Error
+                            });
                 this.invalidPasswords = true;
                 setTimeout(() => { this.invalidPasswords = false }, 3000);
             }
