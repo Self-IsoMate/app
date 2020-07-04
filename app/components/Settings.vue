@@ -35,7 +35,7 @@
                             <Label text="Security &amp; Privacy" class="setting-header" />
 
                             <Label text="Change password" class="setting-text" />
-                            <TextField v-model="settingsValues.newPassword" secure="true" hint="Enter new password" />
+                            <TextField v-model="settingsValues.newPassword" secure="true" hint="Enter new password" @tap="clickPass"/>
                             <TextField v-model="settingsValues.confirmNewPassword" secure="true" hint="Confirm new password" />
 
                             <Label text="Change email" class="setting-text" />
@@ -69,7 +69,9 @@
     import { CheckBox } from '@nstudio/nativescript-checkbox';
     import { topmost } from 'tns-core-modules/ui/frame'
     import ModalComponent from "./ModalComponent";
-
+    var FeedbackPlugin = require("nativescript-feedback");
+    var FeedbackType = require ("nativescript-feedback").FeedbackType;
+    var feedback = new FeedbackPlugin.Feedback();
 
     export default { 
         mounted() {
@@ -96,6 +98,18 @@
             }
         },
         methods: {
+            clickPass (){
+                    feedback.show({
+                        title: "For a strong password, please use:",
+                        message: "A mixture of both uppercase and lowercase letters and numbers (least 8 characters)",
+                        type:
+                        FeedbackType.Custom
+                        //FeedbackType.Success
+                        //FeedbackType.Warning
+                        //FeedbackType.Error
+                        //FeedbackType.Info
+                    });
+        },
             getCheckProp() {
             const checkBox = topmost().getViewById('yourCheckBoxId');
             console.log('checked prop value = ' + checkBox.checked);
@@ -114,62 +128,112 @@
             },
             changeDetails(event) {
 
-                console.log("tapped");
 
                 if (this.settingsValues.newPassword && this.settingsValues.newPassword != this.settingsValues.confirmNewPassword) {
-                    // throw error
-                    console.log("not matching");
+                    feedback.show({
+                        title: "Passwords do not match:",
+                        message: "Please check both password values! They must be the same",
+                        type:
+                        FeedbackType.Error
+                   });
                     return;
                 }
 
                 if (this.settingsValues.newEmail && this.settingsValues.newEmail != this.settingsValues.confirmNewEmail) {
-                    // throw error
-                    console.log("not matching");
+                    feedback.show({
+                        title: "Email addresses do not match",
+                        message: "Please check both email address values! They must be the same",
+                        type:
+                        FeedbackType.Error
+                    });
                     return;
                 }
 
                 if (this.settingsValues.newPassword) {
-                    // change password
-                    this.service.updateUser(this.$store.state.user._id, { password: this.settingsValues.newPassword })
+                    var countPassword = this.settingsValues.newPassword;
+                    if(countPassword.replace(/ /g,'').length < 5 || this.settingsValues.newPassword <8){
+                        feedback.show({
+                            title: "Password must be longer",
+                            message: "Please insert at leat 8 characters (spaces excluded)",
+                            type:
+                            FeedbackType.Error
+                        });
+                }else{                   
+             this.service.updateUser(this.$store.state.user._id, { password: this.settingsValues.newPassword })
                         .then((res) => {
                             if (res) {
-                                console.log("updated password");
-                                alert({ title: "Password", message: "Successfully changed your password" })
-                                    .then((res) => {
-                                        this.clearDetails();
+                    feedback.show({
+                        title: "Password Successfully changed!",
+                        message: "You have successfully changed your password!",
+                        type:
+                        FeedbackType.Success
+                    })
+                        .then((res) => {
+                            this.clearDetails();
                                     });
                             }
                         })
                         .catch((err) => {
                             if (err) {
                                 console.log(err);
-                                alert({ title: "Error", message: "There was a problem changing your password" })
-                                    .then((res) => {
-                                        console.log("acknowledged");
-                                    });
+                        feedback.show({
+                                title: "There has been an error!:",
+                                message: "We are sorry! Something went wrong, please try again in few minutes",
+                                type:
+                                FeedbackType.Error
+                            });
                             }
                         })
                 }
+                }
 
                 if (this.settingsValues.newEmail) {
+                    var filter = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
+                    if(String(this.settingsValues.newEmail).search (filter)==-1){
+                        feedback.show({
+                        title: "Insert a valid email address",
+                        message: "Please insert a valid email address (youremail@address.ext)",
+                        type:
+                        FeedbackType.Error
+                    });
+                        return;
+                    }else{
                     this.service.updateUser(this.$store.state.user._id, { email: this.settingsValues.newEmail })
                         .then((res) => {
                             if (res) {
-                                console.log("updated email");
-                                alert({ title: "Email", message: "Successfully changed your email" })
-                                    .then((res) => {
-                                        this.clearDetails();
+                    feedback.show({
+                        title: "Email address Successfully changed!",
+                        message: "Your email address has been successfully updated!",
+                        type:
+                        FeedbackType.Success
+                    })
+                        .then((res) => {
+                                      this.clearDetails();
                                     })
                             }
                         })
                         .catch((err) => {
                             if (err) {
                                 console.log(err);
+                        feedback.show({
+                                title: "There has been an error!:",
+                                message: "We are sorry! Something went wrong, please try again in few minutes",
+                                type:
+                                FeedbackType.Error
+                            });
                             }
                         })
                 }
+                }
 
-                // check if email is being updated and then update
+            if(!this.settingsValues.newEmail && !this.settingsValues.newPassword){
+                        feedback.show({
+                                title: "To update your email or password please fill the form:",
+                                message: "You can update your email address and password here! \nYou can also edit or delete your profile",
+                                type:
+                                FeedbackType.Warning
+                            });
+            }
 
             },
             deleteAccount(event) {
@@ -211,7 +275,7 @@
                                                                         postBucketName  = "self-isomate-images";
                                                                         postFilename = "post-images/"+mediaData[mediaData.length - 1];
                                                             }             
-                                                            console.log(postBucketName+"  "+postFilename);
+                                                            //console.log(postBucketName+"  "+postFilename);
                                                                 service.removeMediaFromCloud(postBucketName, postFilename )
                                                                     .then((res) => {
                                                                         if (res) {
@@ -242,7 +306,12 @@
                                                                                     if(res.success!=true){
                                                                                     alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
                                                                                     }else{
-                                                                                    alert({ title: "POSTS REMOVED SUCCESSFULLY", message: "POSTS DELETED", okButtonText: "OK"  });
+                                                                                        feedback.show({
+                                                                                            title: "POSTS REMOVED SUCCESSFULLY!:",
+                                                                                            message: "POSTS DELETED",
+                                                                                            type:
+                                                                                            FeedbackType.Success
+                                                                                        });
                                                                                     }
                                                                                 }
                                                                             }).catch((err) => {
@@ -265,7 +334,12 @@
 
                                                         this.service.deleteMessage((message._id))
                                                             .then((res) => {
-                                                                alert({ title: "CHAT MESSAGES REMOVED SUCCESSFULLY", message: "MESSAGES DELETED", okButtonText: "OK"  });    
+                                                                feedback.show({
+                                                                    title: "CHAT MESSAGES REMOVED SUCCESSFULLY!:",
+                                                                    message: "MESSAGES DELETED",
+                                                                    type:
+                                                                    FeedbackType.Success
+                                                                });
                                                         }
                                                         
                                                         );
@@ -303,7 +377,12 @@
                                             .then((res) => {
                                                 if (res) {
                                                     if (res.success) {
-                                                          alert({ title: "PROFILE REMOVED SUCCESSFULLY", message: "ACCOUNT DELETED", okButtonText: "OK"  });
+                                                        feedback.show({
+                                                            title: "PROFILE REMOVED SUCCESSFULLY",
+                                                            message: "ACCOUNT DELETED",
+                                                            type:
+                                                            FeedbackType.Success
+                                                        });
                                                       			//this.$store.commit("setUser", { user: null }); it creashes better use the clearUser 
                                                                 this.$store.commit("clearUser");    
                                                                 this.$navigateTo(LoginMain, {
@@ -312,7 +391,12 @@
                                                                 });
                                                     }
                                                     if (!res.success) {
-                                                        alert({ title: "Unsuccessful", message: "Unfortunately, there was an error deleting your account. Please contact us at <our email>" });
+                                                        feedback.show({
+                                                            title: "Unsuccessful: There has been an error!",
+                                                            message: "We are sorry! Something went wrong, please try again in few minutes \nUnfortunately, there was an error deleting your account. Please contact us at <our email>",
+                                                            type:
+                                                            FeedbackType.Error
+                                                        });
                                                     }
                                                 }
                                             })
