@@ -14,7 +14,7 @@
                 </StackLayout>
                 <StackLayout col="2" orientation="horizontal" alignItems="right" marginRight="10">
                     <Label text="" style="font-size:30;color:#fff;margin:5 15;"
-                        class="font-awesome" verticalAlignment="center" @tap="showFilterModal" />
+                        class="font-awesome" verticalAlignment="center" @tap="showFilterModal"/>
                     <Label text="" style="font-size:30;color:#fff;margin:5;"
                         class="font-awesome" verticalAlignment="center" @tap="createNewPost" />
                 </StackLayout>
@@ -97,6 +97,9 @@ import NewPost from "./NewPost";
 import CommunityPill from "./CommunityPill";
 import CommunityFilter from "./CommunityFilter";
 import  Video  from 'nativescript-videoplayer';
+var FeedbackPlugin = require("nativescript-feedback");
+var FeedbackType = require ("nativescript-feedback").FeedbackType;
+var feedback = new FeedbackPlugin.Feedback();
 
 
 export default {
@@ -173,6 +176,8 @@ export default {
             .catch((err) => {
                 this.$alert({ message: "Error retrieving communities - filtering may not work as expected." })
             })
+        this.arrayEnable = (this.$props.communities != undefined) && (this.allCommunities.includes(undefined));
+
     },
     beforeDestroy () {
     this.timers.log.isSwitchTab=true;
@@ -187,7 +192,8 @@ export default {
             posts: [],
             communityFilter: CommunityFilter,
             communityFilters: [],
-            allCommunities: []
+            allCommunities: [],
+            arrayEnable: true
         };
     },
     methods: {
@@ -432,7 +438,7 @@ export default {
                         })
                         .then((result) => {
 							if (result) {
-								console.log("Resending");
+								//console.log("Resending");
 								service.ResendVerification(response.user.email)
 									.then((res) => {
 										if (res && res.success) {
@@ -455,10 +461,18 @@ export default {
             }
         },
         showFilterModal() {
-            if (this.$props.communities && this.$props.communities.length > 0) {
-                this.$navigateTo(CommunityFilter, { props: { allCommunities: this.allCommunities, preSelectedCommunities: this.$props.communities} });
-            } else {
-                this.$navigateTo(CommunityFilter, { props: { allCommunities: this.allCommunities } });
+            if(this.arrayEnable==false){
+                feedback.show({
+						title: "Error: There was a problem retrieving data from the server",
+						message: "We are sorry! Something went wrong, please try again in few minutes",
+						type: FeedbackType.Warning
+					});
+            }else{
+                if (this.$props.communities && this.$props.communities.length > 0) {
+                    this.$navigateTo(CommunityFilter, { props: { allCommunities: this.allCommunities, preSelectedCommunities: this.$props.communities} });
+                } else {
+                    this.$navigateTo(CommunityFilter, { props: { allCommunities: this.allCommunities } });
+                }
             }
         },
         refreshUser () {

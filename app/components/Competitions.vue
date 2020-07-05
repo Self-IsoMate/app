@@ -72,7 +72,7 @@
                     if (res) {
                         this.allChallenges = res.challenges;
                         this.challenges = Array.from(this.allChallenges);
-                        console.log(this.challenges);
+                        //console.log(this.challenges);
                     }
                 })
                 .catch((err) => {
