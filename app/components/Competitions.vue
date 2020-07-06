@@ -9,7 +9,7 @@
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
                 <AutoFocusView></AutoFocusView>
-                    <SearchBar hint="Search" v-model="searchValue" @loaded="onSearchBarLoaded($event)" @textChange="filter" />
+                    <SearchBar hint="Search" v-model="searchValue" @loaded="onSearchBarLoaded($event)" @textChange="filter" :isEnabled="arrayEnable"/>
                 </StackLayout>
                 <StackLayout class="HRight">
                 </StackLayout>
@@ -63,6 +63,9 @@
     import { backgroundInternalProperty } from 'tns-core-modules/ui/page/page';
     import CompetitionInfo from "./CompetitionInfo";
     import moment from "moment";
+    var FeedbackPlugin = require("nativescript-feedback");
+    var FeedbackType = require ("nativescript-feedback").FeedbackType;
+    var feedback = new FeedbackPlugin.Feedback();
 
     export default {
         created() {
@@ -87,7 +90,16 @@
                 })
                 .catch((err) => {
                     if (err) console.log(err);
-                })
+                });
+
+            this.arrayEnable = (this.challenges.length>0||this.allChallenges.length>0)&&(!this.challenges.includes(undefined)||!this.allChallenges.includes(undefined));
+            if(this.arrayEnable==false){
+                    feedback.show({
+						title: "Error: There was a problem retrieving data from the server",
+						message: "We are sorry! Something went wrong, please try again in few minutes",
+						type: FeedbackType.Warning
+					});
+        }
         },
         data() {
             return {
@@ -98,7 +110,8 @@
                 challenges: [],
                 allChallenges: [],
                 communities: [],
-                searchValue: ""
+                searchValue: "",
+                arrayEnable: true
             };
         },
         methods: {

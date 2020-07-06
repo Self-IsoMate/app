@@ -10,7 +10,7 @@
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
                     <AutoFocusView></AutoFocusView>
-                    <SearchBar hint="Search" v-model="searchPhrase" ref="searchBar" @loaded="onSearchBarLoaded($event)" @textChange="filter()" />
+                    <SearchBar hint="Search" v-model="searchPhrase" ref="searchBar"  @loaded="onSearchBarLoaded($event)" @textChange="filter()" :isEnabled="arrayEnable" />
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -43,6 +43,9 @@
     import CategoryThumb from "./CategoryThumb";
     import BackendService from "../services/BackendService";
     import Category from "./Category";
+    var FeedbackPlugin = require("nativescript-feedback");
+    var FeedbackType = require ("nativescript-feedback").FeedbackType;
+    var feedback = new FeedbackPlugin.Feedback();
 
     export default {
         name: "Home",
@@ -54,7 +57,8 @@
                 drawer1: "",
                 drawer2: "",
                 service: new BackendService(),
-                searchPhrase: ""
+                searchPhrase: "",
+                arrayEnable: true
             };
         },
         components: {
@@ -93,7 +97,15 @@
                     if (err) {
                         console.log(err);
                     }
-                })
+                });
+        this.arrayEnable = (this.allCategories.length>0||this.categories.length>0)&&(!this.categories.includes(undefined)||!this.allCategories.includes(undefined));
+        if(this.arrayEnable==false){
+                    feedback.show({
+						title: "Error: There was a problem retrieving data from the server",
+						message: "We are sorry! Something went wrong, please try again in few minutes",
+						type: FeedbackType.Warning
+					});
+        }
         },
         methods: {
             onSearchBarLoaded: function(event) {

@@ -45,7 +45,7 @@
 
                             <GridLayout columns="*, *" rows="auto">
 
-                                <Button text="Confirm changes" col="0" row="0" @tap="changeDetails"/>
+                                <Button text="Confirm changes" col="0" row="0" @tap="changeDetails" :isEnabled="hasEdits"/>
                                 <Button text="Delete your account" col="1" backgroundColor="red" @tap="deleteAccount"/>
 
                             </GridLayout>
@@ -80,7 +80,10 @@
         computed: {
             message() {
                 return "No Settings";
-            }
+            },
+            hasEdits: function () {
+            return this.settingsValues.newPassword!=''||this.settingsValues.newEmail!='';
+        }
         },
         data: () => {
             return {

@@ -151,7 +151,15 @@ export default {
 					this.$navigateBack();
 				})
 		}
-		this.arrayEnable = (this.availableCommunities||this.allAvailableCommunities)&&(this.availableCommunities.includes(undefined)||this.allAvailableCommunities.includes(undefined));
+
+		this.arrayEnable = (this.availableCommunities.length>0||this.allAvailableCommunities.length>0)&&(!this.availableCommunities.includes(undefined)||!this.allAvailableCommunities.includes(undefined));
+	        if(this.arrayEnable==false){
+                    feedback.show({
+						title: "Error: There was a problem retrieving data from the server",
+						message: "We are sorry! Something went wrong, please try again in few minutes",
+						type: FeedbackType.Warning
+					});
+			}
 	},
 
 	methods: {

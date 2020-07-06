@@ -91,7 +91,7 @@
 
 <script>
 import BackendService from "../services/BackendService";
-import { timer } from 'vue-timers'
+import { timer } from 'vue-timers';
 import moment from "moment";
 import NewPost from "./NewPost";
 import CommunityPill from "./CommunityPill";
