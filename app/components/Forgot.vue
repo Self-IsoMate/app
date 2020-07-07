@@ -14,7 +14,9 @@
 
 <script>
 import LoginMain from "./LoginMain";
-
+var FeedbackPlugin = require("nativescript-feedback");
+var FeedbackType = require ("nativescript-feedback").FeedbackType;
+var feedback = new FeedbackPlugin.Feedback();
 export default {
     name: "Forgot",
     data: () => {
@@ -24,8 +26,11 @@ export default {
     },
     methods: {
         handleSendRecovery (event) {
-            console.log("recovery email");
-        },
+            feedback.show({
+                    title: "We are still working on this. \n Wait for V.02",
+                    message: "Recovery email options not yet available",
+                     type:FeedbackType.Info
+                            })        },
         onBack (event) {
             this.$navigateTo(LoginMain);
         }

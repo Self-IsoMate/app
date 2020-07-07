@@ -22,6 +22,9 @@ import Register from "./Register";
 import Forgot from "./Forgot";
 import Home from "./Home";
 import BackendService from "../services/BackendService";
+var FeedbackPlugin = require("nativescript-feedback");
+var FeedbackType = require ("nativescript-feedback").FeedbackType;
+var feedback = new FeedbackPlugin.Feedback();
 
 export default {
 	name: 'LoginMain',
@@ -46,13 +49,25 @@ export default {
 									clearHistory: true
 								});
 							} else {
-								alert({ title: 'Please log in', message: 'You\'ve been signed out, please re-enter your details.' })
+								//alert({ title: 'Please log in', message: 'You\'ve been signed out, please re-enter your details.' })
+								feedback.show({
+									title: "Please log in:",
+									message: "You\'ve been signed out, please re-enter your details.",
+									type:
+									FeedbackType.Warning
+								});
 							}
 						}
 					})
 					.catch((err) => {
 						if (err) {
-							alert({ title: 'Error', message: 'Problem logging in, please enter your details.' })
+							//alert({ title: 'Error', message: 'Problem logging in, please enter your details.' })
+							feedback.show({
+									title: "Error:",
+									message: "An error might have occurred. \nPlease check Username and Password!",
+									type:
+									FeedbackType.Error
+								});
 						}
 					});
 			}
@@ -86,26 +101,56 @@ export default {
 								okButtonText: 'Resend Verification'
 							}).then((result) => {
 								if (result) {
-									console.log("Resending");
+									//console.log("Resending");
 									service.ResendVerification(response.user.email)
 										.then((res) => {
 											if (res && res.success) {
-												alert({ title: 'Success', message: 'Successfully resent verification' })
+												//alert({ title: 'Success', message: 'Successfully resent verification' })
+													feedback.show({
+													title: "Success",
+													message: "Successfully resent verification",
+													type:
+													FeedbackType.Success
+												});	
 											}
 
 											if (res && !res.success) {
-												alert({ title: 'Error', message: 'Unsuccessful'})
+												//alert({ title: 'Error', message: 'Unsuccessful'})
+												console.log(res);
 												console.log(res.message);
+													feedback.show({
+													title: "Login Unsuccessful, please try again in few minutes",
+													message: "An error might have occurred. \nservers are busy, please try again in few minutes",
+													type:
+													FeedbackType.Error
+												});	
 											}
 										})
 										.catch((err) => {
 											if (err) {
 												console.log(err);
-												alert({ title: 'Error', message: 'Unsuccessful' })
+												//alert({ title: 'Error', message: 'Unsuccessful' })
+												feedback.show({
+													title: "Login Unsuccessful, please try again in few minutes",
+													message: "An error might have occurred. \nservers are busy, please try again in few minutes",
+													type:
+													FeedbackType.Error
+												});	
 											}
 										})
 							} else {
-								console.log("cancelled");
+								//console.log("cancelled");
+									this.message = "Login cancelled";
+									feedback.show({
+										title: "Please  try again:",
+										message: "An error might have occurred. \nPlease check Username and Password!",
+										type:
+										//FeedbackType.Custom
+										//FeedbackType.Success
+										FeedbackType.Warning
+										//FeedbackType.Error
+										//FeedbackType.Info
+									});
 							}
 						})
 							
@@ -113,11 +158,27 @@ export default {
 
 				} else {
 					this.message = "Login failed";
+					 feedback.show({
+                        title: "Please  try again:",
+                        message: "An error might have occurred. \nPlease check Username and Password!",
+                        type:
+                        //FeedbackType.Custom
+                        //FeedbackType.Success
+                        FeedbackType.Warning
+                        //FeedbackType.Error
+                        //FeedbackType.Info
+                    });
 				}
 			});
 		},
 		handleGuest(event) {
-        alert({ title: "GUEST OPTION NOT AVAILABLE", message: "GUEST OPTION NOT AVAILABLE", okButtonText: "OK"  });
+		//alert({ title: "GUEST OPTION NOT AVAILABLE", message: "GUEST OPTION NOT AVAILABLE", okButtonText: "OK"  });
+		    feedback.show({
+                                title: "We are still working on this. \n Wait for V.02",
+                                message: "Guest options not yet available",
+                                type:
+                                FeedbackType.Info
+                            })
 			//this.$store.commit("setUser", { user: null }); it creashes better use the clearUser 
             /*this.$store.commit("clearUser");    
 			this.$navigateTo(Home,

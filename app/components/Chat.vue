@@ -12,7 +12,7 @@
                         editable="true" hint="      Search" returnKeyType="search"
                         ios:height="30" ios:marginTop="3"
                         android:paddingBottom="5" class="searchField font-awesome"
-                        color="#fff" />
+                        color="#fff" :isEnabled="arrayEnable" />
                 </StackLayout>
                 <StackLayout class="HRight" @tap="addTap">
                     <Label text="+" style="font-size:40;color:#fff;" paddingLeft="15%"
@@ -71,7 +71,10 @@
 
     import BackendService from "../services/BackendService";
     var service = new BackendService();
-    import { timer } from 'vue-timers'
+    import { timer } from 'vue-timers';
+    var FeedbackPlugin = require("nativescript-feedback");
+    var FeedbackType = require ("nativescript-feedback").FeedbackType;
+    var feedback = new FeedbackPlugin.Feedback();
 
     
     export default {
@@ -99,8 +102,15 @@
             });
             
             this.$timer.start('log')
-
-        },
+  this.arrayEnable = (this.chatRoomsList.length>0)&&(!this.chatRoomsList.includes(undefined));
+        if(this.arrayEnable==false){
+                    feedback.show({
+						title: "Error: There was a problem retrieving data from the server",
+						message: "We are sorry! Something went wrong, please try again in few minutes",
+						type: FeedbackType.Warning
+					});
+        }
+},
         beforeDestroy () {
         this.timers.log.isSwitchTab=true;
         this.$timer.stop('log');
@@ -113,7 +123,8 @@
                 drawer2: "",
                 mainColor: "#00ff92",
                 chatRoomsList: [
-                ]
+                ],
+                arrayEnable: true
             };
         },
         methods: {

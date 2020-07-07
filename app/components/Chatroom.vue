@@ -76,7 +76,7 @@ gi<template>
     import Chat from "./Chat";
     import moment from "moment";
     import BackendService from "../services/BackendService";
-    import { timer } from 'vue-timers'
+    import { timer } from 'vue-timers';
     import { RadListView, ListViewItemSnapMode } from "nativescript-ui-listview";
 
 
