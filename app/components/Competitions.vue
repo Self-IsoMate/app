@@ -60,24 +60,34 @@
             backend.getChallenges()
                 .then((res) => {
                     if (res) {
-                        this.allChallenges = res.challenges;
-                        this.challenges = Array.from(this.allChallenges);
-                        console.log(this.challenges);
-
+                        if (res.success) {
+                            this.allChallenges = res.challenges;
+                            this.challenges = Array.from(this.allChallenges);
+                        } else {
+                            alert({ title: 'Error', message: res.message })
+                        }
                     }
                 })
                 .catch((err) => {
-                    if (err) console.log(err);
+                    if (err) {
+                        alert({ title: 'Error', message: err.message });
+                    }
                 })
             
             backend.getAllCommunities()
                 .then((res) => {
                     if (res) {
-                        this.communities = res.communities;
+                        if (res.success) {
+                            this.communities = res.communities;
+                        } else {
+                            alert({ title: 'Error', message: res.message });
+                        }
                     }
                 })
                 .catch((err) => {
-                    if (err) console.log(err);
+                    if (err) {
+                        alert({ title: 'Error', message: res.message });
+                    }
                 })
         },
         data() {
@@ -119,61 +129,10 @@
             toggleDrawer() {
                 this.$refs.drawer.nativeView.toggleDrawerState();
             },
-            homeTap() {
-                this.$navigateTo(Home, {
-                    animated: false,
-                    //clearHistory: true
-                });
-            },
-            communityTap() {
-                this.$navigateTo(Community, {
-                    animated: false,
-                    //clearHistory: true
-                });
-            },
-            chatTap() {
-                this.$navigateTo(Chat, {
-                    animated: false,
-                    //clearHistory: true
-                });
-            },
-            competitionTap() {},
-            profileTap() {
-                this.$navigateTo(Profile, {
-                    animated: false,
-                    //clearHistory: true
-                });
-            },
-            notificationTap() {
-                this.$navigateTo(Notifications, {
-                    animated: false,
-                    //clearHistory: true
-                });
-            },
-            settingsTap() {
-                this.$navigateTo(Settings, {
-                    animated: false,
-                    //clearHistory: true
-                });
-            },
-            helpTap(){
-                this.$navigateTo(Help, {
-                    animated: false,
-                    //clearHistory: true
-                });
-            },
-            logOut(){
-                this.$store.commit("clearUser");
-                this.$navigateTo(LoginScreen, {
-                    animated: false,
-                    //clearHistory: true
-                });
-            }, //put in here navigate to log-in screen
             showDetails(challengeVariable){
                 this.$navigateTo(CompetitionInfo, {
                     props: {challenge: challengeVariable, formattedTime: moment(String(challengeVariable.deadline)).format('DD/MM/YYYY')},
-                    animated: false,
-                    //clearHistory: true
+                    animated: false
                 });
             }
         }
