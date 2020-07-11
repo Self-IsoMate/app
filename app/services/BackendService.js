@@ -301,7 +301,7 @@ export default class BackendService {
             if (res) {
                 if (res) {
                     if (res.data.success) {
-                        return { messages: res.data };
+                        return { success: true, messages: res.data.messages };
                     }
 
                     if (!res.data.success) {
