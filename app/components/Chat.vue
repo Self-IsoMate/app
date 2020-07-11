@@ -130,8 +130,6 @@
                                 });
                                 return matchingChats;
                             });
-                        } else {
-                            console.log("Error on gettin chat rooms objects from id");
                         }
                         if (chatsinlist.length > 0) {
                             chatsinlist.forEach(val => {
@@ -140,15 +138,17 @@
                                         this.chatRoomsList = this.chatRoomsList.concat(response.chatroom);    
                                     })
                                     .catch((err) => {
-                                        if (err) console.log("err: " + err);
+                                        if (err) {
+                                            alert({ title: 'Error', message: err.message })
+                                        }
                                     });
                             });
-                        } else {
-                            console.log("no new chats, check every 10 seconds");
                         }
                     })
                     .catch((err) => {
-                        if (err) console.log("err: " + err);
+                        if (err) {
+                            alert({ title: 'Error', message: err.message })
+                        }
                     });
             },
             onDrawerClosed() {
