@@ -6,8 +6,6 @@ const BUCKET_PROFILE_PICTURES = "https://storage.googleapis.com/self-isomate-ima
 const BUCKET_POST_IMAGES = "https://storage.googleapis.com/self-isomate-images/post-images/";
 const BUCKET_POST_VIDEOS = "https://storage.googleapis.com/self-isomate-videos/post-videos/";
 var bghttp = require("nativescript-background-http");
-<<<<<<< HEAD
-=======
 var _ = require('lodash');
 import store from "../store/index";
 
@@ -15,7 +13,6 @@ import store from "../store/index";
  * TO DO: 
  * something to show that a user is uploading something (will use the store for this);
  */
->>>>>>> develop
 
 
 export default class BackendService {
@@ -26,11 +23,6 @@ export default class BackendService {
 
     login(username, password) {
 
-<<<<<<< HEAD
-=======
-        //console.log(`username: ${username} password: ${password}`);
-
->>>>>>> develop
         return axios.post(API+"login", { username: username, password: password })
             .then((res) => {
 
@@ -397,18 +389,11 @@ export default class BackendService {
         return axios.get(API + 'challenges')
         .then((res) => {
             if (res) {
-<<<<<<< HEAD
                 if (res.data.success) {
-                    return { success: true, challenges: res.data.challenges };
+                    return { success: true, challenges: _.orderBy(res.data.challenges, ['deadline'], ['asc']) };
                 } else {
                     return { success: false, message: res.data.message }
                 }
-=======
-               //return {challenges: res.data};
-                const unsortedChallenges = res.data;
-                const sortedChallenges = _.orderBy(unsortedChallenges, ['deadline'], ['asc']);
-                return {challenges: sortedChallenges}
->>>>>>> develop
             }
         })
         .catch((err) => {
