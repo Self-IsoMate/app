@@ -67,52 +67,57 @@ export default {
 			var service = new BackendService();
 			service.login(this.username, this.password).then((response) => {
 				//console.log(response);
-				if (response && response.success) {
-					this.$navigateTo(Home,{
-							animated: false,
-							clearHistory: true
-						});
+				if (response) {
+					if (response.success) {
+						this.$navigateTo(Home,{
+								animated: false,
+								clearHistory: true
+							});
 
-					/*console.log("response.user to store");
-					console.log(response.user);*/
+						/*console.log("response.user to store");
+						console.log(response.user);*/
 
-					this.$store.commit("setUser", { user: response.user });
+						this.$store.commit("setUser", { user: response.user });
 
-					if (!response.user.isVerified) {
-						confirm({ 
-								title: 'Please verify your email',
-								message: 'Make sure you check your spam folder.',
-								cancelButtonText: 'Cancel',
-								okButtonText: 'Resend Verification'
-							}).then((result) => {
-								if (result) {
-									console.log("Resending");
-									service.ResendVerification(response.user.email)
-										.then((res) => {
-											if (res && res.success) {
-												alert({ title: 'Success', message: 'Successfully resent verification' })
-											}
+						if (!response.user.isVerified) {
+							confirm({ 
+									title: 'Please verify your email',
+									message: 'Make sure you check your spam folder.',
+									cancelButtonText: 'Cancel',
+									okButtonText: 'Resend Verification'
+								})
+								.then((result) => {
+									if (result) {
+										service.ResendVerification(response.user.email)
+											.then((res) => {
+												if (res && res.success) {
+													alert({ title: 'Success', message: 'Verification email resent' })
+												}
 
-											if (res && !res.success) {
-												alert({ title: 'Error', message: 'Unsuccessful'})
-												console.log(res.message);
-											}
-										})
-										.catch((err) => {
-											if (err) {
-												console.log(err);
-												alert({ title: 'Error', message: 'Unsuccessful' })
-											}
-										})
-							} else {
-								console.log("cancelled");
-							}
-						})
-							
+												if (res && !res.success) {
+													alert({ title: 'Error', message: res.message})
+													console.log(res.message);
+												}
+											})
+											.catch((err) => {
+												if (err) {
+													alert({ title: 'Error', message: err.message })
+												}
+											})
+									}
+								})
+								
+						}
+
+					} else {
+						alert({ title: "Couldn't log in", message: response.message });
 					}
-
-				} else {
-					this.message = "Login failed";
+				}
+			})
+			.catch((err) => {
+				if (err) {
+					console.log(err);
+					alert({ title: 'Error', message: "Couldn't log in due to error" });
 				}
 			});
 		},

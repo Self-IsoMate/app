@@ -66,15 +66,19 @@
             service.getCategories()
                 .then((res) => {
                     if (res) {
-                        /*console.log("this is the response");
-                        console.log(res.categories);*/
-                        this.allCategories = res.categories;
-                        this.categories = Array.from(this.allCategories);
+                        if (res.success) {
+                            /*console.log("this is the response");
+                            console.log(res.categories);*/
+                            this.allCategories = res.categories;
+                            this.categories = Array.from(this.allCategories);
+                        } else {
+                            alert({ title: 'Error', message: res.message })
+                        }
                     }
                 })
                 .catch((err) => {
                     if (err) {
-                        console.log(err);
+                        alert({ title: 'Error', message: err.message })
                     }
                 })
 
