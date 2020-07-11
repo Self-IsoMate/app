@@ -184,7 +184,9 @@ export default {
                 }
             })
             .catch((err) => {
-                this.$alert({ message: "Error retrieving communities - filtering may not work as expected." })
+                if (err) {
+                    alert({ title: 'Error', message: err.message })
+                }
             })
     },
     beforeDestroy () {
@@ -229,32 +231,38 @@ export default {
                                                             .then((res) => {
                                                                 if (res) {
                                                                     if (res.success) {
-                                                                        alert({ title: "Success", message: "post successfully deleted", okButtonText: "OK"  });
+                                                                        alert({ title: "Success", message: 'Post deleted' });
                                                                         this.posts = [];
                                                                         this.log();
                                                                     } else {
-                                                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                                                        alert({ title: 'Error', message: res.message });
                                                                     }
                                                                 }
                                                             })
                                                             .catch((err) => {
-                                                                if (err) console.log("err: "+err);
+                                                                if (err) {
+                                                                    alert({ title: 'Error', message: err.message })
+                                                                }
                                                             });
                                                     } else {
-                                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                                        alert({ title: 'Error', message: res.message });
                                                     }
                                                 }
                                             })
                                             .catch((err) => {
-                                                if (err) console.log("err: "+err);
+                                                if (err) {
+                                                    alert({ title: 'Error', message: err.message })
+                                                }
                                             });
                                     } else {
-                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                        alert({ title: 'Error', message: res.message });
                                     }
                                 }
                             })
                             .catch((err) => {
-                                if (err) console.log("err: "+err);
+                                if (err){
+                                    alert({ title: 'Error', message: err.message })
+                                }
                             });
                         }
                     })
@@ -290,7 +298,7 @@ export default {
                                                         this.posts = [];
                                                         this.log();
                                                     } else {
-                                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                                        alert({ title: 'Error', message: res.message });
                                                     }
                                                 }
                                             })
@@ -299,17 +307,21 @@ export default {
                                             });
 
                                     } else {
-                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                        alert({ title: 'Error', message: res.message });
                                     }
                                 }
                             })
                             .catch((err) => {
-                                if (err) console.log("err: "+err);
+                                if (err) {
+                                    alert({ title: 'Error', message: err.message })
+                                }
                             });
                     }
                 })
                 .catch((err) => {
-                    if (err) console.log("err: "+err);
+                    if (err) {
+                        alert({ title: 'Error', message: err.message })
+                    }
                 });
         },
         deletePostino(post){
@@ -321,21 +333,25 @@ export default {
                             .then((res) => {
                                 if (res) {
                                     if (res.success) {
-                                        alert({ title: "Success", message: "post successfully deleted", okButtonText: "OK"  });
+                                        alert({ title: "Success", message: "post successfully deleted" });
                                         this.posts= [];
                                         this.log();
                                     } else {
-                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                        alert({ title: 'Error', message: res.message });
                                     }
                                 }
                             })
                             .catch((err) => {
-                                if (err) console.log("err: "+err);
+                                if (err) {
+                                    alert({ title: 'Error', message: err.message })
+                                }
                             });
                     }
                 })
                 .catch((err) => {
-                    if (err) console.log("err: "+err);
+                    if (err) {
+                        alert({ title: 'Error', message: err.message })
+                    }
                 });
         },
         log () {
@@ -348,15 +364,15 @@ export default {
                 return service.getUserfromId(post.userId)
                     .then((res) => {
                         var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
-                        console.log("res2");
-                        console.log(res);
                         if (res && !res.user) {
                             return { ...post, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat};
                         }
                         return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
                     })
                     .catch((err) => {
-                        if (err) console.log("err: "+err);
+                        if (err) {
+                            alert({ title: 'Error', message: err.message })
+                        }
                     });
             };
 
@@ -388,7 +404,9 @@ export default {
                                     }
                                 })
                                 .catch((err) => {
-                                    if (err) console.log("err: "+err);
+                                    if (err) {
+                                        alert({ title: 'Error', message: err.message })
+                                    }
                                 });
                         } 
                     }
@@ -447,12 +465,12 @@ export default {
                         }
 
                         if (res && !res.success) {
-                            alert({ title: 'Error', message: `Couldn't refresh details: ${res.message}` })
+                            alert({ title: 'Error', message: res.message })
                         }
                     })
                     .catch((err) => {
                         if (err) {
-                            console.log(err);
+                            alert({title: 'Error', message: err.message})
                         }
                     })
             }
