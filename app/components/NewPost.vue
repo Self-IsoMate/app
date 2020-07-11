@@ -80,9 +80,7 @@ import BackendService from '../services/BackendService';
 import CommunityItemPost from "./CommunityItemPost";
 import * as imagepicker from "nativescript-imagepicker";
 import  Video  from 'nativescript-videoplayer';
-var FeedbackPlugin = require("nativescript-feedback");
-var FeedbackType = require ("nativescript-feedback").FeedbackType;
-var feedback = new FeedbackPlugin.Feedback();
+import { Feedback, FeedbackType } from "nativescript-feedback"
 
 export default {
 	components: {
@@ -104,7 +102,8 @@ export default {
 			back:"",
 			selectedImage: null,
 			selectedVideo: null,
-			arrayEnable: true
+			arrayEnable: true, // What is this???
+			feedback: new Feedback()
 		}
 	},
 	created() {
@@ -117,11 +116,7 @@ export default {
 					}
 
 					if (res && !res.success) {
-						feedback.show({
-							title: "Error: There was a problem retrieving your communities",
-							message: "We are sorry! Something went wrong, please try again in few minutes",
-							type: FeedbackType.Error
-						})
+						this.feedback.show({ title: 'Error', message: res.message, type: FeedbackType.Error })
 							.then((res) => {
 								this.$navigateBack();
 							});
@@ -129,76 +124,44 @@ export default {
 				})
 				.catch((err) => {
 					if (err) {
-						feedback.show({
-							title: "Error: There was a problem retrieving your communities",
-							message: "We are sorry! Something went wrong, please try again in few minutes",
-							type:
-							FeedbackType.Error
-						})
+						this.feedback.show({ title: 'Error', message: err.message, type: FeedbackType.Error })
 							.then((res) => {
 								this.$navigateBack();
 							});
 					}
 				});
 		} else {
-			      feedback.show({
-                        title: "Error: Please sign in!",
-                        message: "It looks like you're not signed in... Please try again later",
-                        type:
-                        FeedbackType.Error
-                    })			
+			this.feedback.show({ title: 'Please log in', message: 'Please sign in before posting', type: FeedbackType.Error })			
 				.then((res) => {
 					this.$navigateBack();
 				})
 		}
-
-		this.arrayEnable = (this.availableCommunities.length>0||this.allAvailableCommunities.length>0)&&(!this.availableCommunities.includes(undefined)||!this.allAvailableCommunities.includes(undefined));
-	        if(this.arrayEnable==false){
-                    feedback.show({
-						title: "Error: There was a problem retrieving data from the server",
-						message: "We are sorry! Something went wrong, please try again in few minutes",
-						type: FeedbackType.Warning
-					});
-			}
 	},
 
 	methods: {
         titleRequired (){
-                    feedback.show({
-                        title: "Title is required! ",
-                        message: "Your post must have a title! ",
-                        type: FeedbackType.Custom
-                    });
+			this.feedback.show({
+				title: 'Title required',
+				message: "Your post must have a title!",
+				type: FeedbackType.Custom
+			});
         },
 		uploadPost(post) {
 			post.userId = this.currentUser._id;
-			post.communities = post.communities.map((c) => { 
-				return c._id
-			});
+			post.communities = post.communities.map((c) => c._id );
 			
 			this.service.addPost(post)
 				.then((res) => {
 					if (res && res.success) {
 						this.$store.state.lastPosted = Date.parse(res.post.datePosted);
-						feedback.show({
-							title: "Success: Added post",
-							message: "Successfully added post!",
-							type:
-							FeedbackType.Success
-						})
+						this.feedback.show({ title: 'Posted', message: 'Your post has been added', type: FeedbackType.Success })
 							.then((res) => {
 								this.$navigateBack();
 							});
 					}
 
 					if (res && !res.success) {
-						console.log(res.message);
-						feedback.show({
-							title: "Failed: Failed to add post",
-							message: "We are sorry! Something went wrong, please try again in few minutes",
-							type:
-							FeedbackType.Error
-						})
+						this.feedback.show({ title: 'Error', message: res.message, type: FeedbackType.Error })
 							.then((res) => {
 								this.$navigateBack();
 							});
@@ -207,44 +170,24 @@ export default {
 		},
 		addPost () {
 			if (this.selectedImage) {
-				      feedback.show({
-                        title: "Please wait",
-                        message: "Uploading your image & adding your post. Please wait.",
-                        type:
-                        FeedbackType.Info
-                    });
-
+				this.feedback.show({ title: "Please wait", message: "Uploading image", type: FeedbackType.Info });
 				var taskInfo = this.service.uploadPostImage(this.selectedImage);
-
 				if (taskInfo) {
-
-					//console.log(taskInfo);
-					
-
 					var task = taskInfo.task;
-					
-					//console.log(taskInfo.task);
-
 					var link = taskInfo.link;
-
-					//console.log(taskInfo.link);
 
 					task.on("error", (err) => {
 						if (err) {
-							console.log(err);
-						feedback.show({
-							title: "Error",
-							message: err,
-							type:
-							FeedbackType.Error
-						})
+							this.feedback.show({
+								title: "Error",
+								message: err.message,
+								type: FeedbackType.Error
+							})
 						}
 					});
 
 					task.on("complete", (e) => {
 						if (e) {
-							//console.log("got response");
-							//console.log(e);
 							this.post.media = link;
 							this.uploadPost(this.post);
 						}
@@ -252,44 +195,26 @@ export default {
 				}
 
 			} else if (this.selectedVideo) {
-				      feedback.show({
-                        title: "Please wait!",
-                        message: "Uploading your video & adding your post. Please wait.",
-                        type:
-                        FeedbackType.Info
-                    });
-
-				var taskInfo = this.service.uploadPostVideo(this.selectedVideo);// for video
-
+				this.feedback.show({ title: "Please wait", message: "Uploading video", type: FeedbackType.Info });
+				var taskInfo = this.service.uploadPostVideo(this.selectedVideo);
 				if (taskInfo) {
-
-					//console.log(taskInfo);
-					
 
 					var task = taskInfo.task;
 					
-					//console.log(taskInfo.task);
-
 					var link = taskInfo.link;
-
-					//console.log(taskInfo.link);
 
 					task.on("error", (err) => {
 						if (err) {
-							console.log(err);
-						feedback.show({
-							title: "Error",
-							message: err,
-							type:
-							FeedbackType.Error
-						})
-					}
+							this.feedback.show({
+								title: "Error",
+								message: err.message,
+								type: FeedbackType.Error
+							})
+						}
 					});
 
 					task.on("complete", (e) => {
 						if (e) {
-							//console.log("got response");
-							//console.log(e);
 							this.post.media = link;
 							this.uploadPost(this.post);
 						}
@@ -302,15 +227,13 @@ export default {
 		},
 		validatePost (event) {
 			var valid = true;
-			// check content
-			if(this.post.body=="" || this.post.title==""){
+			if(this.post.body == "" || this.post.title == "") {
 				valid = false;
-				feedback.show({
-                        title: "Please add title and content to your post",
-                        message: "Your post need a title and a body",
-                        type:
-                        FeedbackType.Warning
-                    });
+				this.feedback.show({
+					title: 'Content Required',
+					message: 'Cannot send an empty post',
+					type: FeedbackType.Warning
+				});
 			}
 
 			// spam checking
@@ -320,11 +243,10 @@ export default {
 				var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes*/
 				if (diffMins < 4) {
 					valid = false;
-					feedback.show({
+					this.feedback.show({
                         title: "Spam detected",
                         message: "Please wait before adding another post",
-                        type:
-                        FeedbackType.Warning
+                        type: FeedbackType.Warning
                     });
 				}
 			}
@@ -332,12 +254,11 @@ export default {
 			// checking if communities valid
 			if (valid && this.post.communities.length < 1) {
 				valid = false;
-				      feedback.show({
-                        title: "Community required:",
-                        message: "Please select a community first",
-                        type:
-                        FeedbackType.Warning
-                    });
+				this.feedback.show({
+					title: "Community Required:",
+					message: "Select a community to post to",
+					type: FeedbackType.Warning
+				});
 			}
 
 			// if all validation has passed, then proceed
@@ -354,8 +275,6 @@ export default {
 			} else {
 				this.post.communities.push(commie);
 			}
-
-			//console.log(this.post.communities);
 		},
 		filterCommunities (event) {
 			this.availableCommunities = this.allAvailableCommunities.filter((commie) => {
@@ -376,20 +295,17 @@ export default {
                 })
                 .then((selection) => {
                     if (selection) {
-						/*console.log("selection");
-						console.log(selection);*/
                         let image = selection[0];
                         image.options.width = 300;
 						image.options.height = 300;
 						this.selectedImage = image;
-						/*console.log("this.selectedImage");
-						console.log(this.selectedImage);*/
-						
                         return;
                     }
                 })
                 .catch((err) => {
-                    console.table(err); //table <- for errors
+					if (err) {
+						this.feedback.show({ title: 'Error', message: err.message, type: FeedbackType.Error })
+					}
                 })
 		},
 		selectVideo(event) {
@@ -404,36 +320,24 @@ export default {
                 })
                 .then((selection) => {
                     if (selection) {
-						/*console.log("selection");
-						console.log(selection);*/
                         let video = selection[0];
 						video.options.width = 300;
 						video.options.height = 300;
-						//this.showImage = false
-						//this.showVideo = true;
-						this.selectedVideo = video._android ?? video._ios; //URI for video
-						if(this.selectedVideo.slice(-3)!='mp4'){
+						this.selectedVideo = video._android ?? video._ios; 
+						if (this.selectedVideo.slice(-3)!='mp4'){
 							feedback.show({
 								title: "Only MP4 format",
 								message: "Only .mp4 videos supported",
-								type:
-								FeedbackType.Custom
-								//FeedbackType.Success
-								//FeedbackType.Warning
-								//FeedbackType.Error
-								//FeedbackType.Info
+								type: FeedbackType.Custom
 							});
 						}
-						/*console.log("this.selectedVideo");
-						console.log(this.selectedVideo);
-						console.log("this.selectVideo");
-						console.log(this.selectVideo);*/
-						
                         return;
                     }
                 })
                 .catch((err) => {
-                    console.table(err); //table <- for errors
+					if (err) {
+						this.feedback.show({ title: 'Error', message: err.message, type: FeedbackType.Error })
+					}
                 })
 		},
 		confirmDiscard () {
