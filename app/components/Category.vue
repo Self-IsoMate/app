@@ -53,14 +53,14 @@ export default {
 		subcategories: Array
 	},
 	methods: {
-             onSearchBarLoaded: function(event) {
-                if (event.object.android) {
-                    setTimeout(() => {
-                        event.object.dismissSoftInput();
-                        event.object.android.clearFocus();
-                    }, 0);
-                }
-            },
+        onSearchBarLoaded: function(event) {
+            if (event.object.android) {
+                setTimeout(() => {
+                    event.object.dismissSoftInput();
+                    event.object.android.clearFocus();
+                }, 0);
+            }
+        },
         filter() {
             this.filteredSubcategories = this.$props.subcategories.filter((h)=>{
                 return h.name.toUpperCase().startsWith(this.searchPhrase.toUpperCase());
@@ -79,9 +79,7 @@ export default {
 			console.log(`tapped subcategory ${event.category.name}`);
         },
         selectCategory(event) {
-            console.log(`selected category ${event.category.name}`);
             if (event.category.isLeaf) {
-                console.log("OPEN UP IT'S THE POLICE");
                 this.$navigateTo(LeafCategory, {
                     props: {
                         category: event.category
@@ -90,11 +88,17 @@ export default {
             } else {
                 this.service.getSubcategories(event.category)
                     .then((res) => {
-                        this.$navigateTo(Category, {
-                            props: {
-                                subcategories: res.subcategories
+                        if (res) {
+                            if (res.success) {
+                                this.$navigateTo(Category, {
+                                    props: {
+                                        subcategories: res.subcategories
+                                    }
+                                })
+                            } else {
+                                alert({ title: `Couldn't navigate to ${event.category.name}`, message: res.message });
                             }
-                        })
+                        }
                     });
             }
         }
