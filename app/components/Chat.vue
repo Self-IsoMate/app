@@ -130,19 +130,19 @@
                                 });
                                 return matchingChats;
                             });
-                        }
-                        if (chatsinlist.length > 0) {
-                            chatsinlist.forEach(val => {
-                                service.getChatroomObj(val)
-                                    .then((response) => {
-                                        this.chatRoomsList = this.chatRoomsList.concat(response.chatroom);    
-                                    })
-                                    .catch((err) => {
-                                        if (err) {
-                                            alert({ title: 'Error', message: err.message })
-                                        }
-                                    });
-                            });
+                            if (chatsinlist.length > 0) {
+                                chatsinlist.forEach(val => {
+                                    service.getChatroomObj(val)
+                                        .then((response) => {
+                                            this.chatRoomsList = this.chatRoomsList.concat(response.chatroom);    
+                                        })
+                                        .catch((err) => {
+                                            if (err) {
+                                                alert({ title: 'Error', message: err.message })
+                                            }
+                                        });
+                                });
+                            }
                         }
                     })
                     .catch((err) => {
