@@ -114,8 +114,7 @@
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
-                chatRoomsList: [
-                ]
+                chatRoomsList: []
             };
         },
         methods: {
@@ -123,19 +122,28 @@
                 service.getChatroomIds(this.$store.state.user._id)
                     .then( res => {
                         if (res) {
-                            var chatsinlist  = res.chatrooms.filter((chatroom) => this.chatRoomsList.every(chat => chat._id != chatroom ));
-                            if (chatsinlist.length > 0) {
-                                chatsinlist.forEach(val => {
-                                    service.getChatroomObj(val)
-                                        .then((response) => {
-                                            this.chatRoomsList = this.chatRoomsList.concat(response.chatroom);    
-                                        })
-                                        .catch((err) => {
-                                            if (err) {
-                                                alert({ title: 'Error', message: err.message })
+                            if (res.success) {
+                                var chatsInList  = res.chatrooms.filter((chatroom) => this.chatRoomsList.every(chat => chat._id != chatroom ));
+                                var chatroomPromises = chatsInList.map((chatroomId) => service.getChatroomObj(chatroomId));
+
+                                Promise.all(chatroomPromises)
+                                    .then((responses) => {
+                                        if (responses.every(response => response.success)) {
+                                            var chatrooms = responses.map((response) => response.chatroom);
+                                            if (this.chatroomsList) {
+                                                this.chatroomsList.concat(chatrooms);
+                                            } else {
+                                                this.chatroomsList = chatrooms;
                                             }
-                                        });
-                                });
+                                        } else {
+                                            alert({ title: 'Error', message: 'Could not retrieve chatrooms' })
+                                        }
+                                    })
+                                    .catch((err) => {
+                                        if (err) {
+                                            alert({ title: 'Error', message: err.message })
+                                        }
+                                    })
                             }
                         }
                     })
