@@ -9,7 +9,7 @@
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
                 <AutoFocusView></AutoFocusView>
-                    <SearchBar hint="Search" v-model="searchValue" @loaded="onSearchBarLoaded($event)" @textChange="filter" />
+                    <SearchBar hint="Search" v-model="searchValue" @loaded="onSearchBarLoaded($event)" @textChange="filter" :isEnabled="arrayEnable"/>
                 </StackLayout>
                 <StackLayout class="HRight">
                 </StackLayout>
@@ -32,7 +32,17 @@
 
                                 <StackLayout paddingTop="5" backgroundColor="#E8E8E8">
                                     <StackLayout class="item"  @tap="showDetails(item)">
-                                        <Image :src="item.image" marginTop="10" />
+                                        <GridLayout rows="*" backgroundColor="White">
+                                           <GridLayout rows="*" columns="*" margin="0">
+                                                <Image :src="item.image" stretch="aspectFill" />
+                                                <GridLayout verticalAlignment="bottom">
+                                                    <StackLayout paddingTop="8" paddingBottom="8" paddingLeft="16" paddingRight="16">
+                                                        <Label :text="item.title" style="font-size:24;color:#ffffff;" class="font-awesome"/>
+                                                        <Label :text="formatDeadline(item.deadline)" style="font-size:20;color:#ffffff;" class="font-awesome" />
+                                                    </StackLayout>
+                                                </GridLayout>
+                                            </GridLayout>
+                                        </GridLayout>
                                     </StackLayout>
                                 </StackLayout>
 
@@ -53,6 +63,9 @@
     import { backgroundInternalProperty } from 'tns-core-modules/ui/page/page';
     import CompetitionInfo from "./CompetitionInfo";
     import moment from "moment";
+    var FeedbackPlugin = require("nativescript-feedback");
+    var FeedbackType = require ("nativescript-feedback").FeedbackType;
+    var feedback = new FeedbackPlugin.Feedback();
 
     export default {
         created() {
@@ -80,15 +93,17 @@
                         if (res.success) {
                             this.communities = res.communities;
                         } else {
-                            alert({ title: 'Error', message: res.message });
+                            feedback.show({
+                                title: "Error: There was a problem retrieving data from the server",
+                                message: "We are sorry! Something went wrong, please try again in few minutes",
+                                type: FeedbackType.Warning
+                            });
                         }
                     }
                 })
                 .catch((err) => {
-                    if (err) {
-                        alert({ title: 'Error', message: res.message });
-                    }
-                })
+                    if (err) console.log(err);
+                });
         },
         data() {
             return {
@@ -99,7 +114,8 @@
                 challenges: [],
                 allChallenges: [],
                 communities: [],
-                searchValue: ""
+                searchValue: "",
+                arrayEnable: true
             };
         },
         methods: {
@@ -119,6 +135,10 @@
                 this.challenges = Array.from(this.allChallenges).filter((challenge) => {
                     return challenge.communities.some((c) => filteredCommunities.some((c1) => c1._id == c))
                 });
+            },
+            formatDeadline(deadline){
+                var newFormat = moment(String(deadline)).format('MMMM Do YYYY');
+                return "Deadline: " + newFormat;
             },
             onDrawerClosed() {
                 this.drawerToggle = false;

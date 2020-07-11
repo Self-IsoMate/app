@@ -22,6 +22,9 @@ import Register from "./Register";
 import Forgot from "./Forgot";
 import Home from "./Home";
 import BackendService from "../services/BackendService";
+var FeedbackPlugin = require("nativescript-feedback");
+var FeedbackType = require ("nativescript-feedback").FeedbackType;
+var feedback = new FeedbackPlugin.Feedback();
 
 export default {
 	name: 'LoginMain',
@@ -46,13 +49,25 @@ export default {
 									clearHistory: true
 								});
 							} else {
-								alert({ title: 'Please log in', message: 'You\'ve been signed out, please re-enter your details.' })
+								//alert({ title: 'Please log in', message: 'You\'ve been signed out, please re-enter your details.' })
+								feedback.show({
+									title: "Please log in:",
+									message: "You\'ve been signed out, please re-enter your details.",
+									type:
+									FeedbackType.Warning
+								});
 							}
 						}
 					})
 					.catch((err) => {
 						if (err) {
-							alert({ title: 'Error', message: 'Problem logging in, please enter your details.' })
+							//alert({ title: 'Error', message: 'Problem logging in, please enter your details.' })
+							feedback.show({
+									title: "Error:",
+									message: "An error might have occurred. \nPlease check Username and Password!",
+									type:
+									FeedbackType.Error
+								});
 						}
 					});
 			}
@@ -74,9 +89,6 @@ export default {
 								clearHistory: true
 							});
 
-						/*console.log("response.user to store");
-						console.log(response.user);*/
-
 						this.$store.commit("setUser", { user: response.user });
 
 						if (!response.user.isVerified) {
@@ -95,13 +107,20 @@ export default {
 												}
 
 												if (res && !res.success) {
-													alert({ title: 'Error', message: res.message})
-													console.log(res.message);
+													feedback.show({
+														title: 'Login Unsuccessful',
+														message: res.message,
+														type: FeedbackType.Error
+													});	
 												}
 											})
 											.catch((err) => {
 												if (err) {
-													alert({ title: 'Error', message: err.message })
+													feedback.show({
+														title: 'Login Unsuccessful',
+														message: err.message,
+														type: FeedbackType.Error
+													});	
 												}
 											})
 									}
@@ -110,24 +129,30 @@ export default {
 						}
 
 					} else {
-						alert({ title: "Couldn't log in", message: response.message });
+						feedback.show({
+							title: 'Login Unsuccessful',
+							message: response.message,
+							type: FeedbackType.Error
+						});	
 					}
 				}
 			})
 			.catch((err) => {
 				if (err) {
-					console.log(err);
-					alert({ title: 'Error', message: "Couldn't log in due to error" });
+					feedback.show({
+							title: 'Login Unsuccessful',
+							message: response.message,
+							type: FeedbackType.Error
+						});	
 				}
 			});
 		},
 		handleGuest(event) {
-			this.$store.commit("setUser", { user: null });
-			this.$navigateTo(Home,
-			{
-				animated: false,
-				clearHistory: true
-			});
+		    feedback.show({
+				title: "We are still working on this. \n Wait for V.02",
+				message: "Guest options not yet available",
+				type: FeedbackType.Info
+			})
 		}
 	}
 }

@@ -5,7 +5,7 @@
             <StackLayout margin="50 50 50 50">
 				<Label text="Register" class="" fontSize="20"/>
                 <TextField v-model="username" hint="Username" autocapitalizationType="none" autocorrect="false" />
-                <TextField secure="true" v-model="password" hint="Password"  />
+                <TextField secure="true" v-model="password" hint="Password" @tap="clickPass"  />
                 <TextField secure="true" v-model="confirmpassword" hint="Confirm password" />
                 <Label v-if="invalidPasswords" text="Passwords need to match" class="error" />
                 <TextField v-model="email" hint="Email" autocapitalizationType="none" autocorrect="false" keyboardType="email" />
@@ -20,6 +20,9 @@
 import Home from "./Home";
 import LoginQuestionsMentor from "./LoginQuestionsMentor";
 import BackendService from "../services/BackendService";
+var FeedbackPlugin = require("nativescript-feedback");
+var FeedbackType = require ("nativescript-feedback").FeedbackType;
+var feedback = new FeedbackPlugin.Feedback();
 
 export default {
     name: "Register",
@@ -34,7 +37,51 @@ export default {
         };
     },
     methods: {
+        clickPass (){
+                    feedback.show({
+                        title: "For a strong password, please use:",
+                        message: "A mixture of both uppercase and lowercase letters and numbers (least 8 characters)",
+                        type:
+                        FeedbackType.Custom
+                        //FeedbackType.Success
+                        //FeedbackType.Warning
+                        //FeedbackType.Error
+                        //FeedbackType.Info
+                    });
+        },
         navigateQuestions (event) {
+            var filter = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
+            var countUsername = this.username;
+            var countPassword = this.password;
+            if(countUsername.replace(/ /g,'').length < 5){
+                    feedback.show({
+                        title: "Username must be longer",
+                        message: "Please insert at leat 5 characters (spaces excluded)",
+                        type:
+                        FeedbackType.Warning
+                    });
+            }else if(countPassword.replace(/ /g,'').length < 5 || this.password.length <8){
+                    feedback.show({
+                        title: "Password must be longer",
+                        message: "Please insert at leat 8 characters (spaces excluded)",
+                        type:
+                        FeedbackType.Error
+                    });
+            }else if(this.password == this.username){
+                    feedback.show({
+                        title: "Password must be different from username",
+                        message: "Please insert a more safe password (different from username)",
+                        type:
+                        FeedbackType.Error
+                    });
+            }else if(String(this.email).search (filter)==-1){
+                    feedback.show({
+                        title: "Insert a valid email address",
+                        message: "Please insert a valid email address (youremail@address.ext)",
+                        type:
+                        FeedbackType.Error
+                    });
+            }else{
             if (!this.isInvalid()) {
                 var newUser = {
                     username: this.username,
@@ -48,10 +95,15 @@ export default {
 					.then((response) => {
 						if (response && response.success) {
                             this.$store.commit("setUser", { user: response.user });
-                            alert({
+                                feedback.show({
+                                title: "Successfully registered",
+                                message: "We\'ve sent you a confirmation email, so please verify your email so that you can participate in chats and post in communities.",
+                                type: FeedbackType.Success
+                            });
+                            /*alert({
                                 title: 'Registered',
                                 message: 'Successfully registered. We\'ve sent you a confirmation email, so please verify your email so that you can participate in chats and post in communities.'
-                            })
+                            });*/
 							this.$navigateTo(Home,  {
 								animated: false,
 								clearHistory: true
@@ -59,19 +111,37 @@ export default {
                         }
 
                         if (response && !response.success) {
-                            alert({ title: "Error", message: response.message });
+                            //alert({ title: "Error", message: response.message });
+                               feedback.show({
+                                title: "Error",
+                                message: response.message,
+                                type:
+                                FeedbackType.Error
+                            })
                         }
                         
                     })
                     .catch((err) => {
                         if (err) {
-                            alert({ title: "Error", message: err });
+                            //alert({ title: "Error", message: err });
+                                feedback.show({
+                                title: "Error",
+                                message: err,
+                                type:
+                                FeedbackType.Error
+                            })
                         }
                     });
             } else {
+                     feedback.show({
+                        title: "Passwords need to match",
+                        message: "Please confirm your password correctly!",
+                        type:FeedbackType.Error
+                            });
                 this.invalidPasswords = true;
                 setTimeout(() => { this.invalidPasswords = false }, 3000);
             }
+        }
         },
 
         isInvalid() {

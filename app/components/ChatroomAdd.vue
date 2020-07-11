@@ -1,5 +1,5 @@
 <template>
-    <Page>
+    <Page @navigatedFrom="stopTimer">
 		<ActionBar title="" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
@@ -14,7 +14,7 @@
                         returnKeyType="search"
                         ios:height="30" ios:marginTop="3"
                         android:paddingBottom="5" class="searchField font-awesome"
-                        color="#fff" />
+                        color="#fff" :isEnabled="arrayEnable" />
                 </StackLayout>
                 <StackLayout class="HRight">
                 </StackLayout>
@@ -56,7 +56,11 @@
     import Chat from "./Chat";
     import ChatroomItem from "./ChatroomItem";
     import BackendService from "../services/BackendService";
-    import { timer } from 'vue-timers'
+    import { timer } from 'vue-timers';
+    var FeedbackPlugin = require("nativescript-feedback");
+    var FeedbackType = require ("nativescript-feedback").FeedbackType;
+    var feedback = new FeedbackPlugin.Feedback();
+
 
      export default {
          timers: {
@@ -78,7 +82,21 @@
             this.chatrooms = Array.from(this.allChatrooms);
                         this.$timer.start('log')
 
+this.arrayEnable = (this.chatrooms.length>0||this.allChatrooms.length>0)&&(!this.chatrooms.includes(undefined)||!this.allChatrooms.includes(undefined));
+        if(this.arrayEnable==false){
+                    feedback.show({
+						title: "Error: There was a problem retrieving data from the server",
+						message: "We are sorry! Something went wrong, please try again in few minutes",
+						type: FeedbackType.Warning
+					});
+        }
+
         },
+        beforeDestroy () {
+            this.timers.log.isSwitchTab=true;
+            this.$timer.stop('log');
+            //console.log(this.timers.log.isRunning);
+        }, 
         components: {
             ChatroomItem
         },
@@ -94,6 +112,12 @@
             };
         },
          methods: {
+            stopTimer() {
+                this.timers.log.isSwitchTab=true;
+                this.$timer.stop('log');
+                //console.log(this.timers.log.isRunning);
+
+            },
              log () {
 
                  var backend = new BackendService();

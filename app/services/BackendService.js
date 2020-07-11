@@ -6,6 +6,16 @@ const BUCKET_PROFILE_PICTURES = "https://storage.googleapis.com/self-isomate-ima
 const BUCKET_POST_IMAGES = "https://storage.googleapis.com/self-isomate-images/post-images/";
 const BUCKET_POST_VIDEOS = "https://storage.googleapis.com/self-isomate-videos/post-videos/";
 var bghttp = require("nativescript-background-http");
+<<<<<<< HEAD
+=======
+var _ = require('lodash');
+import store from "../store/index";
+
+/**
+ * TO DO: 
+ * something to show that a user is uploading something (will use the store for this);
+ */
+>>>>>>> develop
 
 
 export default class BackendService {
@@ -16,6 +26,11 @@ export default class BackendService {
 
     login(username, password) {
 
+<<<<<<< HEAD
+=======
+        //console.log(`username: ${username} password: ${password}`);
+
+>>>>>>> develop
         return axios.post(API+"login", { username: username, password: password })
             .then((res) => {
 
@@ -378,15 +393,22 @@ export default class BackendService {
         })
     }
 	
-	async getChallenges() {
+	async getChallenges() { //move the conversion to API eventually
         return axios.get(API + 'challenges')
         .then((res) => {
             if (res) {
+<<<<<<< HEAD
                 if (res.data.success) {
                     return { success: true, challenges: res.data.challenges };
                 } else {
                     return { success: false, message: res.data.message }
                 }
+=======
+               //return {challenges: res.data};
+                const unsortedChallenges = res.data;
+                const sortedChallenges = _.orderBy(unsortedChallenges, ['deadline'], ['asc']);
+                return {challenges: sortedChallenges}
+>>>>>>> develop
             }
         })
         .catch((err) => {
@@ -469,9 +491,46 @@ export default class BackendService {
             }
         })
     }
-	
-	async getProfilePosts(user) {
-        return axios.get(API+`posts?user.username=${user.username}`)
+    
+    async deleteMessage(messageId) {
+      
+        return axios.delete(`${API}messages/${messageId}`)
+        .then((res) => {
+            return { success: res.data };
+
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+
+    async deleteToken(email) {
+      
+        return axios.delete(`${API}tokens/${email}`)
+        .then((res) => {
+            return { success: res.data};
+
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+
+    
+    async getMessagesfromUser(userID) {
+      
+        return axios.get(API+`messages?userID=`+userID)
+        .then((res) => {
+            return { chatMessages: res.data };
+
+        })
+        .catch((err) => {
+            if (err) console.log(err);
+        })
+    }
+
+	async getProfilePosts(id) { 
+        return axios.get(API+`posts?userId=${id}`)
             .then((res) => {
                 if (res) {
                     if (res.data.success) {

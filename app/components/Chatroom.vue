@@ -1,5 +1,5 @@
 gi<template>
-    <Page class="page">
+    <Page @navigatedFrom="stopTimer" class="page">
         <ActionBar title="HHHH" class="action-bar header">
             <StackLayout orientation="horizontal" height="38" alignItems="left"
                 class="actionBarContainer">
@@ -76,7 +76,7 @@ gi<template>
     import Chat from "./Chat";
     import moment from "moment";
     import BackendService from "../services/BackendService";
-    import { timer } from 'vue-timers'
+    import { timer } from 'vue-timers';
     import { RadListView, ListViewItemSnapMode } from "nativescript-ui-listview";
 
 
@@ -167,8 +167,13 @@ gi<template>
             this.$timer.start('spamFilterTimer');       
         },
         beforeDestroy () {
-            clearInterval(this.$options.interval)
-        }, 
+            this.timers.log.isSwitchTab=true;
+            this.timers.spamFilterTimer.isSwitchTab=true;
+            this.$timer.stop('log');
+            this.$timer.stop('spamFilterTimer');
+            /*console.log(this.timers.log.isRunning);
+            console.log(this.timers.spamFilterTimer.isRunning);*/
+        },
         data() {
             return {
                 back:"",
@@ -178,6 +183,14 @@ gi<template>
             };
         },
         methods: {
+            stopTimer() {
+                this.timers.log.isSwitchTab=true;
+                this.$timer.stop('log');
+                this.$timer.stop('spamFilterTimer');
+                /*console.log(this.timers.log.isRunning);
+                console.log(this.timers.spamFilterTimer.isRunning);*/
+
+            },
             spamFilterTimer(){
                 this.$store.state.spamFilterCount=0;
             },
@@ -202,6 +215,8 @@ gi<template>
                 }
             },
             log () {
+                            console.log("log chatroom");
+
                 var service = new BackendService();
 
                 // Refreshing user account for email verification

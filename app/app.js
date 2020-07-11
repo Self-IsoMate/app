@@ -5,7 +5,7 @@ import routes from "./routes/routes";
 import Vuex from "vuex";
 //import Vue from 'vue'
 import RadListView from 'nativescript-ui-listview/vue';
-import VueTimers from 'vue-timers'
+import VueTimers from 'vue-timers';
  
 Vue.use(VueTimers)
 Vue.use(RadListView);
