@@ -123,13 +123,7 @@
                 service.getChatroomIds(this.$store.state.user._id)
                     .then( res => {
                         if (res) {
-                            var chatsinlist  = res.chatrooms.filter( e=> {
-                                var matchingChats =  this.chatRoomsList.every(chat => {
-                                    
-                                    return chat._id != e;
-                                });
-                                return matchingChats;
-                            });
+                            var chatsinlist  = res.chatrooms.filter((chatroom) => this.chatRoomsList.every(chat => chat._id != chatroom ));
                             if (chatsinlist.length > 0) {
                                 chatsinlist.forEach(val => {
                                     service.getChatroomObj(val)
