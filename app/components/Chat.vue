@@ -121,35 +121,35 @@
         methods: {
             log () {
                 service.getChatroomIds(this.$store.state.user._id)
-                .then( res => {
-                    if (res) {
-                        var chatsinlist  = res.chatrooms.filter( e=> {
-                            var matchingChats =  this.chatRoomsList.every(chat => {
-                                
-                                return chat._id != e;
-                            });
-                            return matchingChats;
-                        });
-                    } else {
-                        console.log("Error on gettin chat rooms objects from id");
-                    }
-                    if (chatsinlist.length > 0) {
-                        chatsinlist.forEach(val => {
-                            service.getChatroomObj(val)
-                                .then((response) => {
-                                    this.chatRoomsList = this.chatRoomsList.concat(response.chatroom);    
-                                })
-                                .catch((err) => {
-                                    if (err) console.log("err: " + err);
+                    .then( res => {
+                        if (res) {
+                            var chatsinlist  = res.chatrooms.filter( e=> {
+                                var matchingChats =  this.chatRoomsList.every(chat => {
+                                    
+                                    return chat._id != e;
                                 });
-                        });
-                    } else {
-                        console.log("no new chats, check every 10 seconds");
-                    }
-                })
-                .catch((err) => {
-                    if (err) console.log("err: " + err);
-                });
+                                return matchingChats;
+                            });
+                        } else {
+                            console.log("Error on gettin chat rooms objects from id");
+                        }
+                        if (chatsinlist.length > 0) {
+                            chatsinlist.forEach(val => {
+                                service.getChatroomObj(val)
+                                    .then((response) => {
+                                        this.chatRoomsList = this.chatRoomsList.concat(response.chatroom);    
+                                    })
+                                    .catch((err) => {
+                                        if (err) console.log("err: " + err);
+                                    });
+                            });
+                        } else {
+                            console.log("no new chats, check every 10 seconds");
+                        }
+                    })
+                    .catch((err) => {
+                        if (err) console.log("err: " + err);
+                    });
             },
             onDrawerClosed() {
                 this.drawerToggle = false;
