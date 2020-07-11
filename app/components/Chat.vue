@@ -126,8 +126,7 @@
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
-                chatRoomsList: [
-                ],
+                chatRoomsList: [],
                 arrayEnable: true
             };
         },
