@@ -85,7 +85,6 @@ gi<template>
         timers: {
               log: { time: 4000, autostart: true, repeat: true },
               spamFilterTimer: { time: 10000, autostart: true, repeat: true }
-
         },
         created() {
             var service = new BackendService();
@@ -101,13 +100,12 @@ gi<template>
                         }
 
                         if (res && !res.success) {
-                            console.log("couldn't refresh user");
-                            console.log(res.message);
+                            alert({ title: 'Error', message: res.message })
                         }
                     })
                     .catch((err) => {
                         if (err) {
-                            console.log(err);
+                            alert({ title: 'Error', message: err.message })
                         }
                     })
             }
@@ -115,14 +113,22 @@ gi<template>
             var getUserFromMessage = async (message) => {
                 return service.getUserfromId(message.userID)
                     .then((res) => {
-                        var newFormat = moment(String(message.dateSent)).format('HH:mm');
-                        if (res && !res.user){
-                            return { ...message, username: "🚫deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
+                        if (res) {
+                            if (res.success) {
+                                var newFormat = moment(String(message.dateSent)).format('HH:mm');
+                                if (res && !res.user) {
+                                    return { ...message, username: "🚫deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
+                                }
+                                return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };
+                            } else {
+                                alert({ title: 'Error', message: res.message })
+                            }
                         }
-                        return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };
                     })
                     .catch((err) => {
-                        if (err) console.log("err: "+err);
+                        if (err) {
+                            alert({ title: 'Error', message: err.message })
+                        }
                     });
             }
 
@@ -134,19 +140,26 @@ gi<template>
             service.getMessagesfromID(this.$props.chatRoom._id)
                 .then((res) => {
                     if (res) {
-                        if (res.messages){
-                            var messages = res.messages;
-                            if (res.messages.length == 0){
-                                alert({ title: '👀', message: "Looks like you've stumbled onto an empty chat. How about you fix that?" })
-                            } else {
-                                mutateMessages(messages)
-                                .then((result) => {//it does not run mutate Messages
-                                    this.conversations = result;
-                                }).catch((err) => {
-                                    if (err) console.log("err: "+err);
-                                })
+                        if (res.success) {
+                            if (res.messages) {
+                                var messages = res.messages;
+                                if (res.messages.length == 0){
+                                    alert({ title: '👀', message: "Looks like you've stumbled onto an empty chat. How about you fix that?" })
+                                } else {
+                                    mutateMessages(messages)
+                                        .then((result) => {
+                                            this.conversations = result;
+                                        })
+                                        .catch((err) => {
+                                            if (err) {
+                                                alert({ title: 'Error', message: err.message })
+                                            }
+                                        })
+                                }
                             }
-                        } 
+                        } else {
+                            alert({ title: 'Error', message: res.message })
+                        }
                     }
                 });
 
@@ -178,13 +191,12 @@ gi<template>
                             }
 
                             if (res && !res.success) {
-                                console.log("couldn't refresh user");
-                                console.log(res.message);
+                                alert({ title: 'Error', message: res.message })
                             }
                         })
                         .catch((err) => {
                             if (err) {
-                                console.log(err);
+                                alert({ title: 'Error', message: err.message })
                             }
                         })
                 }
@@ -198,14 +210,22 @@ gi<template>
                 var getUserFromMessage = async (message) => {
                     return service.getUserfromId(message.userID)
                         .then((res) => {
-                            var newFormat = moment(String(message.dateSent)).format('HH:mm');
-                            if (res && !res.user){
-                                return { ...message, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
+                            if (res) {
+                                if (res.success) {
+                                    var newFormat = moment(String(message.dateSent)).format('HH:mm');
+                                    if (res && !res.user){
+                                        return { ...message, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat };
+                                    }
+                                    return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };
+                                } else {
+                                    alert({ title: 'Error', message: res.message })
+                                }
                             }
-                            return { ...message, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat };
                         })
                         .catch((err) => {
-                            if (err) console.log("err: "+err);
+                            if (err) {
+                                alert({ title: 'Error', message: err.message })
+                            }
                         });
                 }
 
@@ -216,34 +236,33 @@ gi<template>
                 service.getMessagesfromID(this.$props.chatRoom._id)
                     .then((res) => {
                         if (res) {
-                            var messages = res.messages.filter( e=> {
-                                var matchingConvs =  this.conversations.every(conv => {
-                                    return conv._id != e._id;
+                            if (res.success) {
+                                var messages = res.messages.filter( message => {
+                                    return this.conversations.every(conv => conv._id != message._id);
                                 });
-                                return matchingConvs;
-                            });
-                            console.log("messages");
-                            console.log(messages);
-                            // check if id is not already in the list
-                            // if not mutate message
-                            //this.conversation. push (result)
-                            if(messages.length > 0){
-                            mutateMessages(messages)
-                                .then((result) => {//it does not run mutate Messages
-                                    if(result) {
-                                        console.log("result");
-                                        console.log(result);
-                                        this.conversations = this.conversations.concat(result);
-                                    }
-                                })
-                                .catch((err) => {
-                                    if (err) console.log("err: " + err);
-                                })
-                            } 
+
+                                if (messages.length > 0) {
+                                    mutateMessages(messages)
+                                        .then((result) => {
+                                            if (result) {
+                                                this.conversations = this.conversations.concat(result);
+                                            }
+                                        })
+                                        .catch((err) => {
+                                            if (err) {
+                                                alert({ title: 'Error', message: err.messages })
+                                            }
+                                        })
+                                }
+                            } else {
+                                alert({ title: 'Error', message: res.message })
+                            }
                         }
                     })
                     .catch((err) => {
-                        if (err) console.log("err: " + err);
+                        if (err) {
+                            alert({ title: 'Error', message: err.message })
+                        }
                     });
                 this.scrollDown();
             },
@@ -256,7 +275,7 @@ gi<template>
             toggleDrawer() {
                 this.$refs.drawer.nativeView.toggleDrawerState();
             },
-            sendTap(events){
+            sendTap (events) {
                 if (this.isUserVerified) {
                     if(this.$store.state.spamFilterCount<4) {
                         if (this.message.trim().length >= 1) {
@@ -277,7 +296,7 @@ gi<template>
                     this.confirmDialog();
                 }
             },
-            scrollDown(){
+            scrollDown () {
                 this.$refs.listView.nativeView.scrollToIndex(this.conversations.length);
             },
             alertMessage () {
@@ -287,34 +306,26 @@ gi<template>
                 }
             },
             confirmDialog () {
-                confirm({ 
-							title: 'Please verify your email',
-							message: 'Make sure you check your spam folder.',
-							cancelButtonText: 'Cancel',
-							okButtonText: 'Resend Verification'
-                        })
-                        .then((result) => {
-							if (result) {
-								console.log("Resending");
-								service.ResendVerification(response.user.email)
-									.then((res) => {
-										if (res && res.success) {
-											alert({ title: 'Success', message: 'Successfully resent verification' })
-										}
+                confirm({ title: 'Please verify your email', message: 'Make sure you check your spam folder.', cancelButtonText: 'Cancel', okButtonText: 'Resend Verification' })
+                    .then((result) => {
+                        if (result) {
+                            service.ResendVerification(response.user.email)
+                                .then((res) => {
+                                    if (res && res.success) {
+                                        alert({ title: 'Success', message: 'Successfully resent verification' })
+                                    }
 
-										if (res && !res.success) {
-											alert({ title: 'Error', message: 'Unsuccessful'})
-											console.log(res.message);
-										}
-									})
-									.catch((err) => {
-										if (err) {
-											console.log(err);
-											alert({ title: 'Error', message: 'Unsuccessful' })
-										}
-                                    })
-                            }
-                        })
+                                    if (res && !res.success) {
+                                        alert({ title: 'Error', message: res.message})
+                                    }
+                                })
+                                .catch((err) => {
+                                    if (err) {
+                                        alert({ title: 'Error', message: err.message })
+                                    }
+                                })
+                        }
+                    })
             }
         },
         computed: {
