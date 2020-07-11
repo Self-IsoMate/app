@@ -83,8 +83,8 @@ gi<template>
     export default {
         props: ['chatRoom'],
         timers: {
-              log: { time: 4000, autostart: true, repeat: true },
-              spamFilterTimer: { time: 10000, autostart: true, repeat: true }
+            log: { time: 4000, autostart: true, repeat: true },
+            spamFilterTimer: { time: 10000, autostart: true, repeat: true }
         },
         created() {
             var service = new BackendService();
