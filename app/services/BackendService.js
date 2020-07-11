@@ -20,7 +20,7 @@ export default class BackendService {
             .then((res) => {
 
                 if (res) {
-                    if (res.data.success) {
+                    if (res.data.loginSuccess) {
                         this.loggedIn = true;
                         return { success : true, user: res.data.user };
                     } 
@@ -152,7 +152,7 @@ export default class BackendService {
             .then((res) => {
                 if (res) {
                     if (res.data.success) {
-                        return { categories: res.data }
+                        return { success: true, categories: res.data.categories }
                     }
 
                     if (!res.data.success) {
@@ -171,7 +171,7 @@ export default class BackendService {
             .then((res) => {
                 if (res) {
                     if (res.data.success) {
-                        return { subcategories: res.data }
+                        return { success: true, subcategories: res.data.categories }
                     }
 
                     if (!res.data.success) {
@@ -192,15 +192,24 @@ export default class BackendService {
         });
 
         return Promise.all(promises)
-            .then((res) => {
-                if (res) {
-                    if (res.data.success) {
-                        var coms = res.map((r) => r.data[0]);
-                        return { success: true, communities: coms }
-                    }
+            .then((responses) => {
+                if (responses) {
+                    if (responses.every(res => res.data.success)) {
+                        var communitiesArr = responses.map((response) => response.data.communities);
+                        var communities = [];
+                        for (var i = 0; i < communitiesArr.length; i ++) {
+                            var subArr = communitiesArr[i];
+                            for (var j = 0; j < subArr.length; j ++) {
+                                var community = subArr[j];
+                                communities.push(community);
+                            }
+                        }
 
-                    if (!res.data.success) {
-                        return { success: false, message: res.data.message }; 
+                        return { success: true, communities: communities }
+                    } else {
+                        var errors = responses.map((res) => res.data.message);
+                        console.log(errors);
+                        return { success: false, message: errors[0] }
                     }
                 }
             })
@@ -374,7 +383,7 @@ export default class BackendService {
         .then((res) => {
             if (res) {
                 if (res.data.success) {
-                    return { success: true, challenges: res.data };
+                    return { success: true, challenges: res.data.challenges };
                 } else {
                     return { success: false, message: res.data.message }
                 }
