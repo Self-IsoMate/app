@@ -120,42 +120,52 @@ export default {
             return service.getUserfromId(post.userId)
                 .then((res) => {
                     if (res) {
-                        var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
-                        if (res && !res.user){
-                            return { ...post, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat};
+                        if (res.success) {
+                            var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
+                            if (res && !res.user){
+                                return { ...post, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat};
+                            }
+                            return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
+                        } else {
+                            alert({ title: 'Error', message: res.message })
                         }
-                        return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
                     }
                 })
                 .catch((err) => {
-                    if (err) console.log("err: "+err);
+                    if (err) {
+                        alert({ title: 'Error', message: err.message })
+                    }
                 });
         };
         
         var mutatePosts = async (posts) => {
-            return Promise.all(posts.map((post) => getUserFromPosts(post)));//error
+            return Promise.all(posts.map((post) => getUserFromPosts(post)));
         }
 
 
         service.getFeed(this.$store.state.user._id)
             .then((res) => {
                 if (res) {
-                    var posts = res.posts;
-                    mutatePosts(posts)
-                        .then((result) => {
-                            //console.log("result");
-                            //console.log(result);
-                            if (!this.$props.communities) {
-                                this.posts = result;
-                            } else {
-                                // filter posts by communities
-                                console.log(this.$props.communities);
-                                this.posts = result.filter(post => post.communities.some(c => this.$props.communities.some(pc => pc._id == c)));
-                            }
-                        })
-                        .catch((err) => {
-                            if (err) console.log("err: "+err);
-                        });
+                    if (res.success) {
+                        var posts = res.posts;
+                        mutatePosts(posts)
+                            .then((result) => {
+                                if (result) {
+                                    if (!this.$props.communities) {
+                                        this.posts = result;
+                                    } else {
+                                        this.posts = result.filter(post => post.communities.some(c => this.$props.communities.some(pc => pc._id == c)));
+                                    }
+                                }
+                            })
+                            .catch((err) => {
+                                if (err) {
+                                    alert({ title: 'Error', message: err.message })
+                                }
+                            });
+                    } else {
+                        alert({ title: 'Error', message: res.message });
+                    }
                 }
                 this.$timer.start('log');
             });
@@ -163,10 +173,13 @@ export default {
         service.getCommunities(this.$store.state.user.communities)
             .then((res) => {
                 if (res) {
-                    console.log(res);
-                    this.allCommunities = [... res.communities];
-                    if (this.allCommunities.length == 0){
-                         alert({ title: '😢 Nothing to see here', message: "Subscribe to communities to fill up that feed" })
+                    if (res.success) {
+                        this.allCommunities = [... res.communities];
+                        if (this.allCommunities.length == 0){
+                            alert({ title: '😢 Nothing to see here', message: "Subscribe to communities to fill up that feed" })
+                        }
+                    } else {
+                        alert({ title: 'Error', message: res.message })
                     }
                 }
             })
@@ -189,162 +202,143 @@ export default {
         };
     },
     methods: {
-        deletePostinoMedia(post){
-            confirm(
-                    {
-                        title: 'Are you sure?',
-                        message: 'Are you sure you want to delete your Post?',
-                        okButtonText: "Delete",
-                        cancelButtonText: "Go Back"
-                    })
-                    .then((res) => {
-                        if (res) {
-                            var postBucketName;
-                            var postFilename;
-                            var mediaData = post.media.split("/");
-                              var service = new BackendService();
-                              if(mediaData[mediaData.length - 1].slice(-3)=='mp4'){
-                                        postBucketName  = "self-isomate-videos";
-                                        postFilename = "post-videos/"+mediaData[mediaData.length - 1];
-                              }else{   
-                                        postBucketName  = "self-isomate-images";
-                                        postFilename = "post-images/"+mediaData[mediaData.length - 1];
-                              }
-                           service.removeMediaFromCloud(postBucketName, postFilename )
-                                        .then((res) => {
-                                            if (res) {
-                                                if(res.success==true){
-
-                                                        service.removeMediaFromPost(post._id)
+        deletePostinoMedia (post) {
+            confirm({ title: 'Are you sure?', message: 'Are you sure you want to delete your Post?', okButtonText: "Delete", cancelButtonText: "Go Back" })
+                .then((res) => {
+                    if (res) {
+                        var postBucketName;
+                        var postFilename;
+                        var mediaData = post.media.split("/");
+                        var service = new BackendService();
+                        if (mediaData[mediaData.length - 1].slice(-3)=='mp4'){
+                            postBucketName  = "self-isomate-videos";
+                            postFilename = "post-videos/" + mediaData[mediaData.length - 1];
+                        } else {   
+                            postBucketName  = "self-isomate-images";
+                            postFilename = "post-images/"+mediaData[mediaData.length - 1];
+                        }
+                        service.removeMediaFromCloud(postBucketName, postFilename )
+                            .then((res) => {
+                                if (res) {
+                                    if (res.success) {
+                                        service.removeMediaFromPost(post._id)
+                                            .then((res) => {
+                                                if (res) {
+                                                    if (res.success) {
+                                                        service.deletePost(post._id)
                                                             .then((res) => {
                                                                 if (res) {
-                                                                    if(res.success==true){
-                                                                        service.deletePost(post._id)
-                                                                            .then((res) => {
-                                                                                if (res) {
-                                                                                    if(res.success==true){
-                                                                                    alert({ title: "Success", message: "post successfully deleted", okButtonText: "OK"  });
-                                                                                        this.posts= [];
-                                                                                        this.log();
-                                                                                    }else{
-                                                                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
-
-                                                                                    }
-                                                                                    console.log(res);
-                                                                                }
-                                                                            }).catch((err) => {
-                                                                                if (err) console.log("err: "+err);
-                                                                            });
-                                                                    }else{
+                                                                    if (res.success) {
+                                                                        alert({ title: "Success", message: "post successfully deleted", okButtonText: "OK"  });
+                                                                        this.posts = [];
+                                                                        this.log();
+                                                                    } else {
                                                                         alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
-
                                                                     }
                                                                 }
-                                                            }).catch((err) => {
+                                                            })
+                                                            .catch((err) => {
                                                                 if (err) console.log("err: "+err);
                                                             });
-
-                                                }else{
-                                                    alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
-
+                                                    } else {
+                                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                                    }
                                                 }
-                                            }
-                                        }).catch((err) => {
-                                            if (err) console.log("err: "+err);
-                                        });
+                                            })
+                                            .catch((err) => {
+                                                if (err) console.log("err: "+err);
+                                            });
+                                    } else {
+                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                    }
+                                }
+                            })
+                            .catch((err) => {
+                                if (err) console.log("err: "+err);
+                            });
                         }
-                                        
-                    }).catch((err) => {
-                        if (err) console.log("err: "+err);
+                    })
+                    .catch((err) => {
+                        if (err) {
+                            alert({ title: 'Error', message: err.message })
+                        }
                     });
         },
         removeMedia(post){
-            confirm(
-                    {
-                        title: 'Are you sure?',
-                        message: 'Are you sure you want to remove your image/video from your Post?',
-                        okButtonText: "Delete",
-                        cancelButtonText: "Go Back"
-                    })
-                    .then((res) => {
-                        if (res) {
-                            var postBucketName;
-                            var postFilename;
-                            var mediaData = post.media.split("/");
-                              var service = new BackendService();
-                              if(mediaData[mediaData.length - 1].slice(-3)=='mp4'){
-                                        postBucketName  = "self-isomate-videos";
-                                        postFilename = "post-videos/"+mediaData[mediaData.length - 1];
-                              }else{   
-                                        postBucketName  = "self-isomate-images";
-                                        postFilename = "post-images/"+mediaData[mediaData.length - 1];
-                              }
-                           service.removeMediaFromCloud(postBucketName, postFilename )
-                                        .then((res) => {
-                                            if (res) {
-                                                if(res.success==true){
-
-                                                        service.removeMediaFromPost(post._id)
-                                                            .then((res) => {
-                                                                if (res) {
-                                                                    if(res.success==true){
-                                                                        this.posts= [];
-                                                                        this.log();
-                                                                    }else{
-                                                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
-
-                                                                    }
-                                                                }
-                                                            }).catch((err) => {
-                                                                if (err) console.log("err: "+err);
-                                                            });
-
-                                                }else{
-                                                    alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
-
-                                                }
-                                            }
-                                        }).catch((err) => {
-                                            if (err) console.log("err: "+err);
-                                        });
+            confirm({ title: 'Are you sure?', message: 'Are you sure you want to remove your image/video from your Post?', okButtonText: "Delete", cancelButtonText: "Go Back" })
+                .then((res) => {
+                    if (res) {
+                        var postBucketName;
+                        var postFilename;
+                        var mediaData = post.media.split("/");
+                        var service = new BackendService();
+                        if (mediaData[mediaData.length - 1].slice(-3)=='mp4'){
+                            postBucketName  = "self-isomate-videos";
+                            postFilename = "post-videos/"+mediaData[mediaData.length - 1];
+                        } else {   
+                            postBucketName  = "self-isomate-images";
+                            postFilename = "post-images/"+mediaData[mediaData.length - 1];
                         }
-                    }).catch((err) => {
-                        if (err) console.log("err: "+err);
-                     });
+                        service.removeMediaFromCloud(postBucketName, postFilename)
+                            .then((res) => {
+                                if (res) {
+                                    if (res.success){
+                                        service.removeMediaFromPost(post._id)
+                                            .then((res) => {
+                                                if (res) {
+                                                    if (res.success) {
+                                                        this.posts = [];
+                                                        this.log();
+                                                    } else {
+                                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                                    }
+                                                }
+                                            })
+                                            .catch((err) => {
+                                                if (err) console.log("err: "+err);
+                                            });
+
+                                    } else {
+                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                    }
+                                }
+                            })
+                            .catch((err) => {
+                                if (err) console.log("err: "+err);
+                            });
+                    }
+                })
+                .catch((err) => {
+                    if (err) console.log("err: "+err);
+                });
         },
         deletePostino(post){
-            confirm(
-                    {
-                        title: 'Are you sure?',
-                        message: 'Are you sure you want to delete your Post?',
-                        okButtonText: "Delete",
-                        cancelButtonText: "Go Back"
-                    })
-                    .then((res) => {
-                        if (res) {
-                            var service = new BackendService();
-                            service.deletePost(post._id)
-                                        .then((res) => {
-                                            if (res) {
-                                                if(res.success==true){
-                                                alert({ title: "Success", message: "post successfully deleted", okButtonText: "OK"  });
-                                                    this.posts= [];
-                                                    this.log();
-                                                }else{
-                                                    alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
-
-                                                }
-                                                console.log(res);
-                                            }
-                                        }).catch((err) => {
-                                            if (err) console.log("err: "+err);
-                                        });
-                                        }
-                    }).catch((err) => {
-                        if (err) console.log("err: "+err);
-                    });
+            confirm({ title: 'Are you sure?', message: 'Are you sure you want to delete your Post?', okButtonText: "Delete", cancelButtonText: "Go Back" })
+                .then((res) => {
+                    if (res) {
+                        var service = new BackendService();
+                        service.deletePost(post._id)
+                            .then((res) => {
+                                if (res) {
+                                    if (res.success) {
+                                        alert({ title: "Success", message: "post successfully deleted", okButtonText: "OK"  });
+                                        this.posts= [];
+                                        this.log();
+                                    } else {
+                                        alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
+                                    }
+                                }
+                            })
+                            .catch((err) => {
+                                if (err) console.log("err: "+err);
+                            });
+                    }
+                })
+                .catch((err) => {
+                    if (err) console.log("err: "+err);
+                });
         },
-        log() {
+        log () {
             var service = new BackendService();
 
             // Refreshing user account for email verification
@@ -352,18 +346,18 @@ export default {
 
             var getUserFromPosts = async (post) => {
                 return service.getUserfromId(post.userId)
-                   .then((res) => {
-                    var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
-                    console.log("res2");
-                    console.log(res);
-                        if (res && !res.user){
+                    .then((res) => {
+                        var newFormat = moment(String(post.datePosted)).format('DD/MM/YYYY HH:mm');
+                        console.log("res2");
+                        console.log(res);
+                        if (res && !res.user) {
                             return { ...post, username: "deleted account", profilePicture: "https://storage.googleapis.com/self-isomate-images/profile-pictures/default/deleted-account.png", dataFormat: newFormat};
                         }
-                    return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
-                })
-                .catch((err) => {
-                    if (err) console.log("err: "+err);
-                });
+                        return { ...post, username: res.user.username, profilePicture: res.user.profilePicture, dataFormat: newFormat};
+                    })
+                    .catch((err) => {
+                        if (err) console.log("err: "+err);
+                    });
             };
 
             var mutatePosts = async (posts) => {
@@ -380,7 +374,7 @@ export default {
                             return matchingPosts;
                         });
 
-                        if(posts.length>0) {
+                        if (posts.length > 0) {
                             mutatePosts(posts)
                                 .then((result) => {
                                     if (result) {
@@ -414,34 +408,26 @@ export default {
             if (this.$store.state.user.isVerified) {
                 this.$navigateTo(NewPost);
             } else {
-                confirm({ 
-							title: 'Please verify your email',
-							message: 'Make sure you check your spam folder.',
-							cancelButtonText: 'Cancel',
-							okButtonText: 'Resend Verification'
-                        })
-                        .then((result) => {
-							if (result) {
-								console.log("Resending");
-								service.ResendVerification(response.user.email)
-									.then((res) => {
-										if (res && res.success) {
-											alert({ title: 'Success', message: 'Successfully resent verification' })
-										}
+                confirm({ title: 'Please verify your email', message: 'Make sure you check your spam folder.', cancelButtonText: 'Cancel', okButtonText: 'Resend Verification' })
+                    .then((result) => {
+                        if (result) {
+                            service.ResendVerification(response.user.email)
+                                .then((res) => {
+                                    if (res && res.success) {
+                                        alert({ title: 'Success', message: 'Successfully resent verification' })
+                                    }
 
-										if (res && !res.success) {
-											alert({ title: 'Error', message: 'Unsuccessful'})
-											console.log(res.message);
-										}
-									})
-									.catch((err) => {
-										if (err) {
-											console.log(err);
-											alert({ title: 'Error', message: 'Unsuccessful' })
-										}
-                                    })
-                            }
-                        })
+                                    if (res && !res.success) {
+                                        alert({ title: 'Error', message: res.message})
+                                    }
+                                })
+                                .catch((err) => {
+                                    if (err) {
+                                        alert({ title: 'Error', message: err.message })
+                                    }
+                                })
+                        }
+                    })
             }
         },
         showFilterModal() {
@@ -461,8 +447,7 @@ export default {
                         }
 
                         if (res && !res.success) {
-                            console.log("couldn't refresh user");
-                            console.log(res.message);
+                            alert({ title: 'Error', message: `Couldn't refresh details: ${res.message}` })
                         }
                     })
                     .catch((err) => {
