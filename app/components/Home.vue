@@ -70,15 +70,25 @@
             service.getCategories()
                 .then((res) => {
                     if (res) {
-                        /*console.log("this is the response");
-                        console.log(res.categories);*/
-                        this.allCategories = res.categories;
-                        this.categories = Array.from(this.allCategories);
+                        if (res.success) {
+                            this.allCategories = res.categories;
+                            this.categories = Array.from(this.allCategories);
+                        } else {
+                            feedback.show({
+                                title: 'Error',
+                                message: res.message,
+                                type: FeedbackType.Warning
+                            });
+                        }
                     }
                 })
                 .catch((err) => {
                     if (err) {
-                        console.log(err);
+                        feedback.show({
+                            title: 'Error',
+                            message: errs.message,
+                            type: FeedbackType.Warning
+                        });
                     }
                 })
 
@@ -89,23 +99,22 @@
                     }
 
                     if (res && !res.success) {
-                        console.log("couldn't refresh user");
-                        console.log(res.message);
+                        feedback.show({
+                            title: 'Error',
+                            message: res.message,
+                            type: FeedbackType.Warning
+                        });
                     }
                 })
                 .catch((err) => {
                     if (err) {
-                        console.log(err);
+                        feedback.show({
+                            title: 'Error',
+                            message: err.message,
+                            type: FeedbackType.Warning
+                        });
                     }
                 });
-        this.arrayEnable = (this.allCategories.length>0||this.categories.length>0)&&(!this.categories.includes(undefined)||!this.allCategories.includes(undefined));
-        if(this.arrayEnable==false){
-                    feedback.show({
-						title: "Error: There was a problem retrieving data from the server",
-						message: "We are sorry! Something went wrong, please try again in few minutes",
-						type: FeedbackType.Warning
-					});
-        }
         },
         methods: {
             onSearchBarLoaded: function(event) {

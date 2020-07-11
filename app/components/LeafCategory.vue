@@ -84,21 +84,22 @@ export default {
 		ResourceCard
 	},
 	created() {
+		var errorMessage = '';
+
 		if (this.$props.category.communities) {
 			this.service.getCommunities(this.category.communities)
 				.then((res) => {
 					if (res) {
-						console.log(res);
-						this.communities = res.communities;
-					}
-
-					if (!res.success) {
-						console.log("failed");
+						if (res.success) {
+							this.communities = res.communities;
+						} else {
+							alert({ title: "Couldn't retrieve Communities", message: res.message });
+						}
 					}
 				})
 				.catch((err) => {
 					if (err) {
-						console.log(err);
+						alert({ title: "Couldn't retrieve Communities", message: err.message });
 					}
 				});
 		}
@@ -106,12 +107,16 @@ export default {
 		this.service.getResources(this.$props.category._id)
 			.then((res) => {
 				if (res && res.success) {
-					console.log(":)");
 					this.resources = res.resources;
 				}
 
 				if (res && !res.success) {
-					console.log(":(");
+					alert({ title: "Couldn't retrieve Resources", message: res.message });
+				}
+			})
+			.catch((err) => {
+				if (err) {
+					alert({ title: "Couldn't retrieve Resources", message: err.message });
 				}
 			})
 	},

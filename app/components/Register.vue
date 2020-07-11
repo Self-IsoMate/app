@@ -20,9 +20,7 @@
 import Home from "./Home";
 import LoginQuestionsMentor from "./LoginQuestionsMentor";
 import BackendService from "../services/BackendService";
-var FeedbackPlugin = require("nativescript-feedback");
-var FeedbackType = require ("nativescript-feedback").FeedbackType;
-var feedback = new FeedbackPlugin.Feedback();
+import {Feedback, FeedbackType} from "nativescript-feedback";
 
 export default {
     name: "Register",
@@ -33,49 +31,45 @@ export default {
             password: "",
             confirmpassword: "",
             email: "",
-            invalidPasswords: false
+            invalidPasswords: false,
+            feedback: new Feedback()
         };
     },
     methods: {
-        clickPass (){
-                    feedback.show({
-                        title: "For a strong password, please use:",
-                        message: "A mixture of both uppercase and lowercase letters and numbers (least 8 characters)",
-                        type:
-                        FeedbackType.Custom
-                        //FeedbackType.Success
-                        //FeedbackType.Warning
-                        //FeedbackType.Error
-                        //FeedbackType.Info
-                    });
+        clickPass () {
+            feedback.show({
+                title: "For a strong password, please use:",
+                message: "A mixture of both uppercase and lowercase letters and numbers (least 8 characters)",
+                type: FeedbackType.Custom
+            });
         },
         navigateQuestions (event) {
-            var filter = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
+            var emailValidationRegEX = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
             var countUsername = this.username;
             var countPassword = this.password;
-            if(countUsername.replace(/ /g,'').length < 5){
-                    feedback.show({
+            if (countUsername.replace(/ /g,'').length < 5){
+                    this.feedback.show({
                         title: "Username must be longer",
                         message: "Please insert at leat 5 characters (spaces excluded)",
                         type:
                         FeedbackType.Warning
                     });
             }else if(countPassword.replace(/ /g,'').length < 5 || this.password.length <8){
-                    feedback.show({
+                    this.feedback.show({
                         title: "Password must be longer",
                         message: "Please insert at leat 8 characters (spaces excluded)",
                         type:
                         FeedbackType.Error
                     });
             }else if(this.password == this.username){
-                    feedback.show({
+                    this.feedback.show({
                         title: "Password must be different from username",
                         message: "Please insert a more safe password (different from username)",
                         type:
                         FeedbackType.Error
                     });
-            }else if(String(this.email).search (filter)==-1){
-                    feedback.show({
+            }else if( String(this.email).search(emailValidationRegEX)==-1 ) {
+                    this.feedback.show({
                         title: "Insert a valid email address",
                         message: "Please insert a valid email address (youremail@address.ext)",
                         type:
@@ -95,49 +89,40 @@ export default {
 					.then((response) => {
 						if (response && response.success) {
                             this.$store.commit("setUser", { user: response.user });
-                                feedback.show({
-                                title: "Successfully registered",
-                                message: "We\'ve sent you a confirmation email, so please verify your email so that you can participate in chats and post in communities.",
-                                type: FeedbackType.Success
-                            });
-                            /*alert({
-                                title: 'Registered',
-                                message: 'Successfully registered. We\'ve sent you a confirmation email, so please verify your email so that you can participate in chats and post in communities.'
-                            });*/
-							this.$navigateTo(Home,  {
-								animated: false,
-								clearHistory: true
-							});
+                                this.feedback.show({
+                                    title: 'Registered',
+                                    message: "We\'ve sent you a confirmation email, so please verify your email so that you can participate in chats and post in communities.",
+                                    type: FeedbackType.Success
+                                });
+                                this.$navigateTo(Home,  {
+                                    animated: false,
+                                    clearHistory: true
+                                });
                         }
 
                         if (response && !response.success) {
-                            //alert({ title: "Error", message: response.message });
-                               feedback.show({
+                            this.feedback.show({
                                 title: "Error",
                                 message: response.message,
-                                type:
-                                FeedbackType.Error
+                                type: FeedbackType.Error
                             })
                         }
-                        
                     })
                     .catch((err) => {
                         if (err) {
-                            //alert({ title: "Error", message: err });
-                                feedback.show({
+                            this.feedback.show({
                                 title: "Error",
-                                message: err,
-                                type:
-                                FeedbackType.Error
+                                message: err.message,
+                                type: FeedbackType.Error
                             })
                         }
                     });
             } else {
-                     feedback.show({
-                        title: "Passwords need to match",
-                        message: "Please confirm your password correctly!",
-                        type:FeedbackType.Error
-                            });
+                this.feedback.show({
+                    title: "Passwords need to match",
+                    message: "Please confirm your password correctly!",
+                    type:FeedbackType.Error
+                });
                 this.invalidPasswords = true;
                 setTimeout(() => { this.invalidPasswords = false }, 3000);
             }

@@ -69,9 +69,7 @@
     import { CheckBox } from '@nstudio/nativescript-checkbox';
     import { topmost } from 'tns-core-modules/ui/frame'
     import ModalComponent from "./ModalComponent";
-    var FeedbackPlugin = require("nativescript-feedback");
-    var FeedbackType = require ("nativescript-feedback").FeedbackType;
-    var feedback = new FeedbackPlugin.Feedback();
+    import { Feedback, FeedbackType } from "nativescript-feedback";
 
     export default { 
         mounted() {
@@ -97,12 +95,13 @@
                     confirmNewEmail: '',
                     deleteprofileResponses:[false,false,false]
                 },
-                service: new BackendService()
+                service: new BackendService(),
+                feedback: new Feedback()
             }
         },
         methods: {
             clickPass (){
-                    feedback.show({
+                    this.feedback.show({
                         title: "For a strong password, please use:",
                         message: "A mixture of both uppercase and lowercase letters and numbers (least 8 characters)",
                         type:
@@ -133,7 +132,7 @@
 
 
                 if (this.settingsValues.newPassword && this.settingsValues.newPassword != this.settingsValues.confirmNewPassword) {
-                    feedback.show({
+                    this.feedback.show({
                         title: "Passwords do not match:",
                         message: "Please check both password values! They must be the same",
                         type:
@@ -143,7 +142,7 @@
                 }
 
                 if (this.settingsValues.newEmail && this.settingsValues.newEmail != this.settingsValues.confirmNewEmail) {
-                    feedback.show({
+                    this.feedback.show({
                         title: "Email addresses do not match",
                         message: "Please check both email address values! They must be the same",
                         type:
@@ -155,7 +154,7 @@
                 if (this.settingsValues.newPassword) {
                     var countPassword = this.settingsValues.newPassword;
                     if(countPassword.replace(/ /g,'').length < 5 || this.settingsValues.newPassword <8){
-                        feedback.show({
+                        this.feedback.show({
                             title: "Password must be longer",
                             message: "Please insert at leat 8 characters (spaces excluded)",
                             type:
@@ -165,7 +164,7 @@
              this.service.updateUser(this.$store.state.user._id, { password: this.settingsValues.newPassword })
                         .then((res) => {
                             if (res) {
-                    feedback.show({
+                    this.feedback.show({
                         title: "Password Successfully changed!",
                         message: "You have successfully changed your password!",
                         type:
@@ -179,7 +178,7 @@
                         .catch((err) => {
                             if (err) {
                                 console.log(err);
-                        feedback.show({
+                        this.feedback.show({
                                 title: "There has been an error!:",
                                 message: "We are sorry! Something went wrong, please try again in few minutes",
                                 type:
@@ -193,7 +192,7 @@
                 if (this.settingsValues.newEmail) {
                     var filter = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
                     if(String(this.settingsValues.newEmail).search (filter)==-1){
-                        feedback.show({
+                        this.feedback.show({
                         title: "Insert a valid email address",
                         message: "Please insert a valid email address (youremail@address.ext)",
                         type:
@@ -204,7 +203,7 @@
                     this.service.updateUser(this.$store.state.user._id, { email: this.settingsValues.newEmail })
                         .then((res) => {
                             if (res) {
-                    feedback.show({
+                    this.feedback.show({
                         title: "Email address Successfully changed!",
                         message: "Your email address has been successfully updated!",
                         type:
@@ -218,7 +217,7 @@
                         .catch((err) => {
                             if (err) {
                                 console.log(err);
-                        feedback.show({
+                        this.feedback.show({
                                 title: "There has been an error!:",
                                 message: "We are sorry! Something went wrong, please try again in few minutes",
                                 type:
@@ -230,7 +229,7 @@
                 }
 
             if(!this.settingsValues.newEmail && !this.settingsValues.newPassword){
-                        feedback.show({
+                        this.feedback.show({
                                 title: "To update your email or password please fill the form:",
                                 message: "You can update your email address and password here! \nYou can also edit or delete your profile",
                                 type:
@@ -309,7 +308,7 @@
                                                                                     if(res.success!=true){
                                                                                     alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
                                                                                     }else{
-                                                                                        feedback.show({
+                                                                                        this.feedback.show({
                                                                                             title: "POSTS REMOVED SUCCESSFULLY!:",
                                                                                             message: "POSTS DELETED",
                                                                                             type:
@@ -337,7 +336,7 @@
 
                                                         this.service.deleteMessage((message._id))
                                                             .then((res) => {
-                                                                feedback.show({
+                                                                this.feedback.show({
                                                                     title: "CHAT MESSAGES REMOVED SUCCESSFULLY!:",
                                                                     message: "MESSAGES DELETED",
                                                                     type:
@@ -380,7 +379,7 @@
                                             .then((res) => {
                                                 if (res) {
                                                     if (res.success) {
-                                                        feedback.show({
+                                                        this.feedback.show({
                                                             title: "PROFILE REMOVED SUCCESSFULLY",
                                                             message: "ACCOUNT DELETED",
                                                             type:
@@ -394,7 +393,7 @@
                                                                 });
                                                     }
                                                     if (!res.success) {
-                                                        feedback.show({
+                                                        this.feedback.show({
                                                             title: "Unsuccessful: There has been an error!",
                                                             message: "We are sorry! Something went wrong, please try again in few minutes \nUnfortunately, there was an error deleting your account. Please contact us at <our email>",
                                                             type:
