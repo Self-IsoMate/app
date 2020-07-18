@@ -67,9 +67,7 @@
     import BackendService from "../services/BackendService";
     var service = new BackendService();
     import { timer } from 'vue-timers';
-    var FeedbackPlugin = require("nativescript-feedback");
-    var FeedbackType = require ("nativescript-feedback").FeedbackType;
-    var feedback = new FeedbackPlugin.Feedback();
+    import { Feedback, FeedbackType } from "nativescript-feedback";
 
     
     export default {
@@ -106,19 +104,19 @@
             });
             
             this.$timer.start('log')
-  this.arrayEnable = (this.chatRoomsList.length>0)&&(!this.chatRoomsList.includes(undefined));
-        if(this.arrayEnable==false){
-                    feedback.show({
-						title: "Error: There was a problem retrieving data from the server",
-						message: "We are sorry! Something went wrong, please try again in few minutes",
-						type: FeedbackType.Warning
-					});
-        }
-},
+            this.arrayEnable = (this.chatRoomsList.length>0)&&(!this.chatRoomsList.includes(undefined));
+            if(this.arrayEnable==false){
+                        this.feedback.show({
+                            title: "Error: There was a problem retrieving data from the server",
+                            message: "We are sorry! Something went wrong, please try again in few minutes",
+                            type: FeedbackType.Warning
+                        });
+            }
+        },
         beforeDestroy () {
-        this.timers.log.isSwitchTab=true;
-        this.$timer.stop('log');
-        //console.log(this.timers.log.isRunning);
+            this.timers.log.isSwitchTab=true;
+            this.$timer.stop('log');
+            //console.log(this.timers.log.isRunning);
         }, 
         data() {
             return {
@@ -127,7 +125,8 @@
                 drawer2: "",
                 mainColor: "#00ff92",
                 chatRoomsList: [],
-                arrayEnable: true
+                arrayEnable: true,
+                feedback: new Feedback()
             };
         },
         methods: {
