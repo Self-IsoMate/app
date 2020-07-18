@@ -56,7 +56,7 @@
 							</StackLayout>
 
 							<StackLayout>
-								<TextView v-model="searchCommunity" hint="Search communities..." @textChange="filterCommunities" :isEnabled="arrayEnable" />
+								<TextView v-model="searchCommunity" hint="Search communities..." @textChange="filterCommunities" :isEnabled="!noData" />
 								<WrapLayout orientation="horizontal">
 									<CommunityItemPost v-for="a in availableCommunities" :key="a._id"
 										:community="a" @tap="toggleCommunity" />
@@ -102,7 +102,6 @@ export default {
 			back:"",
 			selectedImage: null,
 			selectedVideo: null,
-			arrayEnable: true, // What is this???
 			feedback: new Feedback()
 		}
 	},
@@ -355,8 +354,14 @@ export default {
 		}
 	},
 	computed: {
-		currentUser () {
+		currentUser: function () {
 			return this.$store.state.user;
+		},
+		noData: function () {
+			return this.availableCommunities.length == 0 ||
+				this.allAvailableCommunities.length == 0 ||
+				this.availableCommunities.includes(undefined)||
+				this.allAvailableCommunities.includes(undefined);
 		}
 	}
 }

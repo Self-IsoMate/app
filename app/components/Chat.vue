@@ -12,7 +12,7 @@
                         editable="true" hint="      Search" returnKeyType="search"
                         ios:height="30" ios:marginTop="3"
                         android:paddingBottom="5" class="searchField font-awesome"
-                        color="#fff" :isEnabled="arrayEnable" />
+                        color="#fff" :isEnabled="noData" />
                 </StackLayout>
                 <StackLayout class="HRight" @tap="addTap">
                     <Label text="+" style="font-size:40;color:#fff;" paddingLeft="15%"
@@ -36,12 +36,17 @@
                                 <v-template>
 
                                     <StackLayout orientation="horizontal" style="border-bottom-width:1;border-bottom-color:#E4E4E4;"
+
                                         padding="10" @tap="chatroomTap(item)">
+
                                         <StackLayout width="20%">
-                                            <Image :src="item.chatroomPicture" stretch="aspectFill" class="conImg" />
+                                            <Image :src="item.chatroomPicture"
+                                                stretch="aspectFill" class="conImg" />
                                         </StackLayout>
-                                        <StackLayout marginLeft="10" paddingTop="3" width="50%">
-                                            <Label  textWrap="true" :text="item.chatroomName" class="chatroomNameTitle" />
+                                        <StackLayout marginLeft="10" paddingTop="3"
+                                            width="50%">
+                                            <Label  textWrap="true" :text="item.chatroomName"
+                                                class="chatroomNameTitle" />
                                         </StackLayout>
                                     </StackLayout>
 
@@ -63,14 +68,11 @@
 <script>
     import Chatroom from "./Chatroom";
     import ChatroomAdd from "./ChatroomAdd";
-
     import BackendService from "../services/BackendService";
     var service = new BackendService();
     import { timer } from 'vue-timers';
-    var FeedbackPlugin = require("nativescript-feedback");
-    var FeedbackType = require ("nativescript-feedback").FeedbackType;
-    var feedback = new FeedbackPlugin.Feedback();
-
+    import { Feedback, FeedbackType } from "nativescript-feedback"
+    var feedback = new Feedback();
     
     export default {
         timers: {
@@ -78,47 +80,27 @@
         },
         mounted() {
             var service = new BackendService();
-
+            this.$timer.start('log');
             service.getChatroomIds(this.$store.state.user._id).then(res=>{
                 if (res) {
-                    if (res.success) {
-                        res.chatrooms.forEach(val => {
-                            service.getChatroomObj(val)
-                                .then( response => {
-                                    if (response) {
-                                        if (response.success) {
-                                            this.chatRoomsList.push(response.chatroom);
-                                        } else {
-                                            alert({ title: 'Error', message: response.message })
-                                        }
-                                    }
-                                })
-                                .catch((err) => {
-                                    if (err) {
-                                        alert({ title: 'Error', message: err.message })
-                                    }
-                                })
+                    res.chatrooms.forEach(val => {
+                        service.getChatroomObj(val).then(response=>{
+                            if (response) {
+                                this.chatRoomsList.push(response.chatroom);    
+                            } else {
+                                console.log("error on getting chatrooms objects");
+                            }
                         });
-                    } else {
-                        alert({ title: 'Error', message: res.message })
-                    }
+                    });
+                } else {
+                    console.log("error on getting Chatroom Ids");
                 }
             });
-            
-            this.$timer.start('log')
-  this.arrayEnable = (this.chatRoomsList.length>0)&&(!this.chatRoomsList.includes(undefined));
-        if(this.arrayEnable==false){
-                    feedback.show({
-						title: "Error: There was a problem retrieving data from the server",
-						message: "We are sorry! Something went wrong, please try again in few minutes",
-						type: FeedbackType.Warning
-					});
-        }
-},
+        },
         beforeDestroy () {
-        this.timers.log.isSwitchTab=true;
-        this.$timer.stop('log');
-        //console.log(this.timers.log.isRunning);
+            this.timers.log.isSwitchTab=true;
+            this.$timer.stop('log');
+            //console.log(this.timers.log.isRunning);
         }, 
         data() {
             return {
@@ -126,8 +108,7 @@
                 drawer1: "",
                 drawer2: "",
                 mainColor: "#00ff92",
-                chatRoomsList: [],
-                arrayEnable: true
+                chatRoomsList: []
             };
         },
         methods: {
@@ -137,40 +118,37 @@
                 //console.log(this.timers.log.isRunning);
             },
             log () {
-                service.getChatroomIds(this.$store.state.user._id)
-                    .then( res => {
-                        if (res) {
-                            if (res.success) {
-                                var chatsInList  = res.chatrooms.filter((chatroom) => this.chatRoomsList.every(chat => chat._id != chatroom ));
-                                var chatroomPromises = chatsInList.map((chatroomId) => service.getChatroomObj(chatroomId));
-
-                                Promise.all(chatroomPromises)
-                                    .then((responses) => {
-                                        if (responses.every(response => response.success)) {
-                                            var chatrooms = responses.map((response) => response.chatroom);
-                                            if (this.chatroomsList) {
-                                                this.chatroomsList.concat(chatrooms);
-                                            } else {
-                                                this.chatroomsList = chatrooms;
-                                            }
-                                        } else {
-                                            alert({ title: 'Error', message: 'Could not retrieve chatrooms' })
-                                        }
-                                    })
-                                    .catch((err) => {
-                                        if (err) {
-                                            alert({ title: 'Error', message: err.message })
-                                        }
-                                    })
-                            }
-                        }
-                    })
-                    .catch((err) => {
-                        if (err) {
-                            alert({ title: 'Error', message: err.message })
-                        }
-                    });
-            },
+     service.getChatroomIds(this.$store.state.user._id).then(res=>{
+                if (res) {
+                            var chatsinlist  = res.chatrooms.filter( e=> {
+                                var matchingChats =  this.chatRoomsList.every(chat => {
+                                    
+                                    return chat._id != e;
+                                });
+                                return matchingChats;
+                            });
+                        } else {
+                                console.log("Error on gettin chat rooms objects from id");
+                            };
+                    
+                            if(chatsinlist.length>0){
+                                    chatsinlist.forEach(val => {
+                                    service.getChatroomObj(val).then(response=>{
+                                    this.chatRoomsList = this.chatRoomsList.concat(response.chatroom);    
+                            }).catch((err) => {
+                            if (err) console.log("err: " + err);
+                        });
+                            });
+                                } else {
+                                    console.log("no new chats, check every 10 seconds");
+                                }
+                            })
+                        .catch((err) => {
+                            if (err) console.log("err: " + err);
+                        });
+                                
+                      
+             },
             onDrawerClosed() {
                 this.drawerToggle = false;
             },
@@ -187,6 +165,12 @@
             },
             addTap(){
                  this.$navigateTo(ChatroomAdd); 
+            }
+        },
+        computed: {
+            noData: function () {
+                return this.chatRoomsList.length > 0 &&
+                    !this.chatRoomsList.includes(undefined)
             }
         }
     };

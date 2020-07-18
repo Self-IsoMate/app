@@ -97,9 +97,7 @@ import NewPost from "./NewPost";
 import CommunityPill from "./CommunityPill";
 import CommunityFilter from "./CommunityFilter";
 import  Video  from 'nativescript-videoplayer';
-var FeedbackPlugin = require("nativescript-feedback");
-var FeedbackType = require ("nativescript-feedback").FeedbackType;
-var feedback = new FeedbackPlugin.Feedback();
+import { Feedback, FeedbackType } from "nativescript-feedback";
 
 
 export default {
@@ -191,13 +189,11 @@ export default {
                     alert({ title: 'Error', message: err.message })
                 }
             })
-        this.arrayEnable = (this.$props.communities != undefined) && (this.allCommunities.includes(undefined));
 
     },
     beforeDestroy () {
-    this.timers.log.isSwitchTab=true;
-    this.$timer.stop('log');
-    //console.log(this.timers.log.isRunning);
+        this.timers.log.isSwitchTab = true;
+        this.$timer.stop('log');
     },
     data() {
         return {
@@ -208,14 +204,13 @@ export default {
             communityFilter: CommunityFilter,
             communityFilters: [],
             allCommunities: [],
-            arrayEnable: true
+            feedback: new Feedback()
         };
     },
     methods: {
         stopTimer() {
-            this.timers.log.isSwitchTab=true;
+            this.timers.log.isSwitchTab = true;
             this.$timer.stop('log');
-            //console.log(this.timers.log.isRunning);
         },
         deletePostinoMedia (post) {
             confirm({ title: 'Are you sure?', message: 'Are you sure you want to delete your Post?', okButtonText: "Delete", cancelButtonText: "Go Back" })
@@ -425,6 +420,25 @@ export default {
                     }
                 });
 
+            service.getCommunities(this.$store.state.user.communities)
+                .then((res) => {
+                    if (res) {
+                        if (res.success) {
+                            this.allCommunities = [... res.communities];
+                            if (this.allCommunities.length == 0){
+                                alert({ title: '😢 Nothing to see here', message: "Subscribe to communities to fill up that feed" })
+                            }
+                        } else {
+                            alert({ title: 'Error', message: res.message })
+                        }
+                    }
+                })
+                .catch((err) => {
+                    if (err) {
+                        alert({ title: 'Error', message: err.message })
+                    }
+                })
+
         },
         onDrawerClosed() {
             this.drawerToggle = false;
@@ -462,13 +476,13 @@ export default {
             }
         },
         showFilterModal() {
-            if(this.arrayEnable==false){
-                feedback.show({
+            if (this.noDataFound) {
+                this.feedback.show({
 						title: "Error: There was a problem retrieving data from the server",
 						message: "We are sorry! Something went wrong, please try again in few minutes",
 						type: FeedbackType.Warning
 					});
-            }else{
+            } else {
                 if (this.$props.communities && this.$props.communities.length > 0) {
                     this.$navigateTo(CommunityFilter, { props: { allCommunities: this.allCommunities, preSelectedCommunities: this.$props.communities} });
                 } else {
@@ -496,6 +510,11 @@ export default {
                     })
             }
         },
+    },
+    computed: {
+        noDataFound: function () {
+            return this.$props.communities || this.allCommunities?.length == 0
+        }
     }
 }
 </script>

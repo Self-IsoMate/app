@@ -14,7 +14,7 @@
                         returnKeyType="search"
                         ios:height="30" ios:marginTop="3"
                         android:paddingBottom="5" class="searchField font-awesome"
-                        color="#fff" :isEnabled="arrayEnable" />
+                        color="#fff" :isEnabled="!noData" />
                 </StackLayout>
                 <StackLayout class="HRight">
                 </StackLayout>
@@ -82,15 +82,6 @@
             this.chatrooms = Array.from(this.allChatrooms);
                         this.$timer.start('log')
 
-this.arrayEnable = (this.chatrooms.length>0||this.allChatrooms.length>0)&&(!this.chatrooms.includes(undefined)||!this.allChatrooms.includes(undefined));
-        if(this.arrayEnable==false){
-                    feedback.show({
-						title: "Error: There was a problem retrieving data from the server",
-						message: "We are sorry! Something went wrong, please try again in few minutes",
-						type: FeedbackType.Warning
-					});
-        }
-
         },
         beforeDestroy () {
             this.timers.log.isSwitchTab=true;
@@ -108,7 +99,8 @@ this.arrayEnable = (this.chatrooms.length>0||this.allChatrooms.length>0)&&(!this
                 drawer2: "",
                 mainColor: "#00ff92",
                 allChatrooms: [],
-                chatrooms: []
+                chatrooms: [],
+                searchPhrase: ''
             };
         },
          methods: {
@@ -210,6 +202,12 @@ this.arrayEnable = (this.chatrooms.length>0||this.allChatrooms.length>0)&&(!this
         computed: {
             currentUser: function () {
                 return this.$store.state.user;
+            },
+            noData: function () {
+                return this.chatrooms.length == 0 ||
+                    this.allChatrooms.length == 0 ||
+                    this.chatrooms.includes(undefined) ||
+                    this.allChatrooms.includes(undefined)
             }
         }
     };

@@ -9,7 +9,7 @@
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
                 <AutoFocusView></AutoFocusView>
-                    <SearchBar hint="Search" v-model="searchValue" @loaded="onSearchBarLoaded($event)" @textChange="filter" :isEnabled="arrayEnable"/>
+                    <SearchBar hint="Search" v-model="searchValue" @loaded="onSearchBarLoaded($event)" @textChange="filter" :isEnabled="!noData"/>
                 </StackLayout>
                 <StackLayout class="HRight">
                 </StackLayout>
@@ -59,104 +59,117 @@
 	</Page>
 </template>
 <script>
-    import BackendService from "../services/BackendService";
-    import { backgroundInternalProperty } from 'tns-core-modules/ui/page/page';
-    import CompetitionInfo from "./CompetitionInfo";
-    import moment from "moment";
-    var FeedbackPlugin = require("nativescript-feedback");
-    var FeedbackType = require ("nativescript-feedback").FeedbackType;
-    var feedback = new FeedbackPlugin.Feedback();
+import BackendService from "../services/BackendService";
+import { backgroundInternalProperty } from 'tns-core-modules/ui/page/page';
+import CompetitionInfo from "./CompetitionInfo";
+import moment from "moment";
+import { Feedback, FeedbackType } from "nativescript-feedback";
 
-    export default {
-        created() {
-            var backend = new BackendService();
-            backend.getChallenges()
-                .then((res) => {
-                    if (res) {
-                        if (res.success) {
-                            this.allChallenges = res.challenges;
-                            this.challenges = Array.from(this.allChallenges);
-                        } else {
-                            alert({ title: 'Error', message: res.message })
-                        }
+export default {
+    created() {
+        var backend = new BackendService();
+        backend.getChallenges()
+            .then((res) => {
+                if (res) {
+                    if (res.success) {
+                        this.allChallenges = res.challenges;
+                        this.challenges = Array.from(this.allChallenges);
+                    } else {
+                        alert({ title: 'Error', message: res.message })
                     }
-                })
-                .catch((err) => {
-                    if (err) {
-                        alert({ title: 'Error', message: err.message });
-                    }
-                })
-            
-            backend.getAllCommunities()
-                .then((res) => {
-                    if (res) {
-                        if (res.success) {
-                            this.communities = res.communities;
-                        } else {
-                            feedback.show({
+                }
+            })
+            .catch((err) => {
+                if (err) {
+                    alert({ title: 'Error', message: err.message });
+                }
+            })
+        
+        backend.getAllCommunities()
+            .then((res) => {
+                if (res) {
+                    if (res.success) {
+                        this.communities = res.communities;
+                        if (this.noData) {
+                            this.feedback.show({
                                 title: "Error: There was a problem retrieving data from the server",
                                 message: "We are sorry! Something went wrong, please try again in few minutes",
                                 type: FeedbackType.Warning
                             });
                         }
+                    } else {
+                        this.feedback.show({
+                            title: "Error: There was a problem retrieving data from the server",
+                            message: "We are sorry! Something went wrong, please try again in few minutes",
+                            type: FeedbackType.Warning
+                        });
                     }
-                })
-                .catch((err) => {
-                    if (err) console.log(err);
-                });
-        },
-        data() {
-            return {
-                drawerToggle: false,
-                drawer1: "",
-                drawer2: "",
-                mainColor: "#00ff92",
-                challenges: [],
-                allChallenges: [],
-                communities: [],
-                searchValue: "",
-                arrayEnable: true
-            };
-        },
-        methods: {
-                 onSearchBarLoaded: function(event) {
-                if (event.object.android) {
-                    setTimeout(() => {
-                        event.object.dismissSoftInput();
-                        event.object.android.clearFocus();
-                    }, 0);
                 }
-            },
-            filter(){
-                var filteredCommunities = this.communities.filter((community) => {
-                    return community.name.toUpperCase().startsWith(this.searchValue.toUpperCase());
-                });
-
-                this.challenges = Array.from(this.allChallenges).filter((challenge) => {
-                    return challenge.communities.some((c) => filteredCommunities.some((c1) => c1._id == c))
-                });
-            },
-            formatDeadline(deadline){
-                var newFormat = moment(String(deadline)).format('MMMM Do YYYY');
-                return "Deadline: " + newFormat;
-            },
-            onDrawerClosed() {
-                this.drawerToggle = false;
-            },
-            onDrawerOpened() {
-                this.drawerToggle = true;
-            },
-            toggleDrawer() {
-                this.$refs.drawer.nativeView.toggleDrawerState();
-            },
-            showDetails(challengeVariable){
-                this.$navigateTo(CompetitionInfo, {
-                    props: {challenge: challengeVariable, formattedTime: moment(String(challengeVariable.deadline)).format('DD/MM/YYYY')},
-                    animated: false
-                });
+            })
+            .catch((err) => {
+                if (err) console.log(err);
+            });
+    },
+    data() {
+        return {
+            drawerToggle: false,
+            drawer1: "",
+            drawer2: "",
+            mainColor: "#00ff92",
+            challenges: [],
+            allChallenges: [],
+            communities: [],
+            searchValue: "",
+            feedback: new Feedback()
+        };
+    },
+    methods: {
+        onSearchBarLoaded: function(event) {
+            if (event.object.android) {
+                setTimeout(() => {
+                    event.object.dismissSoftInput();
+                    event.object.android.clearFocus();
+                }, 0);
             }
+        },
+        filter(){
+            var filteredCommunities = this.communities.filter((community) => {
+                return community.name.toUpperCase().startsWith(this.searchValue.toUpperCase());
+            });
+
+            this.challenges = Array.from(this.allChallenges).filter((challenge) => {
+                return challenge.communities.some((c) => filteredCommunities.some((c1) => c1._id == c))
+            });
+        },
+        formatDeadline(deadline){
+            var newFormat = moment(String(deadline)).format('MMMM Do YYYY');
+            return "Deadline: " + newFormat;
+        },
+        onDrawerClosed() {
+            this.drawerToggle = false;
+        },
+        onDrawerOpened() {
+            this.drawerToggle = true;
+        },
+        toggleDrawer() {
+            this.$refs.drawer.nativeView.toggleDrawerState();
+        },
+        showDetails(challengeVariable){
+            this.$navigateTo(CompetitionInfo, {
+                props: {challenge: challengeVariable, formattedTime: moment(String(challengeVariable.deadline)).format('DD/MM/YYYY')},
+                animated: false
+            });
         }
-    };
+    },
+    computed: {
+        noData: function () {
+            return this.chatrooms?.length == 0 ||
+                this.allChatrooms?.length == 0 ||
+                this.chatrooms?.includes(undefined) ||
+                this.allChatrooms?.includes(undefined);
+        }
+    }
+};
 </script>
 
 <style scoped>

@@ -10,7 +10,7 @@
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
                     <AutoFocusView></AutoFocusView>
-                    <SearchBar hint="Search" v-model="searchPhrase" ref="searchBar"  @loaded="onSearchBarLoaded($event)" @textChange="filter()" :isEnabled="arrayEnable" />
+                    <SearchBar hint="Search" v-model="searchPhrase" ref="searchBar"  @loaded="onSearchBarLoaded($event)" @textChange="filter()" :isEnabled="noData" />
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -43,9 +43,7 @@
     import CategoryThumb from "./CategoryThumb";
     import BackendService from "../services/BackendService";
     import Category from "./Category";
-    var FeedbackPlugin = require("nativescript-feedback");
-    var FeedbackType = require ("nativescript-feedback").FeedbackType;
-    var feedback = new FeedbackPlugin.Feedback();
+    import { FeedbackPlugin, FeedbackType, Feedback } from "nativescript-feedback";
 
     export default {
         name: "Home",
@@ -58,7 +56,7 @@
                 drawer2: "",
                 service: new BackendService(),
                 searchPhrase: "",
-                arrayEnable: true
+                feedback: new Feedback()
             };
         },
         components: {
@@ -74,7 +72,7 @@
                             this.allCategories = res.categories;
                             this.categories = Array.from(this.allCategories);
                         } else {
-                            feedback.show({
+                            this.feedback.show({
                                 title: 'Error',
                                 message: res.message,
                                 type: FeedbackType.Warning
@@ -84,7 +82,7 @@
                 })
                 .catch((err) => {
                     if (err) {
-                        feedback.show({
+                        this.feedback.show({
                             title: 'Error',
                             message: errs.message,
                             type: FeedbackType.Warning
@@ -99,7 +97,7 @@
                     }
 
                     if (res && !res.success) {
-                        feedback.show({
+                        this.feedback.show({
                             title: 'Error',
                             message: res.message,
                             type: FeedbackType.Warning
@@ -108,7 +106,7 @@
                 })
                 .catch((err) => {
                     if (err) {
-                        feedback.show({
+                        this.feedback.show({
                             title: 'Error',
                             message: err.message,
                             type: FeedbackType.Warning
@@ -148,6 +146,14 @@
                             }
                         })
                     });
+            }
+        },
+        computed: {
+            noData: function () {
+                return this.allCategories.length == 0 ||
+                    this.categories.length == 0 ||
+                    this.categories.includes(undefined) ||
+                    this.allCategories.includes(undefined)
             }
         }
     };
