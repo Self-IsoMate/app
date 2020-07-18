@@ -37,7 +37,7 @@ export default {
     },
     methods: {
         clickPass () {
-            feedback.show({
+            this.feedback.show({
                 title: "For a strong password, please use:",
                 message: "A mixture of both uppercase and lowercase letters and numbers (least 8 characters)",
                 type: FeedbackType.Custom
