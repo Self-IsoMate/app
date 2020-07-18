@@ -99,7 +99,8 @@
                 drawer2: "",
                 mainColor: "#00ff92",
                 allChatrooms: [],
-                chatrooms: []
+                chatrooms: [],
+                searchPhrase: ''
             };
         },
          methods: {
