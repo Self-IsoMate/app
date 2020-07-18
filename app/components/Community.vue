@@ -97,9 +97,7 @@ import NewPost from "./NewPost";
 import CommunityPill from "./CommunityPill";
 import CommunityFilter from "./CommunityFilter";
 import  Video  from 'nativescript-videoplayer';
-var FeedbackPlugin = require("nativescript-feedback");
-var FeedbackType = require ("nativescript-feedback").FeedbackType;
-var feedback = new FeedbackPlugin.Feedback();
+import { Feedback, feedbackType } from "nativescript-this.feedback";
 
 
 export default {
@@ -195,9 +193,8 @@ export default {
 
     },
     beforeDestroy () {
-    this.timers.log.isSwitchTab=true;
-    this.$timer.stop('log');
-    //console.log(this.timers.log.isRunning);
+        this.timers.log.isSwitchTab = true;
+        this.$timer.stop('log');
     },
     data() {
         return {
@@ -208,7 +205,8 @@ export default {
             communityFilter: CommunityFilter,
             communityFilters: [],
             allCommunities: [],
-            arrayEnable: true
+            arrayEnable: true,
+            feedback: new Feedback()
         };
     },
     methods: {
@@ -463,7 +461,7 @@ export default {
         },
         showFilterModal() {
             if(this.arrayEnable==false){
-                feedback.show({
+                this.feedback.show({
 						title: "Error: There was a problem retrieving data from the server",
 						message: "We are sorry! Something went wrong, please try again in few minutes",
 						type: FeedbackType.Warning
