@@ -10,7 +10,7 @@
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
                     <AutoFocusView></AutoFocusView>
-                    <SearchBar hint="Search" v-model="searchPhrase" ref="searchBar"  @loaded="onSearchBarLoaded($event)" @textChange="filter()" :isEnabled="arrayEnable" />
+                    <SearchBar hint="Search" v-model="searchPhrase" ref="searchBar"  @loaded="onSearchBarLoaded($event)" @textChange="filter()" :isEnabled="noData" />
                 </StackLayout>
                 <StackLayout class="HRight">
 
@@ -56,7 +56,6 @@
                 drawer2: "",
                 service: new BackendService(),
                 searchPhrase: "",
-                arrayEnable: true,
                 feedback: new Feedback()
             };
         },
@@ -147,6 +146,14 @@
                             }
                         })
                     });
+            }
+        },
+        computed: {
+            noData: function () {
+                return this.allCategories.length == 0 ||
+                    this.categories.length == 0 ||
+                    this.categories.includes(undefined) ||
+                    this.allCategories.includes(undefined)
             }
         }
     };
