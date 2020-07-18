@@ -420,6 +420,25 @@ export default {
                     }
                 });
 
+            service.getCommunities(this.$store.state.user.communities)
+                .then((res) => {
+                    if (res) {
+                        if (res.success) {
+                            this.allCommunities = [... res.communities];
+                            if (this.allCommunities.length == 0){
+                                alert({ title: '😢 Nothing to see here', message: "Subscribe to communities to fill up that feed" })
+                            }
+                        } else {
+                            alert({ title: 'Error', message: res.message })
+                        }
+                    }
+                })
+                .catch((err) => {
+                    if (err) {
+                        alert({ title: 'Error', message: err.message })
+                    }
+                })
+
         },
         onDrawerClosed() {
             this.drawerToggle = false;
