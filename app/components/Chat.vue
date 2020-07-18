@@ -12,7 +12,7 @@
                         editable="true" hint="      Search" returnKeyType="search"
                         ios:height="30" ios:marginTop="3"
                         android:paddingBottom="5" class="searchField font-awesome"
-                        color="#fff" :isEnabled="arrayEnable" />
+                        color="#fff" :isEnabled="!noData" />
                 </StackLayout>
                 <StackLayout class="HRight" @tap="addTap">
                     <Label text="+" style="font-size:40;color:#fff;" paddingLeft="15%"
@@ -86,6 +86,14 @@
                                     if (response) {
                                         if (response.success) {
                                             this.chatRoomsList.push(response.chatroom);
+
+                                            if (this.noData) {
+                                                this.feedback.show({
+                                                    title: "Error: There was a problem retrieving data from the server",
+                                                    message: "We are sorry! Something went wrong, please try again in few minutes",
+                                                    type: FeedbackType.Warning
+                                                });
+                                            }
                                         } else {
                                             alert({ title: 'Error', message: response.message })
                                         }
@@ -104,14 +112,6 @@
             });
             
             this.$timer.start('log')
-            this.arrayEnable = (this.chatRoomsList.length>0)&&(!this.chatRoomsList.includes(undefined));
-            if(this.arrayEnable==false){
-                        this.feedback.show({
-                            title: "Error: There was a problem retrieving data from the server",
-                            message: "We are sorry! Something went wrong, please try again in few minutes",
-                            type: FeedbackType.Warning
-                        });
-            }
         },
         beforeDestroy () {
             this.timers.log.isSwitchTab=true;
@@ -125,7 +125,6 @@
                 drawer2: "",
                 mainColor: "#00ff92",
                 chatRoomsList: [],
-                arrayEnable: true,
                 feedback: new Feedback()
             };
         },
@@ -186,6 +185,11 @@
             },
             addTap(){
                  this.$navigateTo(ChatroomAdd); 
+            }
+        },
+        computed : {
+            noData : function () {
+                return this.chatRoomsList.length = 0 || this.chatRoomsList.includes(undefined);
             }
         }
     };
