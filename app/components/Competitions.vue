@@ -163,10 +163,10 @@ export default {
     },
     computed: {
         noData: function () {
-            return this.chatrooms.length == 0 ||
-                this.allChatrooms.length == 0 ||
-                this.chatrooms.includes(undefined) ||
-                this.allChatrooms.includes(undefined);
+            return this.chatrooms?.length == 0 ||
+                this.allChatrooms?.length == 0 ||
+                this.chatrooms?.includes(undefined) ||
+                this.allChatrooms?.includes(undefined);
         }
     }
 };
