@@ -9,7 +9,7 @@
                 </StackLayout>
                 <StackLayout class="HMid" alignItems="left">
                 <AutoFocusView></AutoFocusView>
-                    <SearchBar hint="Search" v-model="searchValue" @loaded="onSearchBarLoaded($event)" @textChange="filter" :isEnabled="arrayEnable"/>
+                    <SearchBar hint="Search" v-model="searchValue" @loaded="onSearchBarLoaded($event)" @textChange="filter" :isEnabled="!noData"/>
                 </StackLayout>
                 <StackLayout class="HRight">
                 </StackLayout>
@@ -90,6 +90,13 @@ export default {
                 if (res) {
                     if (res.success) {
                         this.communities = res.communities;
+                        if (this.noData) {
+                            this.feedback.show({
+                                title: "Error: There was a problem retrieving data from the server",
+                                message: "We are sorry! Something went wrong, please try again in few minutes",
+                                type: FeedbackType.Warning
+                            });
+                        }
                     } else {
                         this.feedback.show({
                             title: "Error: There was a problem retrieving data from the server",
@@ -152,6 +159,14 @@ export default {
                 props: {challenge: challengeVariable, formattedTime: moment(String(challengeVariable.deadline)).format('DD/MM/YYYY')},
                 animated: false
             });
+        }
+    },
+    computed: {
+        noData: function () {
+            return this.chatrooms.length == 0 ||
+                this.allChatrooms.length == 0 ||
+                this.chatrooms.includes(undefined) ||
+                this.allChatrooms.includes(undefined);
         }
     }
 };
