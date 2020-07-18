@@ -97,7 +97,7 @@ import NewPost from "./NewPost";
 import CommunityPill from "./CommunityPill";
 import CommunityFilter from "./CommunityFilter";
 import  Video  from 'nativescript-videoplayer';
-import { Feedback, feedbackType } from "nativescript-this.feedback";
+import { Feedback, FeedbackType } from "nativescript-feedback";
 
 
 export default {
@@ -189,7 +189,6 @@ export default {
                     alert({ title: 'Error', message: err.message })
                 }
             })
-        this.arrayEnable = (this.$props.communities != undefined) && (this.allCommunities.includes(undefined));
 
     },
     beforeDestroy () {
@@ -205,15 +204,13 @@ export default {
             communityFilter: CommunityFilter,
             communityFilters: [],
             allCommunities: [],
-            arrayEnable: true,
             feedback: new Feedback()
         };
     },
     methods: {
         stopTimer() {
-            this.timers.log.isSwitchTab=true;
+            this.timers.log.isSwitchTab = true;
             this.$timer.stop('log');
-            //console.log(this.timers.log.isRunning);
         },
         deletePostinoMedia (post) {
             confirm({ title: 'Are you sure?', message: 'Are you sure you want to delete your Post?', okButtonText: "Delete", cancelButtonText: "Go Back" })
@@ -460,13 +457,13 @@ export default {
             }
         },
         showFilterModal() {
-            if(this.arrayEnable==false){
+            if (this.noDataFound) {
                 this.feedback.show({
 						title: "Error: There was a problem retrieving data from the server",
 						message: "We are sorry! Something went wrong, please try again in few minutes",
 						type: FeedbackType.Warning
 					});
-            }else{
+            } else {
                 if (this.$props.communities && this.$props.communities.length > 0) {
                     this.$navigateTo(CommunityFilter, { props: { allCommunities: this.allCommunities, preSelectedCommunities: this.$props.communities} });
                 } else {
@@ -494,6 +491,11 @@ export default {
                     })
             }
         },
+    },
+    computed: {
+        noDataFound: function () {
+            return this.$props.communities || this.allCommunities?.length == 0
+        }
     }
 }
 </script>
