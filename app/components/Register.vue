@@ -20,6 +20,7 @@
 import Home from "./Home";
 import LoginQuestionsMentor from "./LoginQuestionsMentor";
 import BackendService from "../services/BackendService";
+import Validate from "../validation/Validate";
 import {Feedback, FeedbackType} from "nativescript-feedback";
 
 export default {
@@ -44,17 +45,15 @@ export default {
             });
         },
         navigateQuestions (event) {
-            var emailValidationRegEX = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
-            var countUsername = this.username;
-            var countPassword = this.password;
-            if (countUsername.replace(/ /g,'').length < 5){
+            var validation = new Validate();
+            if (validation.validateUsername(this.username)){
                     this.feedback.show({
                         title: "Username must be longer",
                         message: "Please insert at leat 5 characters (spaces excluded)",
                         type:
                         FeedbackType.Warning
                     });
-            }else if(countPassword.replace(/ /g,'').length < 5 || this.password.length <8){
+            }else if(validation.validatePassword(this.password)){
                     this.feedback.show({
                         title: "Password must be longer",
                         message: "Please insert at leat 8 characters (spaces excluded)",
@@ -68,7 +67,7 @@ export default {
                         type:
                         FeedbackType.Error
                     });
-            }else if( String(this.email).search(emailValidationRegEX)==-1 ) {
+            }else if( String(this.email).search(validation.filterEmail())==-1 ) {
                     this.feedback.show({
                         title: "Insert a valid email address",
                         message: "Please insert a valid email address (youremail@address.ext)",
