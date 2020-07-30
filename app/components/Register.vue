@@ -46,21 +46,10 @@ export default {
         },
         navigateQuestions (event) {
             var validation = new Validate();
-            if (validation.validateUsername(this.username)){
-                    this.feedback.show({
-                        title: "Username must be longer",
-                        message: "Please insert at leat 5 characters (spaces excluded)",
-                        type:
-                        FeedbackType.Warning
-                    });
-            }else if(validation.validatePassword(this.password)){
-                    this.feedback.show({
-                        title: "Password must be longer",
-                        message: "Please insert at leat 8 characters (spaces excluded)",
-                        type:
-                        FeedbackType.Error
-                    });
-            }else if(this.password == this.username){
+            validation.validateUsername(this.username);
+            validation.validatePassword(this.password);
+      
+        if(this.password == this.username){
                     this.feedback.show({
                         title: "Password must be different from username",
                         message: "Please insert a more safe password (different from username)",
