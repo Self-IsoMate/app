@@ -43,7 +43,7 @@ export default {
         },
         navigateQuestions (event) {
            
-            if (!this.isInvalid()) {
+            if (this.isValid()) {
                 var newUser = {
                     username: this.username,
                     password: this.password,
@@ -94,7 +94,7 @@ export default {
         
         },
 
-        isInvalid() {
+        isValid() {
             return (validation.validateUsernameLength(this.username) && validation.validatePasswordLength(this.password) && validation.validatePasswordAgainstUsername(this.password, this.username) && validation.validateEmail(this.email) && validation.validateConfirmPassword(this.password, this.confirmpassword));
         }
     }

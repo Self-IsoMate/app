@@ -3,7 +3,9 @@ const passwordNOSPACELength = 5;
 const passwordLength = 8;
 const filter = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
 
-import {Feedback, FeedbackType} from "nativescript-feedback";
+const FeedbackPlugin = require("nativescript-feedback");
+const FeedbackType = require ("nativescript-feedback").FeedbackType;
+const feedback = new FeedbackPlugin.Feedback();
 
 export default class Validate {
 
@@ -11,7 +13,7 @@ export default class Validate {
         var countUsername = usernameString;
         if (countUsername.replace(/ /g,'').length < usernameLength){
             alert({ title: "Username must be longer", message: "Please insert at leat 5 characters (spaces excluded)" });
-            /*this.feedback.show({
+            /*feedback.show({
                 title: "Username must be longer",
                 message: "Please insert at leat 5 characters (spaces excluded)",
                 type:
@@ -27,7 +29,7 @@ export default class Validate {
         var countPassword = passwordString;
         if(countPassword.replace(/ /g,'').length < passwordNOSPACELength || passwordString.length <passwordLength){
             alert({ title: "Password must be longer", message: "Please insert at leat 8 characters (spaces excluded)" });
-            /*this.feedback.show({
+            /*feedback.show({
                 title: "Password must be longer",
                 message: "Please insert at leat 8 characters (spaces excluded)",
                 type:
@@ -41,7 +43,7 @@ export default class Validate {
     validatePasswordAgainstUsername(password, username){
         if(password == username){
             alert({ title: "Password must be different from username", message: "Please insert a more safe password (different from username)" });
-            /*this.feedback.show({
+            /*feedback.show({
                 title: "Password must be different from username",
                 message: "Please insert a more safe password (different from username)",
                 type:
@@ -55,7 +57,7 @@ export default class Validate {
     validateEmail(emailAddress){
         if( String(emailAddress).search(filter)==-1 ) {
             alert({ title: "Insert a valid email address", message: "Please insert a valid email address (youremail@address.ext)" });
-            /*this.feedback.show({
+            /*feedback.show({
                 title: "Insert a valid email address",
                 message: "Please insert a valid email address (youremail@address.ext)",
                 type:
@@ -69,7 +71,7 @@ export default class Validate {
     validateConfirmPassword(password, confirmpassword ){
         if( password != confirmpassword) {
             alert({ title: "Passwords need to match", message: "Please confirm your password correctly!" });
-              /*this.feedback.show({
+              /*feedback.show({
                     title: "Passwords need to match",
                     message: "Please confirm your password correctly!",
                     type:FeedbackType.Error
@@ -81,8 +83,7 @@ export default class Validate {
 
     selectPassword(){
         alert({ title: "For a strong password, please use:", message: "A mixture of both uppercase and lowercase letters and numbers (least 8 characters)" });
-
-        /*this.feedback.show({
+        /*feedback.show({
             title: "For a strong password, please use:",
             message: "A mixture of both uppercase and lowercase letters and numbers (least 8 characters)",
             type: FeedbackType.Custom
