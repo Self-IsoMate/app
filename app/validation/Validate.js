@@ -70,12 +70,26 @@ export default class Validate {
 
     validateConfirmPassword(password, confirmpassword ){
         if( password != confirmpassword) {
-            alert({ title: "Passwords need to match", message: "Please confirm your password correctly!" });
+            alert({ title: "Passwords need to match", message: "Please check both password values! They must be the same!" });
               /*feedback.show({
                     title: "Passwords need to match",
-                    message: "Please confirm your password correctly!",
+                    message: "Please check both password values! They must be the same!",
                     type:FeedbackType.Error
                 });*/
+            return false;
+    }
+    else return true;
+    };
+
+    validateConfirmEmail(email, confirmEmail ){
+        if( email != confirmEmail) {
+            alert({ title: "Email addresses do not match", message: "Please check both email address values! They must be the same!" });
+              /*feedback.show({
+                        title: "Email addresses do not match",
+                        message: "Please check both email address values! They must be the same!",
+                        type:
+                        FeedbackType.Error
+                    });*/
             return false;
     }
     else return true;
@@ -89,4 +103,19 @@ export default class Validate {
             type: FeedbackType.Custom
         });*/
     };
+
+    emptySettingChanges(emailAddress, newPassword){
+        if(!emailAddress && !newPassword){
+            alert({ title: "To update your email or password please fill the form:", message: "You can update your email address and password here! \nYou can also edit or delete your profile" });
+            /*this.feedback.show({
+                    title: "To update your email or password please fill the form:",
+                    message: "You can update your email address and password here! \nYou can also edit or delete your profile",
+                    type:
+                    FeedbackType.Warning
+                });*/
+                return false;
+            }
+            else return true;
+            };
+            
 }
