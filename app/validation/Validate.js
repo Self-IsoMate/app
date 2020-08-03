@@ -117,5 +117,18 @@ export default class Validate {
             }
             else return true;
             };
+
+    validateEmptyPost(body, title){
+        if(body == "" || title == "") {
+            alert({ title: "Content Required", message: "Cannot send an empty post" });
+            /*this.feedback.show({
+                title: 'Content Required',
+                message: 'Cannot send an empty post',
+                type: FeedbackType.Warning
+            });*/
+                return false;
+            }
+            else return true;
+            };
             
 }

@@ -80,7 +80,10 @@ import BackendService from '../services/BackendService';
 import CommunityItemPost from "./CommunityItemPost";
 import * as imagepicker from "nativescript-imagepicker";
 import  Video  from 'nativescript-videoplayer';
-import { Feedback, FeedbackType } from "nativescript-feedback"
+import { Feedback, FeedbackType } from "nativescript-feedback";
+import Validate from "../validation/Validate";
+var validation = new Validate();
+    
 
 export default {
 	components: {
@@ -102,7 +105,8 @@ export default {
 			back:"",
 			selectedImage: null,
 			selectedVideo: null,
-			feedback: new Feedback()
+			feedback: new Feedback(),
+			valid: true
 		}
 	},
 	created() {
@@ -225,16 +229,10 @@ export default {
 			}
 		},
 		validatePost (event) {
-			var valid = true;
-			if(this.post.body == "" || this.post.title == "") {
-				valid = false;
-				this.feedback.show({
-					title: 'Content Required',
-					message: 'Cannot send an empty post',
-					type: FeedbackType.Warning
-				});
-			}
-
+			
+    
+			this.valid = validation.validateEmptyPost(this.post.body, this.post.title);
+		 
 			// spam checking
 			var today = new Date();
 			if(this.$store.state.lastPosted) {
