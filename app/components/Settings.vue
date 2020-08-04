@@ -122,16 +122,10 @@
                 this.$navigateTo(EditProfile);
             },
             changeDetails(event) {
-                if (this.settingsValues.newPassword &&  validation.validateConfirmPassword(this.settingsValues.newPassword, this.settingsValues.confirmNewPassword)) {
-                    return;
-                }
+                            
+                if(!validation.emptySettingChanges(this.settingsValues.newEmail, this.settingsValues.newPassword)) return;
 
-                if (this.settingsValues.newEmail && validation.validateConfirmEmail(this.settingsValues.newEmail, this.settingsValues.confirmNewEmail)) {
-                    return;
-                }
-
-                if (this.settingsValues.newPassword) {
-                    if(validation.validatePasswordLength(this.settingsValues.newPassword)){                   
+                if (this.settingsValues.newPassword &&  validation.validateConfirmPassword(this.settingsValues.newPassword, this.settingsValues.confirmNewPassword) && validation.validatePasswordLength(this.settingsValues.newPassword)){
                         this.service.updateUser(this.$store.state.user._id, { password: this.settingsValues.newPassword })
                         .then((res) => {
                             if (res) {
@@ -160,10 +154,9 @@
                             }
                         })
                 }
-                }
+                
 
-                if (this.settingsValues.newEmail) {
-                    if(validation.validateEmail(this.settingsValues.newEmail)){
+                if (this.settingsValues.newEmail && validation.validateConfirmEmail(this.settingsValues.newEmail, this.settingsValues.confirmNewEmail) && validation.validateEmail(this.settingsValues.newEmail)){
                     this.service.updateUser(this.$store.state.user._id, { email: this.settingsValues.newEmail })
                         .then((res) => {
                             if (res) {
@@ -192,9 +185,7 @@
                             }
                         })
                 }
-                }
 
-            validation.emptySettingChanges(this.settingsValues.newEmail, this.settingsValues.newPassword);
 
             },
             deleteAccount(event) {
