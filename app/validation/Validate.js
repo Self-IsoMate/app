@@ -118,11 +118,11 @@ export default class Validate {
             else return true;
             };
 
-    validateEmptyPost(body, title){
-        if(body == "" || title == "") {
-            alert({ title: "Content Required", message: "Cannot send an empty post" });
+    validateEmptyPost(body){
+        if(body == "") {
+            alert({ title: "Body Required", message: "Cannot send an empty post" });
             /*this.feedback.show({
-                title: 'Content Required',
+                title: 'Body Required',
                 message: 'Cannot send an empty post',
                 type: FeedbackType.Warning
             });*/
@@ -130,5 +130,37 @@ export default class Validate {
             }
             else return true;
             };
-            
+
+    validateTitlePost(title){
+        if(title == "") {
+            alert({ title: "Title Required", message: "Your post must have a title!" });
+            /*this.feedback.show({
+				title: 'Title required',
+				message: "Your post must have a title!",
+				type: FeedbackType.Custom
+			});*/
+
+                return false;
+            }
+            else return true;
+            };
+ 
+    spamDetection(){
+		var today = new Date();
+		if(this.$store.state.lastPosted) {
+			var diffMs = (today - this.$store.state.lastPosted); 
+			var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes*/
+			if (diffMins < 4) {
+                alert({ title: "Spam detected", message: "Please wait before adding another post" });
+				/*this.feedback.show({
+                    title: "Spam detected",
+                    message: "Please wait before adding another post",
+                    type: FeedbackType.Warning
+                    });*/
+        return false
+                }
+        else return true;
+			}
+
+            };            
 }

@@ -142,14 +142,7 @@ export default {
 	},
 
 	methods: {
-        titleRequired (){
-			this.feedback.show({
-				title: 'Title required',
-				message: "Your post must have a title!",
-				type: FeedbackType.Custom
-			});
-        },
-		uploadPost(post) {
+ 		uploadPost(post) {
 			post.userId = this.currentUser._id;
 			post.communities = post.communities.map((c) => c._id );
 			
@@ -230,27 +223,14 @@ export default {
 		},
 		validatePost (event) {
 			
-    
-			this.valid = validation.validateEmptyPost(this.post.body, this.post.title);
+			this.valid = validation.validateTitlePost(this.post.title) && 
+			validation.validateEmptyPost(this.post.body)&& 
+			validation.spamDetection();
 		 
-			// spam checking
-			var today = new Date();
-			if(this.$store.state.lastPosted) {
-				var diffMs = (today - this.$store.state.lastPosted); 
-				var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes*/
-				if (diffMins < 4) {
-					valid = false;
-					this.feedback.show({
-                        title: "Spam detected",
-                        message: "Please wait before adding another post",
-                        type: FeedbackType.Warning
-                    });
-				}
-			}
 
 			// checking if communities valid
-			if (valid && this.post.communities.length < 1) {
-				valid = false;
+			if (this.valid && this.post.communities.length < 1) {
+				this.valid = false;
 				this.feedback.show({
 					title: "Community Required:",
 					message: "Select a community to post to",
@@ -259,7 +239,7 @@ export default {
 			}
 
 			// if all validation has passed, then proceed
-			if (valid) {
+			if (this.valid) {
 				this.addPost();
 			} else {
 				return;
