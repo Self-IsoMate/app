@@ -23,7 +23,7 @@
 
 					<ScrollView>
 						<StackLayout>
-							<TextField v-model="post.title" hint="Title..." class="text-field" @tap="titleRequired"/>
+							<TextField v-model="post.title" hint="Title..." class="text-field"/>
 
 							<TextView v-model="post.body" hint="Your post..." height="100" class="outline-field text-field" />
 
@@ -83,6 +83,8 @@ import  Video  from 'nativescript-videoplayer';
 import { Feedback, FeedbackType } from "nativescript-feedback";
 import Validate from "../validation/Validate";
 var validation = new Validate();
+import Community from "./Community";
+
     
 
 export default {
@@ -105,8 +107,7 @@ export default {
 			back:"",
 			selectedImage: null,
 			selectedVideo: null,
-			feedback: new Feedback(),
-			valid: true
+			feedback: new Feedback()
 		}
 	},
 	created() {
@@ -150,9 +151,10 @@ export default {
 				.then((res) => {
 					if (res && res.success) {
 						this.$store.state.lastPosted = Date.parse(res.post.datePosted);
-						this.feedback.show({ title: 'Posted', message: 'Your post has been added', type: FeedbackType.Success })
-							.then((res) => {
-								this.$navigateBack();
+						//this.feedback.show({ title: 'Posted', message: 'Your post has been added', type: FeedbackType.Success })
+			            alert({ title: "Posted", message: "Your post has been added!" })
+						.then((res) => {
+							this.$navigateTo(Community);
 							});
 					}
 
@@ -222,28 +224,18 @@ export default {
 			}
 		},
 		validatePost (event) {
-			
-			this.valid = validation.validateTitlePost(this.post.title) && 
-			validation.validateEmptyPost(this.post.body)&& 
-			validation.spamDetection();
-		 
+			console.log(this.$store.state.lastPosted);
+			if (validation.validateTitlePost(this.post.title) && 
+				validation.validateEmptyPost(this.post.body)&& 
+				validation.spamDetection(this.$store.state.lastPosted)&&
+				validation.validateCommunities(this.post.communities)){
 
-			// checking if communities valid
-			if (this.valid && this.post.communities.length < 1) {
-				this.valid = false;
-				this.feedback.show({
-					title: "Community Required:",
-					message: "Select a community to post to",
-					type: FeedbackType.Warning
-				});
-			}
-
-			// if all validation has passed, then proceed
-			if (this.valid) {
 				this.addPost();
+				
 			} else {
 				return;
 			}
+			
 		},
 		toggleCommunity (param) {
 			var commie = param.item;

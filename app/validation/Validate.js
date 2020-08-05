@@ -107,7 +107,7 @@ export default class Validate {
     emptySettingChanges(emailAddress, newPassword){
         if(!emailAddress && !newPassword){
             alert({ title: "To update your email or password please fill the form:", message: "You can update your email address and password here! \nYou can also edit or delete your profile" });
-            /*this.feedback.show({
+            /*feedback.show({
                     title: "To update your email or password please fill the form:",
                     message: "You can update your email address and password here! \nYou can also edit or delete your profile",
                     type:
@@ -121,7 +121,7 @@ export default class Validate {
     validateEmptyPost(body){
         if(body == "") {
             alert({ title: "Body Required", message: "Cannot send an empty post" });
-            /*this.feedback.show({
+            /*feedback.show({
                 title: 'Body Required',
                 message: 'Cannot send an empty post',
                 type: FeedbackType.Warning
@@ -134,7 +134,7 @@ export default class Validate {
     validateTitlePost(title){
         if(title == "") {
             alert({ title: "Title Required", message: "Your post must have a title!" });
-            /*this.feedback.show({
+            /*feedback.show({
 				title: 'Title required',
 				message: "Your post must have a title!",
 				type: FeedbackType.Custom
@@ -145,14 +145,15 @@ export default class Validate {
             else return true;
             };
  
-    spamDetection(){
-		var today = new Date();
-		if(this.$store.state.lastPosted) {
-			var diffMs = (today - this.$store.state.lastPosted); 
-			var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes*/
+    spamDetection(lastPosted){
+        var today = new Date();
+		if(lastPosted!=null) {
+            console.log(lastPosted);
+			var diffMs = (today - lastPosted); 
+			var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
 			if (diffMins < 4) {
                 alert({ title: "Spam detected", message: "Please wait before adding another post" });
-				/*this.feedback.show({
+				/*feedback.show({
                     title: "Spam detected",
                     message: "Please wait before adding another post",
                     type: FeedbackType.Warning
@@ -160,7 +161,20 @@ export default class Validate {
         return false
                 }
         else return true;
-			}
-
+			}else return true;
             };            
-}
+
+    validateCommunities(communities){
+		if (communities.length < 1) {
+            alert({ title: "Community Required", message: "Select at least a community to post to" });
+			/*feedback.show({
+				title: "Community Required:",
+				message: "Select a community to post to",
+				type: FeedbackType.Warning
+                });*/
+        return false;
+            }
+        else return true;
+    };
+
+        }
