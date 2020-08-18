@@ -48,21 +48,23 @@ export default {
 									clearHistory: true
 								});
 							} else {
-								this.feedback.show({
+					            alert({ title: "Log In", message: res.message });
+								/*this.feedback.show({
 									title: 'Log In',
 									message: res.message,
 									type: FeedbackType.Warning
-								});
+								});*/
 							}
 						}
 					})
 					.catch((err) => {
 						if (err) {
-							this.feedback.show({
+							alert({ title: "Error", message: err.message });
+							/*this.feedback.show({
 								title: 'Error',
 								message: err.message,
 								type: FeedbackType.Error
-							});
+							});*/
 						}
 					});
 			}
@@ -92,28 +94,31 @@ export default {
 										service.ResendVerification(response.user.email)
 											.then((res) => {
 												if (res && res.success) {
-													this.feedback.show({
+													alert({ title: "Sent", message: "New verification email sent" });
+													/*this.feedback.show({
 														title: 'Sent',
 														message: 'New verification email sent',
 														type: FeedbackType.Success
-													});	
+													});	*/
 												}
 
 												if (res && !res.success) {
-													this.feedback.show({
+													alert({ title: "Login Unsuccessful", message: res.message });
+													/*this.feedback.show({
 														title: 'Login Unsuccessful',
 														message: res.message,
 														type: FeedbackType.Error
-													});	
+													});	*/
 												}
 											})
 											.catch((err) => {
 												if (err) {
-													this.feedback.show({
+													alert({ title: "Login Unsuccessful", message: err.message });
+													/*this.feedback.show({
 														title: 'Login Unsuccessful',
 														message: err.message,
 														type: FeedbackType.Error
-													});	
+													});	*/
 												}
 											})
 									}
@@ -122,30 +127,33 @@ export default {
 						}
 
 					} else {
-						this.feedback.show({
+						alert({ title: "Login Unsuccessful", message: response.message });
+						/*this.feedback.show({
 							title: 'Login Unsuccessful',
 							message: response.message,
 							type: FeedbackType.Error
-						});	
+						});	*/
 					}
 				}
 			})
 			.catch((err) => {
 				if (err) {
-					this.feedback.show({
+					alert({ title: "Login Unsuccessful", message: response.message });
+					/*this.feedback.show({
 						title: 'Login Unsuccessful',
 						message: response.message,
 						type: FeedbackType.Error
-					});	
+					});	*/
 				}
 			});
 		},
 		handleGuest(event) {
-		    this.feedback.show({
+			alert({ title: "We are still working on this. \n Wait for V.02", message: "Guest options not yet available" });
+		    /*this.feedback.show({
 				title: "We are still working on this. \n Wait for V.02",
 				message: "Guest options not yet available",
 				type: FeedbackType.Info
-			})
+			})*/
 		}
 	}
 }
