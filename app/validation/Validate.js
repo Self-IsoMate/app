@@ -177,4 +177,17 @@ export default class Validate {
         else return true;
     };
 
+    validateVideo(selectedVideo){
+        if (selectedVideo.slice(-3)!='mp4'){
+            alert({ title: "Only MP4 format allowed", message: "Only .mp4 videos supported" });
+            /*feedback.show({
+                title: "Only MP4 format",
+                message: "Only .mp4 videos supported",
+                type: FeedbackType.Custom
+            });*/
+            return false;
+        }
+        else return true;
+    };
+
         }

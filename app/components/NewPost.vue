@@ -120,7 +120,8 @@ export default {
 					}
 
 					if (res && !res.success) {
-						this.feedback.show({ title: 'Error', message: res.message, type: FeedbackType.Error })
+						alert({ title: "Error", message: res.message })
+						//this.feedback.show({ title: 'Error', message: res.message, type: FeedbackType.Error })
 							.then((res) => {
 								this.$navigateBack();
 							});
@@ -128,14 +129,16 @@ export default {
 				})
 				.catch((err) => {
 					if (err) {
-						this.feedback.show({ title: 'Error', message: err.message, type: FeedbackType.Error })
+						alert({ title: "Error", message: err.message })
+						//this.feedback.show({ title: 'Error', message: err.message, type: FeedbackType.Error })
 							.then((res) => {
 								this.$navigateBack();
 							});
 					}
 				});
 		} else {
-			this.feedback.show({ title: 'Please log in', message: 'Please sign in before posting', type: FeedbackType.Error })			
+			alert({ title: "Please log in", message: "Please sign in before posting" })
+			//this.feedback.show({ title: 'Please log in', message: 'Please sign in before posting', type: FeedbackType.Error })			
 				.then((res) => {
 					this.$navigateBack();
 				})
@@ -159,7 +162,8 @@ export default {
 					}
 
 					if (res && !res.success) {
-						this.feedback.show({ title: 'Error', message: res.message, type: FeedbackType.Error })
+						alert({ title: "Error", message: res.message })
+						//this.feedback.show({ title: 'Error', message: res.message, type: FeedbackType.Error })
 							.then((res) => {
 								this.$navigateBack();
 							});
@@ -168,7 +172,8 @@ export default {
 		},
 		addPost () {
 			if (this.selectedImage) {
-				this.feedback.show({ title: "Please wait", message: "Uploading image", type: FeedbackType.Info });
+				alert({ title: "Please wait", message: "Uploading image" });
+				//this.feedback.show({ title: "Please wait", message: "Uploading image", type: FeedbackType.Info });
 				var taskInfo = this.service.uploadPostImage(this.selectedImage);
 				if (taskInfo) {
 					var task = taskInfo.task;
@@ -176,11 +181,12 @@ export default {
 
 					task.on("error", (err) => {
 						if (err) {
-							this.feedback.show({
+							alert({ title: "Error", message: err.message })
+							/*this.feedback.show({
 								title: "Error",
 								message: err.message,
 								type: FeedbackType.Error
-							})
+							})*/
 						}
 					});
 
@@ -193,7 +199,8 @@ export default {
 				}
 
 			} else if (this.selectedVideo) {
-				this.feedback.show({ title: "Please wait", message: "Uploading video", type: FeedbackType.Info });
+				alert({ title: "Please wait", message: "Uploading video" })
+				//this.feedback.show({ title: "Please wait", message: "Uploading video", type: FeedbackType.Info });
 				var taskInfo = this.service.uploadPostVideo(this.selectedVideo);
 				if (taskInfo) {
 
@@ -203,11 +210,12 @@ export default {
 
 					task.on("error", (err) => {
 						if (err) {
-							this.feedback.show({
+							alert({ title: "Error", message: err.message });
+							/*this.feedback.show({
 								title: "Error",
 								message: err.message,
 								type: FeedbackType.Error
-							})
+							})*/
 						}
 					});
 
@@ -273,7 +281,8 @@ export default {
                 })
                 .catch((err) => {
 					if (err) {
-						this.feedback.show({ title: 'Error', message: err.message, type: FeedbackType.Error })
+						alert({ title: "Error", message: err.message })
+						//this.feedback.show({ title: 'Error', message: err.message, type: FeedbackType.Error })
 					}
                 })
 		},
@@ -293,19 +302,14 @@ export default {
 						video.options.width = 300;
 						video.options.height = 300;
 						this.selectedVideo = video._android ?? video._ios; 
-						if (this.selectedVideo.slice(-3)!='mp4'){
-							feedback.show({
-								title: "Only MP4 format",
-								message: "Only .mp4 videos supported",
-								type: FeedbackType.Custom
-							});
-						}
+						validation.validateVideo(this.selectedVideo);
                         return;
                     }
                 })
                 .catch((err) => {
 					if (err) {
-						this.feedback.show({ title: 'Error', message: err.message, type: FeedbackType.Error })
+						alert({ title: "Error", message: err.message })
+						//this.feedback.show({ title: 'Error', message: err.message, type: FeedbackType.Error })
 					}
                 })
 		},
