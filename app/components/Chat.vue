@@ -71,8 +71,6 @@
     import BackendService from "../services/BackendService";
     var service = new BackendService();
     import { timer } from 'vue-timers';
-    import { Feedback, FeedbackType } from "nativescript-feedback"
-    var feedback = new Feedback();
     
     export default {
         timers: {

@@ -57,10 +57,6 @@
     import ChatroomItem from "./ChatroomItem";
     import BackendService from "../services/BackendService";
     import { timer } from 'vue-timers';
-    var FeedbackPlugin = require("nativescript-feedback");
-    var FeedbackType = require ("nativescript-feedback").FeedbackType;
-    var feedback = new FeedbackPlugin.Feedback();
-
 
      export default {
          timers: {
