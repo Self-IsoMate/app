@@ -57,6 +57,8 @@
     import ChatroomItem from "./ChatroomItem";
     import BackendService from "../services/BackendService";
     import { timer } from 'vue-timers';
+    import Validate from "../validation/Validate";
+    var validation = new Validate();
 
      export default {
          timers: {
@@ -103,7 +105,6 @@
             stopTimer() {
                 this.timers.log.isSwitchTab=true;
                 this.$timer.stop('log');
-                //console.log(this.timers.log.isRunning);
 
             },
              log () {
@@ -162,9 +163,7 @@
                             chatroomName: result.text,
                             user_id: this.$store.state.user._id
                         }
-                        if (result.text.length > 25) {
-                            alert({ title: 'Error', message: 'Max Character Limit Reached' })
-                        } else {
+                        if(validation.validateChatroomName(result.text.length)){
                               var backend = new BackendService();
                         backend.requestNewChatroom(chatroomRequest)
                             .then((res) => {

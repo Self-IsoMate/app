@@ -88,27 +88,8 @@ gi<template>
         },
         created() {
             var service = new BackendService();
-
-            this.refreshUser();
-
             // Refreshing user account for email verification
-            if (this.$store.state.user) {
-                service.RefreshUser(this.$store.state.user._id)
-                    .then((res) => {
-                        if (res && res.success) {
-                            this.$store.commit("setUser", { user: res.user });
-                        }
-
-                        if (res && !res.success) {
-                            alert({ title: 'Error', message: res.message })
-                        }
-                    })
-                    .catch((err) => {
-                        if (err) {
-                            alert({ title: 'Error', message: err.message })
-                        }
-                    })
-            }
+            this.refreshUser();
 
             var getUserFromMessage = async (message) => {
                 return service.getUserfromId(message.userID)

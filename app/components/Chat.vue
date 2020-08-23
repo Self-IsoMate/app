@@ -98,7 +98,6 @@
         beforeDestroy () {
             this.timers.log.isSwitchTab=true;
             this.$timer.stop('log');
-            //console.log(this.timers.log.isRunning);
         }, 
         data() {
             return {
@@ -113,7 +112,6 @@
             stopTimer() {
                 this.timers.log.isSwitchTab=true;
                 this.$timer.stop('log');
-                //console.log(this.timers.log.isRunning);
             },
             log () {
      service.getChatroomIds(this.$store.state.user._id).then(res=>{
@@ -127,6 +125,7 @@
                             });
                         } else {
                                 console.log("Error on gettin chat rooms objects from id");
+                                alert("Error on gettin chat rooms, please try again in a few minutes");
                             };
                     
                             if(chatsinlist.length>0){

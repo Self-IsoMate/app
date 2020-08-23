@@ -1,6 +1,11 @@
 const usernameLength = 5;
 const passwordNOSPACELength = 5;
 const passwordLength = 8;
+const extensionLength =-3;
+const atLeastOne = 1;
+const spamMinutes = 4;
+const errorOutput = -1;
+const chatTitleLength = 25;
 const filter = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
 
 const FeedbackPlugin = require("nativescript-feedback");
@@ -55,7 +60,7 @@ export default class Validate {
     };
     
     validateEmail(emailAddress){
-        if( String(emailAddress).search(filter)==-1 ) {
+        if( String(emailAddress).search(filter)== errorOutput ) {
             alert({ title: "Insert a valid email address", message: "Please insert a valid email address (youremail@address.ext)" });
             /*feedback.show({
                 title: "Insert a valid email address",
@@ -151,7 +156,7 @@ export default class Validate {
             console.log(lastPosted);
 			var diffMs = (today - lastPosted); 
 			var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
-			if (diffMins < 4) {
+			if (diffMins < spamMinutes) {
                 alert({ title: "Spam detected", message: "Please wait before adding another post" });
 				/*feedback.show({
                     title: "Spam detected",
@@ -165,7 +170,7 @@ export default class Validate {
             };            
 
     validateCommunities(communities){
-		if (communities.length < 1) {
+		if (communities.length < atLeastOne) {
             alert({ title: "Community Required", message: "Select at least a community to post to" });
 			/*feedback.show({
 				title: "Community Required:",
@@ -178,11 +183,24 @@ export default class Validate {
     };
 
     validateVideo(selectedVideo){
-        if (selectedVideo.slice(-3)!='mp4'){
+        if (selectedVideo.slice(extensionLength)!='mp4'){
             alert({ title: "Only MP4 format allowed", message: "Only .mp4 videos supported" });
             /*feedback.show({
                 title: "Only MP4 format",
                 message: "Only .mp4 videos supported",
+                type: FeedbackType.Custom
+            });*/
+            return false;
+        }
+        else return true;
+    };
+
+    validateChatroomName(title){
+        if (title >= chatTitleLength) {
+            alert({ title: 'Error', message: 'Max Character Limit Reached' })
+            /*feedback.show({
+                title: "Error",
+                message: "Max Character Limit Reached",
                 type: FeedbackType.Custom
             });*/
             return false;
