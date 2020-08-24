@@ -91,18 +91,20 @@ export default {
                     if (res.success) {
                         this.communities = res.communities;
                         if (this.noData) {
-                            this.feedback.show({
+                            alert({ title: 'Error: There was a problem retrieving data from the server', message: "We are sorry! Something went wrong, please try again in few minutes" });
+                            /*this.feedback.show({
                                 title: "Error: There was a problem retrieving data from the server",
                                 message: "We are sorry! Something went wrong, please try again in few minutes",
                                 type: FeedbackType.Warning
-                            });
+                            });*/
                         }
                     } else {
-                        this.feedback.show({
+                        alert({ title: 'Error: There was a problem retrieving data from the server', message: "We are sorry! Something went wrong, please try again in few minutes" });
+                        /*this.feedback.show({
                             title: "Error: There was a problem retrieving data from the server",
                             message: "We are sorry! Something went wrong, please try again in few minutes",
                             type: FeedbackType.Warning
-                        });
+                        });*/
                     }
                 }
             })

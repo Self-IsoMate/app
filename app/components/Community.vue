@@ -427,7 +427,8 @@ export default {
                             this.allCommunities = [... res.communities];
                             /*if (this.allCommunities.length == 0){
                                 alert({ title: '😢 Nothing to see here', message: "Subscribe to communities to fill up that feed" })
-                            }*/ //commented out, spammed too many times if user has no community
+                            }*/ 
+                            //commented out, spammed too many times if user has no community
                         } else {
                             alert({ title: 'Error', message: res.message })
                         }
