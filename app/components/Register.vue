@@ -9,7 +9,7 @@
                 <TextField secure="true" v-model="confirmpassword" hint="Confirm password" />
                 <Label v-if="invalidPasswords" text="Passwords need to match" class="error" />
                 <TextField v-model="email" hint="Email" autocapitalizationType="none" autocorrect="false" keyboardType="email" />
-                <Button text="Register" @tap="navigateQuestions" />
+                <Button text="Register" @tap="navigateQuestions" :isEnabled="hasEdits"/>
             </StackLayout>
         </ScrollView>
     </Page>
@@ -20,10 +20,17 @@
 import Home from "./Home";
 import LoginQuestionsMentor from "./LoginQuestionsMentor";
 import BackendService from "../services/BackendService";
+import Validate from "../validation/Validate";
 import {Feedback, FeedbackType} from "nativescript-feedback";
+var validation = new Validate();
 
 export default {
     name: "Register",
+    computed: {
+            hasEdits: function () {
+            return this.username!=''&& this.password!=''&& this.email!='';
+        }
+        },
     data: () => {
         return {
             message: "",
@@ -37,46 +44,11 @@ export default {
     },
     methods: {
         clickPass () {
-            this.feedback.show({
-                title: "For a strong password, please use:",
-                message: "A mixture of both uppercase and lowercase letters and numbers (least 8 characters)",
-                type: FeedbackType.Custom
-            });
+   validation.selectPassword();
         },
         navigateQuestions (event) {
-            var emailValidationRegEX = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
-            var countUsername = this.username;
-            var countPassword = this.password;
-            if (countUsername.replace(/ /g,'').length < 5){
-                    this.feedback.show({
-                        title: "Username must be longer",
-                        message: "Please insert at leat 5 characters (spaces excluded)",
-                        type:
-                        FeedbackType.Warning
-                    });
-            }else if(countPassword.replace(/ /g,'').length < 5 || this.password.length <8){
-                    this.feedback.show({
-                        title: "Password must be longer",
-                        message: "Please insert at leat 8 characters (spaces excluded)",
-                        type:
-                        FeedbackType.Error
-                    });
-            }else if(this.password == this.username){
-                    this.feedback.show({
-                        title: "Password must be different from username",
-                        message: "Please insert a more safe password (different from username)",
-                        type:
-                        FeedbackType.Error
-                    });
-            }else if( String(this.email).search(emailValidationRegEX)==-1 ) {
-                    this.feedback.show({
-                        title: "Insert a valid email address",
-                        message: "Please insert a valid email address (youremail@address.ext)",
-                        type:
-                        FeedbackType.Error
-                    });
-            }else{
-            if (!this.isInvalid()) {
+           
+            if (this.isValid()) {
                 var newUser = {
                     username: this.username,
                     password: this.password,
@@ -89,11 +61,12 @@ export default {
 					.then((response) => {
 						if (response && response.success) {
                             this.$store.commit("setUser", { user: response.user });
-                                this.feedback.show({
+                                alert({ title: "Registered", message: "We\'ve sent you a confirmation email, so please verify your email so that you can participate in chats and post in communities." });
+                                /*this.feedback.show({
                                     title: 'Registered',
                                     message: "We\'ve sent you a confirmation email, so please verify your email so that you can participate in chats and post in communities.",
                                     type: FeedbackType.Success
-                                });
+                                });*/
                                 this.$navigateTo(Home,  {
                                     animated: false,
                                     clearHistory: true
@@ -101,41 +74,33 @@ export default {
                         }
 
                         if (response && !response.success) {
-                            this.feedback.show({
+                            alert({ title: "Error:", message: response.message });
+                            /*this.feedback.show({
                                 title: "Error",
                                 message: response.message,
                                 type: FeedbackType.Error
-                            })
+                            })*/
                         }
                     })
                     .catch((err) => {
                         if (err) {
-                            this.feedback.show({
+                            alert({ title: "Error:", message: err.message });
+                            /*this.feedback.show({
                                 title: "Error",
                                 message: err.message,
                                 type: FeedbackType.Error
-                            })
+                            })*/
                         }
                     });
             } else {
-                this.feedback.show({
-                    title: "Passwords need to match",
-                    message: "Please confirm your password correctly!",
-                    type:FeedbackType.Error
-                });
                 this.invalidPasswords = true;
                 setTimeout(() => { this.invalidPasswords = false }, 3000);
             }
-        }
+        
         },
 
-        isInvalid() {
-            // add any extra cases where passwords could be invalid
-
-            if (this.password != this.confirmpassword)
-                return true;
-
-            return false;
+        isValid() {
+            return (validation.validateUsernameLength(this.username) && validation.validatePasswordLength(this.password) && validation.validatePasswordAgainstUsername(this.password, this.username) && validation.validateEmail(this.email) && validation.validateConfirmPassword(this.password, this.confirmpassword));
         }
     }
 }

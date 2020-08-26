@@ -1,5 +1,5 @@
 import axios from "axios";
-const API = "https://self-isomate-api.appspot.com/api/";
+const API = "https://self-isomate-api.herokuapp.com/api/";
 const BUCKET_NAME = "self-isomate-images";
 const BUCKET_NAME_VIDEOS = "self-isomate-videos";
 const BUCKET_PROFILE_PICTURES = "https://storage.googleapis.com/self-isomate-images/profile-pictures/";

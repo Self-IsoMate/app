@@ -402,7 +402,7 @@ export default {
                             mutatePosts(posts)
                                 .then((result) => {
                                     if (result) {
-                                        console.log(result);
+                                        //console.log(result);
                                         if (!this.$props.communities) {
                                             this.posts = [ ...result, ... this.posts];
                                         } else {
@@ -425,9 +425,10 @@ export default {
                     if (res) {
                         if (res.success) {
                             this.allCommunities = [... res.communities];
-                            if (this.allCommunities.length == 0){
+                            /*if (this.allCommunities.length == 0){
                                 alert({ title: '😢 Nothing to see here', message: "Subscribe to communities to fill up that feed" })
-                            }
+                            }*/ 
+                            //commented out, spammed too many times if user has no community
                         } else {
                             alert({ title: 'Error', message: res.message })
                         }
@@ -477,11 +478,7 @@ export default {
         },
         showFilterModal() {
             if (this.noDataFound) {
-                this.feedback.show({
-						title: "Error: There was a problem retrieving data from the server",
-						message: "We are sorry! Something went wrong, please try again in few minutes",
-						type: FeedbackType.Warning
-					});
+                alert({ title: "No communities", message: "Subscribe to communities to fill up that feed or there might be a problem retrieving data from the server" });
             } else {
                 if (this.$props.communities && this.$props.communities.length > 0) {
                     this.$navigateTo(CommunityFilter, { props: { allCommunities: this.allCommunities, preSelectedCommunities: this.$props.communities} });
@@ -513,7 +510,7 @@ export default {
     },
     computed: {
         noDataFound: function () {
-            return this.$props.communities || this.allCommunities?.length == 0
+            return !this.$props.communities && this.allCommunities.includes(undefined)//this.allCommunities?.length == 0 commented out, error if from database adds undefined not if user has no feed
         }
     }
 }

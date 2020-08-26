@@ -72,21 +72,23 @@
                             this.allCategories = res.categories;
                             this.categories = Array.from(this.allCategories);
                         } else {
-                            this.feedback.show({
+                            alert({ title: 'Error', message: res.message })
+                            /*this.feedback.show({
                                 title: 'Error',
                                 message: res.message,
                                 type: FeedbackType.Warning
-                            });
+                            });*/
                         }
                     }
                 })
                 .catch((err) => {
                     if (err) {
-                        this.feedback.show({
+                        alert({ title: 'Error', message: err.message })
+                        /*this.feedback.show({
                             title: 'Error',
-                            message: errs.message,
+                            message: err.message,
                             type: FeedbackType.Warning
-                        });
+                        });*/
                     }
                 })
 
@@ -97,20 +99,22 @@
                     }
 
                     if (res && !res.success) {
-                        this.feedback.show({
+                        alert({ title: 'Error', message: res.message })
+                        /*this.feedback.show({
                             title: 'Error',
                             message: res.message,
                             type: FeedbackType.Warning
-                        });
+                        });*/
                     }
                 })
                 .catch((err) => {
                     if (err) {
-                        this.feedback.show({
+                        alert({ title: 'Error', message: err.message })
+                        /*this.feedback.show({
                             title: 'Error',
                             message: err.message,
                             type: FeedbackType.Warning
-                        });
+                        });*/
                     }
                 });
         },

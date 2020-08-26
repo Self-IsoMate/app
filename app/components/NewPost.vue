@@ -23,7 +23,7 @@
 
 					<ScrollView>
 						<StackLayout>
-							<TextField v-model="post.title" hint="Title..." class="text-field" @tap="titleRequired"/>
+							<TextField v-model="post.title" hint="Title..." class="text-field"/>
 
 							<TextView v-model="post.body" hint="Your post..." height="100" class="outline-field text-field" />
 
@@ -80,7 +80,12 @@ import BackendService from '../services/BackendService';
 import CommunityItemPost from "./CommunityItemPost";
 import * as imagepicker from "nativescript-imagepicker";
 import  Video  from 'nativescript-videoplayer';
-import { Feedback, FeedbackType } from "nativescript-feedback"
+import { Feedback, FeedbackType } from "nativescript-feedback";
+import Validate from "../validation/Validate";
+var validation = new Validate();
+import Community from "./Community";
+
+    
 
 export default {
 	components: {
@@ -115,7 +120,8 @@ export default {
 					}
 
 					if (res && !res.success) {
-						this.feedback.show({ title: 'Error', message: res.message, type: FeedbackType.Error })
+						alert({ title: "Error", message: res.message })
+						//this.feedback.show({ title: 'Error', message: res.message, type: FeedbackType.Error })
 							.then((res) => {
 								this.$navigateBack();
 							});
@@ -123,14 +129,16 @@ export default {
 				})
 				.catch((err) => {
 					if (err) {
-						this.feedback.show({ title: 'Error', message: err.message, type: FeedbackType.Error })
+						alert({ title: "Error", message: err.message })
+						//this.feedback.show({ title: 'Error', message: err.message, type: FeedbackType.Error })
 							.then((res) => {
 								this.$navigateBack();
 							});
 					}
 				});
 		} else {
-			this.feedback.show({ title: 'Please log in', message: 'Please sign in before posting', type: FeedbackType.Error })			
+			alert({ title: "Please log in", message: "Please sign in before posting" })
+			//this.feedback.show({ title: 'Please log in', message: 'Please sign in before posting', type: FeedbackType.Error })			
 				.then((res) => {
 					this.$navigateBack();
 				})
@@ -138,14 +146,7 @@ export default {
 	},
 
 	methods: {
-        titleRequired (){
-			this.feedback.show({
-				title: 'Title required',
-				message: "Your post must have a title!",
-				type: FeedbackType.Custom
-			});
-        },
-		uploadPost(post) {
+ 		uploadPost(post) {
 			post.userId = this.currentUser._id;
 			post.communities = post.communities.map((c) => c._id );
 			
@@ -153,14 +154,16 @@ export default {
 				.then((res) => {
 					if (res && res.success) {
 						this.$store.state.lastPosted = Date.parse(res.post.datePosted);
-						this.feedback.show({ title: 'Posted', message: 'Your post has been added', type: FeedbackType.Success })
-							.then((res) => {
-								this.$navigateBack();
+						//this.feedback.show({ title: 'Posted', message: 'Your post has been added', type: FeedbackType.Success })
+			            alert({ title: "Posted", message: "Your post has been added!" })
+						.then((res) => {
+							this.$navigateTo(Community);
 							});
 					}
 
 					if (res && !res.success) {
-						this.feedback.show({ title: 'Error', message: res.message, type: FeedbackType.Error })
+						alert({ title: "Error", message: res.message })
+						//this.feedback.show({ title: 'Error', message: res.message, type: FeedbackType.Error })
 							.then((res) => {
 								this.$navigateBack();
 							});
@@ -169,7 +172,8 @@ export default {
 		},
 		addPost () {
 			if (this.selectedImage) {
-				this.feedback.show({ title: "Please wait", message: "Uploading image", type: FeedbackType.Info });
+				alert({ title: "Please wait", message: "Uploading image" });
+				//this.feedback.show({ title: "Please wait", message: "Uploading image", type: FeedbackType.Info });
 				var taskInfo = this.service.uploadPostImage(this.selectedImage);
 				if (taskInfo) {
 					var task = taskInfo.task;
@@ -177,11 +181,12 @@ export default {
 
 					task.on("error", (err) => {
 						if (err) {
-							this.feedback.show({
+							alert({ title: "Error", message: err.message })
+							/*this.feedback.show({
 								title: "Error",
 								message: err.message,
 								type: FeedbackType.Error
-							})
+							})*/
 						}
 					});
 
@@ -194,7 +199,8 @@ export default {
 				}
 
 			} else if (this.selectedVideo) {
-				this.feedback.show({ title: "Please wait", message: "Uploading video", type: FeedbackType.Info });
+				alert({ title: "Please wait", message: "Uploading video" })
+				//this.feedback.show({ title: "Please wait", message: "Uploading video", type: FeedbackType.Info });
 				var taskInfo = this.service.uploadPostVideo(this.selectedVideo);
 				if (taskInfo) {
 
@@ -204,11 +210,12 @@ export default {
 
 					task.on("error", (err) => {
 						if (err) {
-							this.feedback.show({
+							alert({ title: "Error", message: err.message });
+							/*this.feedback.show({
 								title: "Error",
 								message: err.message,
 								type: FeedbackType.Error
-							})
+							})*/
 						}
 					});
 
@@ -225,47 +232,18 @@ export default {
 			}
 		},
 		validatePost (event) {
-			var valid = true;
-			if(this.post.body == "" || this.post.title == "") {
-				valid = false;
-				this.feedback.show({
-					title: 'Content Required',
-					message: 'Cannot send an empty post',
-					type: FeedbackType.Warning
-				});
-			}
+			console.log(this.$store.state.lastPosted);
+			if (validation.validateTitlePost(this.post.title) && 
+				validation.validateEmptyPost(this.post.body)&& 
+				validation.spamDetection(this.$store.state.lastPosted)&&
+				validation.validateCommunities(this.post.communities)){
 
-			// spam checking
-			var today = new Date();
-			if(this.$store.state.lastPosted) {
-				var diffMs = (today - this.$store.state.lastPosted); 
-				var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes*/
-				if (diffMins < 4) {
-					valid = false;
-					this.feedback.show({
-                        title: "Spam detected",
-                        message: "Please wait before adding another post",
-                        type: FeedbackType.Warning
-                    });
-				}
-			}
-
-			// checking if communities valid
-			if (valid && this.post.communities.length < 1) {
-				valid = false;
-				this.feedback.show({
-					title: "Community Required:",
-					message: "Select a community to post to",
-					type: FeedbackType.Warning
-				});
-			}
-
-			// if all validation has passed, then proceed
-			if (valid) {
 				this.addPost();
+				
 			} else {
 				return;
 			}
+			
 		},
 		toggleCommunity (param) {
 			var commie = param.item;
@@ -303,7 +281,8 @@ export default {
                 })
                 .catch((err) => {
 					if (err) {
-						this.feedback.show({ title: 'Error', message: err.message, type: FeedbackType.Error })
+						alert({ title: "Error", message: err.message })
+						//this.feedback.show({ title: 'Error', message: err.message, type: FeedbackType.Error })
 					}
                 })
 		},
@@ -323,19 +302,14 @@ export default {
 						video.options.width = 300;
 						video.options.height = 300;
 						this.selectedVideo = video._android ?? video._ios; 
-						if (this.selectedVideo.slice(-3)!='mp4'){
-							feedback.show({
-								title: "Only MP4 format",
-								message: "Only .mp4 videos supported",
-								type: FeedbackType.Custom
-							});
-						}
+						validation.validateVideo(this.selectedVideo);
                         return;
                     }
                 })
                 .catch((err) => {
 					if (err) {
-						this.feedback.show({ title: 'Error', message: err.message, type: FeedbackType.Error })
+						alert({ title: "Error", message: err.message })
+						//this.feedback.show({ title: 'Error', message: err.message, type: FeedbackType.Error })
 					}
                 })
 		},

@@ -70,7 +70,9 @@
     import { topmost } from 'tns-core-modules/ui/frame'
     import ModalComponent from "./ModalComponent";
     import { Feedback, FeedbackType } from "nativescript-feedback";
-
+    import Validate from "../validation/Validate";
+    var validation = new Validate();
+    
     export default { 
         mounted() {
             SelectedPageService.getInstance().updateSelectedPage("Notifications");
@@ -101,16 +103,7 @@
         },
         methods: {
             clickPass (){
-                    this.feedback.show({
-                        title: "For a strong password, please use:",
-                        message: "A mixture of both uppercase and lowercase letters and numbers (least 8 characters)",
-                        type:
-                        FeedbackType.Custom
-                        //FeedbackType.Success
-                        //FeedbackType.Warning
-                        //FeedbackType.Error
-                        //FeedbackType.Info
-                    });
+                       validation.selectPassword();
         },
             getCheckProp() {
             const checkBox = topmost().getViewById('yourCheckBoxId');
@@ -129,47 +122,20 @@
                 this.$navigateTo(EditProfile);
             },
             changeDetails(event) {
+                            
+                if(!validation.emptySettingChanges(this.settingsValues.newEmail, this.settingsValues.newPassword)) return;
 
-
-                if (this.settingsValues.newPassword && this.settingsValues.newPassword != this.settingsValues.confirmNewPassword) {
-                    this.feedback.show({
-                        title: "Passwords do not match:",
-                        message: "Please check both password values! They must be the same",
-                        type:
-                        FeedbackType.Error
-                   });
-                    return;
-                }
-
-                if (this.settingsValues.newEmail && this.settingsValues.newEmail != this.settingsValues.confirmNewEmail) {
-                    this.feedback.show({
-                        title: "Email addresses do not match",
-                        message: "Please check both email address values! They must be the same",
-                        type:
-                        FeedbackType.Error
-                    });
-                    return;
-                }
-
-                if (this.settingsValues.newPassword) {
-                    var countPassword = this.settingsValues.newPassword;
-                    if(countPassword.replace(/ /g,'').length < 5 || this.settingsValues.newPassword <8){
-                        this.feedback.show({
-                            title: "Password must be longer",
-                            message: "Please insert at leat 8 characters (spaces excluded)",
-                            type:
-                            FeedbackType.Error
-                        });
-                }else{                   
-             this.service.updateUser(this.$store.state.user._id, { password: this.settingsValues.newPassword })
+                if (this.settingsValues.newPassword &&  validation.validateConfirmPassword(this.settingsValues.newPassword, this.settingsValues.confirmNewPassword) && validation.validatePasswordLength(this.settingsValues.newPassword)){
+                        this.service.updateUser(this.$store.state.user._id, { password: this.settingsValues.newPassword })
                         .then((res) => {
                             if (res) {
-                    this.feedback.show({
+                    alert({ title: "Password Successfully changed!", message: "You have successfully changed your password!" })
+                    /*this.feedback.show({
                         title: "Password Successfully changed!",
                         message: "You have successfully changed your password!",
                         type:
                         FeedbackType.Success
-                    })
+                    })*/
                         .then((res) => {
                             this.clearDetails();
                                     });
@@ -178,37 +144,29 @@
                         .catch((err) => {
                             if (err) {
                                 console.log(err);
-                        this.feedback.show({
+                        alert({ title: "There has been an error!:", message: "We are sorry! Something went wrong, please try again in few minutes" })
+                        /*this.feedback.show({
                                 title: "There has been an error!:",
                                 message: "We are sorry! Something went wrong, please try again in few minutes",
                                 type:
                                 FeedbackType.Error
-                            });
+                            });*/
                             }
                         })
                 }
-                }
+                
 
-                if (this.settingsValues.newEmail) {
-                    var filter = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
-                    if(String(this.settingsValues.newEmail).search (filter)==-1){
-                        this.feedback.show({
-                        title: "Insert a valid email address",
-                        message: "Please insert a valid email address (youremail@address.ext)",
-                        type:
-                        FeedbackType.Error
-                    });
-                        return;
-                    }else{
+                if (this.settingsValues.newEmail && validation.validateConfirmEmail(this.settingsValues.newEmail, this.settingsValues.confirmNewEmail) && validation.validateEmail(this.settingsValues.newEmail)){
                     this.service.updateUser(this.$store.state.user._id, { email: this.settingsValues.newEmail })
                         .then((res) => {
                             if (res) {
-                    this.feedback.show({
+                    alert({ title: "Email address Successfully changed!", message: "Your email address has been successfully updated!" })
+                    /*this.feedback.show({
                         title: "Email address Successfully changed!",
                         message: "Your email address has been successfully updated!",
                         type:
                         FeedbackType.Success
-                    })
+                    })*/
                         .then((res) => {
                                       this.clearDetails();
                                     })
@@ -217,25 +175,17 @@
                         .catch((err) => {
                             if (err) {
                                 console.log(err);
-                        this.feedback.show({
+                        alert({ title: "There has been an error!:", message: "We are sorry! Something went wrong, please try again in few minutes" })
+                        /*this.feedback.show({
                                 title: "There has been an error!:",
                                 message: "We are sorry! Something went wrong, please try again in few minutes",
                                 type:
                                 FeedbackType.Error
-                            });
+                            });*/
                             }
                         })
                 }
-                }
 
-            if(!this.settingsValues.newEmail && !this.settingsValues.newPassword){
-                        this.feedback.show({
-                                title: "To update your email or password please fill the form:",
-                                message: "You can update your email address and password here! \nYou can also edit or delete your profile",
-                                type:
-                                FeedbackType.Warning
-                            });
-            }
 
             },
             deleteAccount(event) {
@@ -308,12 +258,13 @@
                                                                                     if(res.success!=true){
                                                                                     alert({ title: ""+res.success+"", message: ""+res.message+"", okButtonText: "OK"  });
                                                                                     }else{
-                                                                                        this.feedback.show({
+                                                                                        alert({ title: "POSTS REMOVED SUCCESSFULLY", message: "POSTS DELETED" });
+                                                                                        /*this.feedback.show({
                                                                                             title: "POSTS REMOVED SUCCESSFULLY!:",
                                                                                             message: "POSTS DELETED",
                                                                                             type:
                                                                                             FeedbackType.Success
-                                                                                        });
+                                                                                        });*/
                                                                                     }
                                                                                 }
                                                                             }).catch((err) => {
@@ -336,12 +287,13 @@
 
                                                         this.service.deleteMessage((message._id))
                                                             .then((res) => {
-                                                                this.feedback.show({
+                                                                alert({ title: "CHAT MESSAGES REMOVED SUCCESSFULLY", message: "MESSAGES DELETED" });
+                                                                /*this.feedback.show({
                                                                     title: "CHAT MESSAGES REMOVED SUCCESSFULLY!:",
                                                                     message: "MESSAGES DELETED",
                                                                     type:
                                                                     FeedbackType.Success
-                                                                });
+                                                                });*/
                                                         }
                                                         
                                                         );
@@ -379,12 +331,13 @@
                                             .then((res) => {
                                                 if (res) {
                                                     if (res.success) {
-                                                        this.feedback.show({
+                                                        alert({ title: "PROFILE REMOVED SUCCESSFULLY", message: "ACCOUNT DELETED" });
+                                                        /*this.feedback.show({
                                                             title: "PROFILE REMOVED SUCCESSFULLY",
                                                             message: "ACCOUNT DELETED",
                                                             type:
                                                             FeedbackType.Success
-                                                        });
+                                                        });*/
                                                       			//this.$store.commit("setUser", { user: null }); it creashes better use the clearUser 
                                                                 this.$store.commit("clearUser");    
                                                                 this.$navigateTo(LoginMain, {
@@ -393,12 +346,13 @@
                                                                 });
                                                     }
                                                     if (!res.success) {
-                                                        this.feedback.show({
+                                                        alert({ title: "Unsuccessful: There has been an error!", message: "We are sorry! Something went wrong, please try again in few minutes \nUnfortunately, there was an error deleting your account. Please contact us at <our email>" });
+                                                        /*this.feedback.show({
                                                             title: "Unsuccessful: There has been an error!",
                                                             message: "We are sorry! Something went wrong, please try again in few minutes \nUnfortunately, there was an error deleting your account. Please contact us at <our email>",
                                                             type:
                                                             FeedbackType.Error
-                                                        });
+                                                        });*/
                                                     }
                                                 }
                                             })

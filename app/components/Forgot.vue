@@ -26,11 +26,12 @@ export default {
     },
     methods: {
         handleSendRecovery (event) {
-            feedback.show({
+  			alert({ title: "We are still working on this. \n Wait for V.02", message: "Recovery email options not yet available" });
+            /*feedback.show({
                     title: "We are still working on this. \n Wait for V.02",
                     message: "Recovery email options not yet available",
                      type:FeedbackType.Info
-                            })        },
+                            }) */       },
         onBack (event) {
             this.$navigateTo(LoginMain);
         }
