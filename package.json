@@ -17,7 +17,7 @@
         "@nativescript/theme": "2.3.3",
         "@nstudio/nativescript-checkbox": "^1.0.0",
         "@progress-nativechat/nativescript-nativechat": "3.0.0",
-        "axios": "^0.19.2",
+        "axios": "^0.21.1",
         "kinvey-nativescript-sdk": "4.2.5",
         "lodash": "^4.17.19",
         "moment": "^2.27.0",
