@@ -45,7 +45,7 @@
         "nativescript-vue": "2.5.0",
         "numeral": "^2.0.6",
         "tns-core-modules": "6.5.0",
-        "underscore": "^1.9.2",
+        "underscore": "^1.12.1",
         "vue-timers": "^2.0.4",
         "vue-video": "^0.1.7",
         "vue-video-player": "^5.0.2",
